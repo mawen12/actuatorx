@@ -1,0 +1,12 @@
+{
+  "common": {
+    "yes": "Yes",
+    "no": "No",
+    "loading": "Loading"
+  },
+  "instance": {
+    "health": {
+      "title": "Health"
+    }
+  }
+}

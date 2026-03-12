@@ -1,0 +1,12 @@
+{
+  "common": {
+    "yes": "是",
+    "no": "否",
+    "loading": "加载中"
+  },
+  "instance": {
+    "health": {
+      "title": "Health"
+    }
+  }
+}
