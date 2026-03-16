@@ -13,15 +13,15 @@ defineProps({
             <div class="text-body-1 text-uppercase mb-1">Method</div>
 
             <span class="border-sm rounded-lg pa-1 text-subtitle-2 text-warning">{{
-              item.request.method
-            }}</span>
+                item.request.method
+              }}</span>
           </v-col>
           <v-col>
             <div class="text-body-1 text-uppercase mb-1">URI</div>
 
             <span class="border-sm rounded-lg pa-1 text-subtitle-2 text-warning">{{
-              item.request.uri
-            }}</span>
+                item.request.uri
+              }}</span>
           </v-col>
         </v-row>
       </v-card-text>
@@ -46,8 +46,8 @@ defineProps({
             <div class="text-body-1 text-uppercase mb-1">Status</div>
 
             <span class="border-sm rounded-lg pa-1 text-subtitle-2 text-warning">{{
-              item.response.status
-            }}</span>
+                item.response.status
+              }}</span>
           </v-col>
         </v-row>
       </v-card-text>

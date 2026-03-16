@@ -1,8 +1,8 @@
 <script setup>
-import { ref, watch, computed, provide } from 'vue'
-import { getIncomers, getOutgoers, MarkerType } from '@vue-flow/core'
-import { getLayoutElements } from '@/utils/vueflowUtils'
-import { isEmpty } from 'lodash-es'
+import {computed, provide, ref, watch} from 'vue'
+import {getIncomers, getOutgoers, MarkerType} from '@vue-flow/core'
+import {getLayoutElements} from '@/utils/vueflowUtils'
+import {isEmpty} from 'lodash-es'
 import colors from 'vuetify/util/colors'
 
 const props = defineProps({
@@ -18,15 +18,15 @@ const outgoingNodeIds = ref(undefined)
 const layoutData = ref(undefined)
 
 watch(
-  [() => props.nodes, () => props.edges],
-  async ([nodes, edges]) => {
-    if (nodes && edges) {
-      layoutData.value = await getLayoutElements(nodes, edges)
-    }
-  },
-  {
-    immediate: true,
-  },
+    [() => props.nodes, () => props.edges],
+    async ([nodes, edges]) => {
+      if (nodes && edges) {
+        layoutData.value = await getLayoutElements(nodes, edges)
+      }
+    },
+    {
+      immediate: true,
+    },
 )
 
 const graphData = computed(() => {
@@ -55,15 +55,15 @@ const graphData = computed(() => {
           transition: 'all 0.4s ease',
           PointerEvents: 'none',
           ...(edge.style ?? {}),
-          ...(!!selectedNode.value && !isRelated ? { opacity: 0.3 } : {}),
+          ...(!!selectedNode.value && !isRelated ? {opacity: 0.3} : {}),
           // ...(isTarget
           //   ? { stroke: changeAlpha(getPaletteColor('warning'), 0.5), strokeWidth: 2 }
           //   : {}),
           // ...(isSource
           //   ? { stroke: changeAlpha(getPaletteColor('accent'), 0.5), strokeWidth: 2 }
           //   : {}),
-          ...(isTarget ? { stroke: colors.yellow.base, strokeWidth: 2 } : {}),
-          ...(isSource ? { stroke: colors.purple.base, strokeWidth: 2 } : {}),
+          ...(isTarget ? {stroke: colors.yellow.base, strokeWidth: 2} : {}),
+          ...(isSource ? {stroke: colors.purple.base, strokeWidth: 2} : {}),
         },
       }
     }),
@@ -74,32 +74,32 @@ const loading = computed(() => !graphData.value)
 const empty = computed(() => !!graphData.value && isEmpty(graphData.value.nodes))
 
 const isHighlight = (searchString, data) =>
-  !!searchString && data.label.toLowerCase().indexOf(searchString.toLowerCase()) !== -1
+    !!searchString && data.label.toLowerCase().indexOf(searchString.toLowerCase()) !== -1
 
 watch(
-  [() => selectedNode.value, () => graphData.value],
-  () => {
-    if (!selectedNode.value || !graphData.value) {
-      incomingNodeIds.value = undefined
-      outgoingNodeIds.value = undefined
-      return
-    }
+    [() => selectedNode.value, () => graphData.value],
+    () => {
+      if (!selectedNode.value || !graphData.value) {
+        incomingNodeIds.value = undefined
+        outgoingNodeIds.value = undefined
+        return
+      }
 
-    incomingNodeIds.value = getIncomers(
-      selectedNode.value,
-      graphData.value.nodes,
-      graphData.value.edges,
-    ).map((n) => n.id)
+      incomingNodeIds.value = getIncomers(
+          selectedNode.value,
+          graphData.value.nodes,
+          graphData.value.edges,
+      ).map((n) => n.id)
 
-    outgoingNodeIds.value = getOutgoers(
-      selectedNode.value,
-      graphData.value.nodes,
-      graphData.value.edges,
-    ).map((n) => n.id)
-  },
-  {
-    immediate: true,
-  },
+      outgoingNodeIds.value = getOutgoers(
+          selectedNode.value,
+          graphData.value.nodes,
+          graphData.value.edges,
+      ).map((n) => n.id)
+    },
+    {
+      immediate: true,
+    },
 )
 
 provide('GraphContext', {
@@ -115,7 +115,7 @@ provide('GraphContext', {
 </script>
 
 <template>
-  <slot />
+  <slot/>
 </template>
 
 <style scoped></style>

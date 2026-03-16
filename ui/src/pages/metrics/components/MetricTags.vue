@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import {computed} from 'vue'
 
 const props = defineProps({
   allTags: Array,
@@ -10,7 +10,7 @@ const props = defineProps({
 const map = computed(() => {
   const m = new Map()
 
-  for (const { tag, values } of props.availableTags) {
+  for (const {tag, values} of props.availableTags) {
     m.set(tag, new Set(values))
   }
 
@@ -37,19 +37,19 @@ const disabled = (v, tag) => {
           <span class="text-body-2">{{ tag.tag }}</span>
 
           <v-chip-group
-            v-model:model-value="selectedTags[tag.tag]"
-            column
-            :filter="false"
-            :label="true"
-            :pill="true"
+              v-model:model-value="selectedTags[tag.tag]"
+              column
+              :filter="false"
+              :label="true"
+              :pill="true"
           >
             <v-chip
-              v-for="v in tag.values"
-              :key="v"
-              :value="v"
-              color="deep-purple"
-              :disabled="disableAll || disabled(v, tag.tag)"
-              >{{ v }}
+                v-for="v in tag.values"
+                :key="v"
+                :value="v"
+                color="deep-purple"
+                :disabled="disableAll || disabled(v, tag.tag)"
+            >{{ v }}
             </v-chip>
           </v-chip-group>
         </v-col>

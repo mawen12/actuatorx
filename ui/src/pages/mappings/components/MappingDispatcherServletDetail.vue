@@ -1,5 +1,4 @@
 <script setup>
-import { computed } from 'vue'
 
 defineProps({
   item: Object,
@@ -40,11 +39,11 @@ defineProps({
           <div class="text-subtitle-1 mb-1">Consumes</div>
 
           <v-chip
-            v-for="m in item.details.requestMappingConditions.consumes"
-            :key="m"
-            :value="m"
-            color="brown"
-            >{{ m }}
+              v-for="m in item.details.requestMappingConditions.consumes"
+              :key="m"
+              :value="m"
+              color="brown"
+          >{{ m }}
           </v-chip>
         </v-col>
         <v-col>
@@ -52,11 +51,11 @@ defineProps({
 
           <v-chip-group column v-model="item.details.requestMappingConditions.produces">
             <v-chip
-              v-for="m in item.details.requestMappingConditions.produces"
-              :key="m"
-              :value="m"
-              color="deep-purple"
-              >{{ m }}
+                v-for="m in item.details.requestMappingConditions.produces"
+                :key="m"
+                :value="m"
+                color="deep-purple"
+            >{{ m }}
             </v-chip>
           </v-chip-group>
         </v-col>
@@ -69,11 +68,11 @@ defineProps({
           <div class="text-subtitle-1 mb-1">Methods</div>
 
           <v-chip
-            v-for="m in item.details.requestMappingConditions.methods"
-            :key="m"
-            :value="m"
-            color="orange"
-            >{{ m }}
+              v-for="m in item.details.requestMappingConditions.methods"
+              :key="m"
+              :value="m"
+              color="orange"
+          >{{ m }}
           </v-chip>
         </v-col>
         <v-col>
@@ -81,11 +80,11 @@ defineProps({
 
           <v-chip-group column v-model="item.details.requestMappingConditions.patterns">
             <v-chip
-              v-for="m in item.details.requestMappingConditions.patterns"
-              :key="m"
-              :value="m"
-              color="teal"
-              >{{ m }}
+                v-for="m in item.details.requestMappingConditions.patterns"
+                :key="m"
+                :value="m"
+                color="teal"
+            >{{ m }}
             </v-chip>
           </v-chip-group>
         </v-col>
@@ -99,11 +98,11 @@ defineProps({
 
           <v-chip-group column v-model="item.details.requestMappingConditions.headers">
             <v-chip
-              v-for="m in item.details.requestMappingConditions.headers"
-              :key="m"
-              :value="m"
-              color="green"
-              >{{ m }}
+                v-for="m in item.details.requestMappingConditions.headers"
+                :key="m"
+                :value="m"
+                color="green"
+            >{{ m }}
             </v-chip>
           </v-chip-group>
         </v-col>
@@ -112,11 +111,11 @@ defineProps({
 
           <v-chip-group column v-model="item.details.requestMappingConditions.params">
             <v-chip
-              v-for="m in item.details.requestMappingConditions.params"
-              :key="m"
-              :value="m"
-              color="lime"
-              >{{ m }}
+                v-for="m in item.details.requestMappingConditions.params"
+                :key="m"
+                :value="m"
+                color="lime"
+            >{{ m }}
             </v-chip>
           </v-chip-group>
         </v-col>

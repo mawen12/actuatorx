@@ -1,15 +1,15 @@
 <script setup>
-import { computed, ref } from 'vue'
-import { search } from '@codemirror/search'
-import { logLanguage } from '@/components/code/extensions/logLanguageExtension'
+import {computed} from 'vue'
+import {search} from '@codemirror/search'
+import {logLanguage} from '@/components/code/extensions/logLanguageExtension'
 import CodeEditor from '@/components/code/CodeEditor.vue'
-import { EditorView } from '@codemirror/view'
+import {EditorView} from '@codemirror/view'
 
 defineProps({
   log: String,
 })
 
-const searchExtension = computed(() => search({ top: true }))
+const searchExtension = computed(() => search({top: true}))
 const logLanguageExtension = computed(() => logLanguage())
 </script>
 
@@ -17,9 +17,9 @@ const logLanguageExtension = computed(() => logLanguage())
   <v-card class="page-card d-flex flex-column rounded-lg" :elevation="0" title="Logfile">
     <v-card-text class="page-content">
       <CodeEditor
-        :value="log"
-        readonly
-        :extensions="[
+          :value="log"
+          readonly
+          :extensions="[
           EditorView.editable.of(false),
           EditorView.lineWrapping,
           searchExtension,

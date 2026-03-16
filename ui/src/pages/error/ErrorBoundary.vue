@@ -1,5 +1,4 @@
 <script setup>
-import ThePage from '@/components/page/ThePage.vue'
 
 defineProps({
   error: Object,
@@ -25,7 +24,7 @@ defineProps({
 
 <template>
   <v-container fluid class="d-flex align-center justify-center fill-height">
-    <v-card class="mx-auto px-6 py-8" :title="error.message" :elevation="0">
+    <v-card class="mx-auto px-6 py-8" :title="error?.message" :elevation="0">
       <v-btn color="warning" size="large" variant="elevated" block @click="handler">Refetch</v-btn>
     </v-card>
   </v-container>

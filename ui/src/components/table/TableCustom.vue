@@ -1,5 +1,5 @@
 <script setup>
-import { inject, useSlots } from 'vue'
+import {inject, useSlots} from 'vue'
 import TableToolbar from './TableToolbar.vue'
 
 const {
@@ -22,7 +22,7 @@ const {
 
 const slots = useSlots()
 
-const rowProps = ({ item }) => {
+const rowProps = ({item}) => {
   const isExpanded = expanded.value.includes(item[parentProps.entity.itemValue])
 
   return {
@@ -38,30 +38,30 @@ const rowProps = ({ item }) => {
     <template v-if="parentProps.entity.showToolbar">
       <table-toolbar>
         <template #global-actions="slotProps">
-          <slot name="global-actions" v-bind="slotProps" />
+          <slot name="global-actions" v-bind="slotProps"/>
         </template>
       </table-toolbar>
     </template>
 
     <v-data-table
-      ref="tableRef"
-      fixed-header
-      :row-props="rowProps"
-      :headers="parentProps.entity.headers"
-      :items="filteredTableData"
-      item-key="name"
-      :item-value="parentProps.entity.itemValue"
-      v-model="selected"
-      :show-select="hasMassActions"
-      v-model:expanded="expanded"
-      :show-expand="hasDetailsRowAction"
-      :expand-on-click="hasDetailsRowAction"
-      density="comfortable"
-      hover
-      v-model:page="page"
-      v-model:items-per-page="itemsPerPage"
-      :items-per-page-options="itemPerPageOptions"
-      class="data-table"
+        ref="tableRef"
+        fixed-header
+        :row-props="rowProps"
+        :headers="parentProps.entity.headers"
+        :items="filteredTableData"
+        item-key="name"
+        :item-value="parentProps.entity.itemValue"
+        v-model="selected"
+        :show-select="hasMassActions"
+        v-model:expanded="expanded"
+        :show-expand="hasDetailsRowAction"
+        :expand-on-click="hasDetailsRowAction"
+        density="comfortable"
+        hover
+        v-model:page="page"
+        v-model:items-per-page="itemsPerPage"
+        :items-per-page-options="itemPerPageOptions"
+        class="data-table"
     >
       <template v-slot:header.data-table-expand="{}">
         <v-tooltip location="bottom">
@@ -96,7 +96,7 @@ const rowProps = ({ item }) => {
 
       <template v-for="(_, slotName) in slots" #[slotName]="slotProps">
         <template v-if="slotName !== 'global-actions'">
-          <slot :name="slotName" v-bind="slotProps" />
+          <slot :name="slotName" v-bind="slotProps"/>
         </template>
       </template>
     </v-data-table>

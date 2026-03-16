@@ -11,8 +11,8 @@ defineProps({
         <div class="text-subtitle-1 mb-1">{{ v.condition }}</div>
 
         <span class="border-sm rounded-lg pa-2 text-subtitle-2 text-blue-darken-2">{{
-          v.message
-        }}</span>
+            v.message
+          }}</span>
       </v-card-text>
     </template>
   </v-card>
@@ -22,8 +22,8 @@ defineProps({
         <div class="text-subtitle-1 mb-1">{{ v.condition }}</div>
 
         <span class="border-sm rounded-lg pa-2 text-subtitle-2 text-amber-darken-3">{{
-          v.message
-        }}</span>
+            v.message
+          }}</span>
       </v-card-text>
     </template>
   </v-card>

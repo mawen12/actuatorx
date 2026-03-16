@@ -6,7 +6,7 @@ const props = defineProps({
 
 <template>
   <v-btn icon size="small" variant="text" @click="onClick">
-    <v-icon icon="mdi-chevron-double-right"> </v-icon>
+    <v-icon icon="mdi-chevron-double-right"></v-icon>
   </v-btn>
 </template>
 

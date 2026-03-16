@@ -31,14 +31,14 @@ defineProps({
           <div class="text-subtitle-1 mb-1">Servlet Name Mappings</div>
 
           <v-chip v-for="m in item.servletNameMappings" :key="m" :value="m" color="deep-purple"
-            >{{ m }}
+          >{{ m }}
           </v-chip>
         </v-col>
         <v-col>
           <div class="text-subtitle-1 mb-1">URL Pattern Mappings</div>
 
           <v-chip v-for="m in item.urlPatternMappings" :key="m" :value="m" color="deep-purple"
-            >{{ m }}
+          >{{ m }}
           </v-chip>
         </v-col>
       </v-row>

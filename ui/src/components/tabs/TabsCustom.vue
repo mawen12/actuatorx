@@ -1,9 +1,9 @@
 <script setup>
-import { computed, inject, watch } from 'vue'
+import {computed, inject, watch} from 'vue'
 import TabsToolbar from './TabsToolbar.vue'
-import { useMemoize } from '@vueuse/core'
+import {useMemoize} from '@vueuse/core'
 
-const { parentProps, currentTab, tabs, filteredTabsData, tabsData, search } = inject('tabsContext')
+const {parentProps, currentTab, tabs, filteredTabsData, tabsData, search} = inject('tabsContext')
 
 const getTabData = (tab) => tab.getTabData(filteredTabsData.value)
 
@@ -23,18 +23,18 @@ const dataCountCache = (tab) => {
 }
 
 watch(
-  filteredTabsData,
-  () => {
-    dataLengthCache.clear()
-  },
-  { immediate: true },
+    filteredTabsData,
+    () => {
+      dataLengthCache.clear()
+    },
+    {immediate: true},
 )
 </script>
 
 <template>
   <v-card class="page-card rounded-lg">
     <template v-if="showToolbar">
-      <tabs-toolbar />
+      <tabs-toolbar/>
     </template>
 
     <div style="flex: 1; overflow: hidden; display: flex; flex-direction: column">
@@ -43,11 +43,11 @@ watch(
           <template v-for="(tab, idx) in tabs" :key="idx">
             <template v-if="tab.componentType === 'Table'">
               <v-badge
-                bordered
-                location="top right"
-                :color="dataLengthCache(tab) > 0 ? 'success' : 'warning'"
-                :content="dataCountCache(tab)"
-                :offset-y="8"
+                  bordered
+                  location="top right"
+                  :color="dataLengthCache(tab) > 0 ? 'success' : 'warning'"
+                  :content="dataCountCache(tab)"
+                  :offset-y="8"
               >
                 <v-tab :value="tab.name" class="text-none" :disabled="dataLengthCache(tab) === 0">
                   {{ tab.name }}
@@ -64,28 +64,28 @@ watch(
 
         <v-tabs-window v-model="currentTab" style="flex: 1; overflow: hidden">
           <v-tabs-window-item
-            v-for="(tab, idx) in tabs"
-            :key="idx"
-            :value="tab.name"
-            class="data-tab"
+              v-for="(tab, idx) in tabs"
+              :key="idx"
+              :value="tab.name"
+              class="data-tab"
           >
             <component
-              :is="tab.component"
-              :entity="tab.entity"
-              :data="getTabData(tab)"
-              :all-data="getTabAllData(tab)"
-              :refetchHandler="parentProps.refetchHandler"
+                :is="tab.component"
+                :entity="tab.entity"
+                :data="getTabData(tab)"
+                :all-data="getTabAllData(tab)"
+                :refetchHandler="parentProps.refetchHandler"
             />
           </v-tabs-window-item>
         </v-tabs-window>
       </template>
       <template v-else>
         <component
-          :is="tabs[0].component"
-          :entity="tabs[0].entity"
-          :data="getTabData(tabs[0])"
-          :all-data="getTabAllData(tabs[0])"
-          :refetchHandler="parentProps.refetchHandler"
+            :is="tabs[0].component"
+            :entity="tabs[0].entity"
+            :data="getTabData(tabs[0])"
+            :all-data="getTabAllData(tabs[0])"
+            :refetchHandler="parentProps.refetchHandler"
         />
       </template>
     </div>

@@ -1,7 +1,6 @@
 <script setup>
-import { ref, reactive, watch, computed } from 'vue'
-import { formatWidgetValue } from '@/utils/formatUtils'
-import { useGetMetricDetailsQuery } from '@/apis/requests/endpoints/metrics/getMetricDetails'
+import {reactive, ref, watch} from 'vue'
+import {useGetMetricDetailsQuery} from '@/apis/requests/endpoints/metrics/getMetricDetails'
 import MetricTags from './MetricTags.vue'
 
 const props = defineProps({
@@ -12,27 +11,27 @@ const metricDetails = ref(undefined)
 const metricDetailsValue = ref(undefined)
 const selectedTags = reactive({})
 
-const { data, isLoading, refetch } = useGetMetricDetailsQuery({
+const {data, isLoading, refetch} = useGetMetricDetailsQuery({
   name: props.item.name,
   tags: selectedTags,
 })
 
 watch(
-  data,
-  (newVal) => {
-    if (newVal) {
-      if (!metricDetails.value) {
-        metricDetails.value = newVal
+    data,
+    (newVal) => {
+      if (newVal) {
+        if (!metricDetails.value) {
+          metricDetails.value = newVal
+        }
+        metricDetailsValue.value = newVal
       }
-      metricDetailsValue.value = newVal
-    }
-  },
-  { immediate: true },
+    },
+    {immediate: true},
 )
 
 const measurementHeaders = [
-  { title: 'Statistic', key: 'statistic', align: 'start', width: '40%' },
-  { title: 'Value', key: 'value', align: 'start', width: '60%' },
+  {title: 'Statistic', key: 'statistic', align: 'start', width: '40%'},
+  {title: 'Value', key: 'value', align: 'start', width: '60%'},
 ]
 </script>
 
@@ -43,12 +42,12 @@ const measurementHeaders = [
       <v-card-text>
         <div class="d-flex row items-center">
           <span class="text-body-2 text-capitalize">Description:</span>
-          <v-spacer />
+          <v-spacer/>
           <span class="text-subtitle-2">{{ metricDetails?.description }}</span>
         </div>
         <div class="d-flex row items-center">
           <span class="text-body-2 text-capitalize">Base Unit:</span>
-          <v-spacer />
+          <v-spacer/>
           <span class="text-subtitle-2">{{ metricDetails?.baseUnit }}</span>
         </div>
       </v-card-text>
@@ -57,36 +56,36 @@ const measurementHeaders = [
     <!-- tags -->
     <template v-if="!!metricDetails?.availableTags.length">
       <metric-tags
-        :all-tags="metricDetails?.availableTags"
-        :available-tags="metricDetailsValue?.availableTags"
-        :selected-tags="selectedTags"
+          :all-tags="metricDetails?.availableTags"
+          :available-tags="metricDetailsValue?.availableTags"
+          :selected-tags="selectedTags"
       />
     </template>
 
     <v-card outlined class="page-card rounded-lg" :elevation="0">
       <v-card-title class="d-flex align-center">
         <span>Measurements</span>
-        <v-spacer />
+        <v-spacer/>
         <v-tooltip location="bottom">
           <template v-slot:activator="{ props }">
             <v-btn
-              v-bind="props"
-              variant="text"
-              @click="refetch"
-              icon="mdi-refresh"
-              :loading="isLoading"
+                v-bind="props"
+                variant="text"
+                @click="refetch"
+                icon="mdi-refresh"
+                :loading="isLoading"
             />
           </template>
           Refresh
         </v-tooltip>
       </v-card-title>
       <v-data-table
-        :headers="measurementHeaders"
-        :items="metricDetailsValue?.measurements"
-        :items-per-page="-1"
-        density="comfortable"
-        hide-default-footer
-        :loading="isLoading"
+          :headers="measurementHeaders"
+          :items="metricDetailsValue?.measurements"
+          :items-per-page="-1"
+          density="comfortable"
+          hide-default-footer
+          :loading="isLoading"
       >
       </v-data-table>
     </v-card>

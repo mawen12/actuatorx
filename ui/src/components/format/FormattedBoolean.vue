@@ -1,5 +1,5 @@
 <script setup>
-import { FALSE_LABEL_ID, TRUE_LABEL_ID } from '@/constants/ui'
+import {FALSE_LABEL_ID, TRUE_LABEL_ID} from '@/constants/ui'
 
 defineProps({
   value: Boolean,

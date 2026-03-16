@@ -1,42 +1,42 @@
 export const fixedTableEntity = {
-  id: 'fixedTableEntity',
-  itemValue: 'uid',
-  showToolbar: false,
-  headers: [
-    {
-      title: 'Target',
-      key: 'target',
-      value: (item) => item.runnable.target,
-      sortable: true,
-      align: 'start',
-      width: '50%',
-      cellProps: {
-        class: 'text-break',
-      },
+    id: 'fixedTableEntity',
+    itemValue: 'uid',
+    showToolbar: false,
+    headers: [
+        {
+            title: 'Target',
+            key: 'target',
+            value: (item) => item.runnable.target,
+            sortable: true,
+            align: 'start',
+            width: '50%',
+            cellProps: {
+                class: 'text-break',
+            },
+        },
+        {
+            title: 'Initial Delay',
+            key: 'initialDelay',
+            sortable: false,
+            align: 'center',
+            width: '25%',
+        },
+        {
+            title: 'Interval',
+            key: 'interval',
+            sortable: false,
+            align: 'center',
+            width: '25%',
+        },
+    ],
+    rowAction: {},
+    massActions: [],
+    globalActions: [],
+    filterData: (data, filter) => {
+        if (filter && filter !== '') {
+            const lower = filter.toLowerCase()
+            return data.filter((item) => item.search.includes(lower))
+        }
+        return data
     },
-    {
-      title: 'Initial Delay',
-      key: 'initialDelay',
-      sortable: false,
-      align: 'center',
-      width: '25%',
-    },
-    {
-      title: 'Interval',
-      key: 'interval',
-      sortable: false,
-      align: 'center',
-      width: '25%',
-    },
-  ],
-  rowAction: {},
-  massActions: [],
-  globalActions: [],
-  filterData: (data, filter) => {
-    if (filter && filter !== '') {
-      const lower = filter.toLowerCase()
-      return data.filter((item) => item.search.includes(lower))
-    }
-    return data
-  },
 }

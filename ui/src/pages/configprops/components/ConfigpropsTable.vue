@@ -2,7 +2,7 @@
 import TableContext from '@/components/table/TableContext.vue'
 import TableCustom from '@/components/table/TableCustom.vue'
 import ConfigPropertyCode from './ConfigPropertyCode.vue'
-import { useCopyFeedback } from '@/composables/useCopyFeedback'
+import {useCopyFeedback} from '@/composables/useCopyFeedback'
 
 const props = defineProps({
   entity: Object,
@@ -11,7 +11,7 @@ const props = defineProps({
   refetchHandler: Function,
 })
 
-const { copyItem, isCopied } = useCopyFeedback({
+const {copyItem, isCopied} = useCopyFeedback({
   timeout: 1500,
   getKey: (item) => item[props.entity.itemValue],
 })
@@ -25,12 +25,12 @@ const { copyItem, isCopied } = useCopyFeedback({
         <v-tooltip location="bottom">
           <template v-slot:activator="{ props }">
             <v-btn
-              size="small"
-              v-bind="props"
-              :active="isCopied(item)"
-              variant="text"
-              :icon="isCopied(item) ? 'mdi-check' : 'mdi-content-copy'"
-              @click.stop="(event) => copyItem(value, item)"
+                size="small"
+                v-bind="props"
+                :active="isCopied(item)"
+                variant="text"
+                :icon="isCopied(item) ? 'mdi-check' : 'mdi-content-copy'"
+                @click.stop="(event) => copyItem(value, item)"
             />
           </template>
           {{ isCopied(item) ? 'Copied' : 'Copy' }}
@@ -40,7 +40,7 @@ const { copyItem, isCopied } = useCopyFeedback({
       <template v-slot:expanded-row="{ columns, item }">
         <tr class="expanded-row">
           <td :colspan="columns.length" style="padding: 0px">
-            <config-property-code :data="item" />
+            <config-property-code :data="item"/>
           </td>
         </tr>
       </template>

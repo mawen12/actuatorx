@@ -1,9 +1,8 @@
 <script setup>
-import { computed, nextTick, provide, watch, ref, inject, reactive } from 'vue'
-import { isEmpty } from 'lodash-es'
-import { highlightElement } from '@/utils/highlightElement'
-import { useTheme } from 'vuetify'
-import { debounce } from 'lodash-es'
+import {computed, inject, nextTick, provide, reactive, ref, watch} from 'vue'
+import {debounce, isEmpty} from 'lodash-es'
+import {highlightElement} from '@/utils/highlightElement'
+import {useTheme} from 'vuetify'
 
 const props = defineProps({
   entity: {
@@ -40,9 +39,9 @@ const selected = ref([])
 const expanded = ref([])
 
 const itemPerPageOptions = [
-  { value: 10, title: '10' },
-  { value: 25, title: '25' },
-  { value: 50, title: '50' },
+  {value: 10, title: '10'},
+  {value: 25, title: '25'},
+  {value: 50, title: '50'},
 ]
 
 const page = ref(1)
@@ -54,19 +53,19 @@ const tableAllData = computed(() => props.allData ?? [])
 const tableData = computed(() => props.data ?? [])
 
 const filteredTableData = computed(() =>
-  search.value || customFilters
-    ? props.entity.filterData(tableData.value, search.value, customFilters)
-    : tableData.value,
+    search.value || customFilters
+        ? props.entity.filterData(tableData.value, search.value, customFilters)
+        : tableData.value,
 )
 
 const displayTableData = computed(() =>
-  props.entity.paging
-    ? filteredTableData.value.slice(
-        page.value,
-        itemsPerPage.value,
-        page.value * itemsPerPage.value + itemsPerPage.value,
-      )
-    : filteredTableData.value,
+    props.entity.paging
+        ? filteredTableData.value.slice(
+            page.value,
+            itemsPerPage.value,
+            page.value * itemsPerPage.value + itemsPerPage.value,
+        )
+        : filteredTableData.value,
 )
 const empty = computed(() => !props.loading && !filteredTableData.value.length)
 const selectedRows = computed(() => selected.value)
@@ -97,17 +96,17 @@ const snackbarContent = ref('')
 const theme = useTheme()
 const highlightAnchor = ref('')
 const delayedAnchor = ref('')
-const { search: tabsSearch } = inject('tabsContext', {})
+const {search: tabsSearch} = inject('tabsContext', {})
 
 const highlightHandler = async (anchor) => {
   if (!props.entity.getAnchor) return
 
   const anchorIndex = filteredTableData.value.findIndex(
-    (row) => props.entity.getAnchor(row) === anchor,
+      (row) => props.entity.getAnchor(row) === anchor,
   )
   if (anchorIndex < 0) {
     const allDataAnchorIndex = tableAllData.value.findIndex(
-      (row) => props.entity.getAnchor(row) === anchor,
+        (row) => props.entity.getAnchor(row) === anchor,
     )
     if (allDataAnchorIndex >= 0) {
       console.log('Selected item is filtered')
@@ -133,19 +132,19 @@ const highlightHandler = async (anchor) => {
   const el = tableRef.value.$el.querySelector(`span[data-row-id='${anchor}']`)
   const target = el?.closest('tr')
   if (target) {
-    target.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    target.scrollIntoView({behavior: 'smooth', block: 'center'})
     highlightElement(target, theme.name.value === 'dark' ? '#689f38' : '#dcedc8')
   }
 }
 
 watch(
-  () => delayedAnchor.value,
-  debounce((val) => {
-    if (val) {
-      highlightHandler(val)
-      delayedAnchor.value = undefined
-    }
-  }, 500),
+    () => delayedAnchor.value,
+    debounce((val) => {
+      if (val) {
+        highlightHandler(val)
+        delayedAnchor.value = undefined
+      }
+    }, 500),
 )
 
 const resetFilterAndHighlight = () => {

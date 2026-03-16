@@ -1,11 +1,11 @@
 <script setup>
-import { inject, toRef, watch } from 'vue'
+import {inject, toRef, watch} from 'vue'
 
 const props = defineProps({
   onChange: Function,
 })
 
-const { customFilters } = inject('tableContext')
+const {customFilters} = inject('tableContext')
 
 const configuredRef = toRef(customFilters, 'configured')
 
@@ -17,13 +17,13 @@ watch(customFilters, (newVal) => {
 
 <template>
   <v-btn-toggle
-    v-model="configuredRef"
-    density="compact"
-    border="opacity-50 sm"
-    rounded="lg"
-    divided
-    variant="text"
-    color="warning"
+      v-model="configuredRef"
+      density="compact"
+      border="opacity-50 sm"
+      rounded="lg"
+      divided
+      variant="text"
+      color="warning"
   >
     <v-btn :value="true">Configured</v-btn>
   </v-btn-toggle>

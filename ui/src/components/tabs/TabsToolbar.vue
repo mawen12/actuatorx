@@ -1,8 +1,8 @@
 <script setup>
-import { ref, inject } from 'vue'
+import {inject, ref} from 'vue'
 
-const { parentProps, refetchHandler, search, changeCustomFiltersHandler, hasGlobalActions } =
-  inject('tabsContext')
+const {parentProps, refetchHandler, search, changeCustomFiltersHandler, hasGlobalActions} =
+    inject('tabsContext')
 
 const loadingActionIds = ref([])
 
@@ -22,29 +22,29 @@ const globalActionClickHandler = async (event, actionId) => {
 <template>
   <v-card-title class="d-flex ga-2 align-center">
     <v-text-field
-      v-model="search"
-      label="Search"
-      prepend-inner-icon="mdi-magnify"
-      variant="outlined"
-      density="compact"
-      autocomplete="suppress"
-      rounded="lg"
-      hide-details
-      single-line
-      clearable
+        v-model="search"
+        label="Search"
+        prepend-inner-icon="mdi-magnify"
+        variant="outlined"
+        density="compact"
+        autocomplete="suppress"
+        rounded="lg"
+        hide-details
+        single-line
+        clearable
     >
     </v-text-field>
 
     <template v-if="parentProps.entity.customFilterComponent">
       <component
-        :is="parentProps.entity.customFilterComponent"
-        :on-change="changeCustomFiltersHandler"
+          :is="parentProps.entity.customFilterComponent"
+          :on-change="changeCustomFiltersHandler"
       />
     </template>
 
     <v-tooltip location="bottom">
       <template v-slot:activator="{ props }">
-        <v-btn @click="refetchHandler" variant="text" icon="mdi-refresh" v-bind="props" />
+        <v-btn @click="refetchHandler" variant="text" icon="mdi-refresh" v-bind="props"/>
       </template>
       Refresh
     </v-tooltip>

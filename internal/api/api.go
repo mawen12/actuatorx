@@ -19,6 +19,10 @@ func NewActuatorApi() *ActuatorApi {
 	}
 }
 
+func (a *ActuatorApi) Connect(c *gin.Context, cli *client.Client) (interface{}, error) {
+	return nil, nil
+}
+
 func (a *ActuatorApi) GetHealth(c *gin.Context, cli *client.Client) (interface{}, error) {
 	return cli.Health(c.Request.Context())
 }
@@ -161,7 +165,7 @@ func (a *ActuatorApi) wrapperResult(handler func(c *gin.Context, cli *client.Cli
 }
 
 func (a *ActuatorApi) resource(c *gin.Context) (*client.Resource, error) {
-	urlStr := c.Param("url")
+	urlStr := c.Query("url")
 	res, err := a.TryAcquire(c.Request.Context(), urlStr)
 	if err != nil {
 		return nil, err

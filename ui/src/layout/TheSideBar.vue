@@ -1,6 +1,6 @@
 <script setup>
-import { ref, computed } from 'vue'
-import { useStorage } from '@vueuse/core'
+import {computed, ref} from 'vue'
+import {useStorage} from '@vueuse/core'
 
 const connected = useStorage('connected')
 const drawer = useStorage('drawer', true)
@@ -168,26 +168,26 @@ const filteredResult = computed(() => {
       <v-sheet class="drawer-root">
         <v-sheet class="pa-2">
           <v-text-field
-            v-model="search"
-            prepend-inner-icon="mdi-magnify"
-            density="compact"
-            label="Search Abaility"
-            variant="outlined"
-            active-strategy="single-leaf"
-            hide-details
-            single-line
-            clearable
+              v-model="search"
+              prepend-inner-icon="mdi-magnify"
+              density="compact"
+              label="Search Abaility"
+              variant="outlined"
+              active-strategy="single-leaf"
+              hide-details
+              single-line
+              clearable
           ></v-text-field>
         </v-sheet>
 
         <v-list :items="filteredResult" color="primary" dense="compact" nav class="drawer-list">
         </v-list>
 
-        <v-divider />
+        <v-divider/>
 
         <v-card height="120" class="mt-2" variant="tonal">
-          <v-card-title> Summary </v-card-title>
-          <v-card-text> Fixed height content </v-card-text>
+          <v-card-title> Summary</v-card-title>
+          <v-card-text> Fixed height content</v-card-text>
         </v-card>
       </v-sheet>
     </v-navigation-drawer>

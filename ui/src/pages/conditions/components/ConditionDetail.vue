@@ -10,13 +10,13 @@ defineProps({
 <template>
   <v-container fluid class="pa-4 d-flex flex-column ga-2">
     <template v-if="item.type === 'positiveMatches'">
-      <ConditionPositiveMatchDetail :item="item" />
+      <ConditionPositiveMatchDetail :item="item"/>
     </template>
     <template v-else-if="item.type === 'negativeMatches'">
-      <ConditionNegativeMatchDetail :item="item" />
+      <ConditionNegativeMatchDetail :item="item"/>
     </template>
     <template v-else>
-      <v-card class="page-card rounded-lg" :elevation="0" title="Unconditional"> </v-card>
+      <v-card class="page-card rounded-lg" :elevation="0" title="Unconditional"></v-card>
     </template>
   </v-container>
 </template>

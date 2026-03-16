@@ -27,7 +27,7 @@ const typeColor = {
       <template v-slot:expanded-row="{ columns, item }">
         <tr class="expanded-row">
           <td :colspan="columns.length" style="padding: 0px">
-            <condition-detail :item="item" />
+            <condition-detail :item="item"/>
           </td>
         </tr>
       </template>

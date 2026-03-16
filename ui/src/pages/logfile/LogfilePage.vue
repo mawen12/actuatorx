@@ -1,10 +1,10 @@
 <script setup>
 import LoadingPage from '@/components/page/LoadingPage.vue'
 import ThePage from '@/components/page/ThePage.vue'
-import { useGetLogfile } from '@/apis/requests/endpoints/logfile/getLogFile'
-import { computed, ref, watch } from 'vue'
-import { isNil } from 'lodash-es'
-import { useIntervalFn } from '@vueuse/core'
+import {useGetLogfile} from '@/apis/requests/endpoints/logfile/getLogFile'
+import {computed, ref, watch} from 'vue'
+import {isNil} from 'lodash-es'
+import {useIntervalFn} from '@vueuse/core'
 import LogCode from './components/LogCode.vue'
 
 const log = ref(undefined)
@@ -16,35 +16,35 @@ const LOG_INTERVAL = 3000
 const start = ref(0)
 const end = ref(LOG_MAX_LENGTH)
 
-const logfileState = useGetLogfile({ disableGlobalError: true, cacheTime: 0 })
+const logfileState = useGetLogfile({disableGlobalError: true, cacheTime: 0})
 
-const { pause, resume, isActive } = useIntervalFn(
-  () => {
-    if (active.value) requestFlag.value = !requestFlag.value
-  },
-  LOG_INTERVAL,
-  { immediate: false },
+const {pause, resume, isActive} = useIntervalFn(
+    () => {
+      if (active.value) requestFlag.value = !requestFlag.value
+    },
+    LOG_INTERVAL,
+    {immediate: false},
 )
 
 watch(
-  requestFlag,
-  async (newVal) => {
-    if (!active.value) return
-    if (logfileState?.isLoading?.value) return
+    requestFlag,
+    async (newVal) => {
+      if (!active.value) return
+      if (logfileState?.isLoading?.value) return
 
-    try {
-      // const result = await logfileState.mutateAsync({ start: start.value, end: end.value })
-      // let newLog = result.slice(-LOG_MAX_LENGTH)
-      // if (newLog.length === LOG_MAX_LENGTH) {
-      //   const lineBreakIndex = newLog.indexOf('\n')
-      //   if (lineBreakIndex !== -1) {
-      //     newLog = newLog.slice(lineBreakIndex + 1)
-      //   }
-      // }
-      // start.value = end.value
-      // end.value = end.value + LOG_MAX_LENGTH
-      // log.value = newLog
-      log.value = `2025-11-25 21:38:43,575 INFO [main] [] com.github.mawen12.MonitorApp: Starting MonitorApp using Java 17.0.15 on mawendeMac-mini.local with PID 9015 (/Users/mawen/Documents/github/mawen12/learn-spring-boot/spring-boot2/spring-boot2-monitor-demo/target/classes started by mawen in /Users/mawen/Documents/github/mawen12/learn-spring-boot)
+      try {
+        // const result = await logfileState.mutateAsync({ start: start.value, end: end.value })
+        // let newLog = result.slice(-LOG_MAX_LENGTH)
+        // if (newLog.length === LOG_MAX_LENGTH) {
+        //   const lineBreakIndex = newLog.indexOf('\n')
+        //   if (lineBreakIndex !== -1) {
+        //     newLog = newLog.slice(lineBreakIndex + 1)
+        //   }
+        // }
+        // start.value = end.value
+        // end.value = end.value + LOG_MAX_LENGTH
+        // log.value = newLog
+        log.value = `2025-11-25 21:38:43,575 INFO [main] [] com.github.mawen12.MonitorApp: Starting MonitorApp using Java 17.0.15 on mawendeMac-mini.local with PID 9015 (/Users/mawen/Documents/github/mawen12/learn-spring-boot/spring-boot2/spring-boot2-monitor-demo/target/classes started by mawen in /Users/mawen/Documents/github/mawen12/learn-spring-boot)
 2025-11-25 21:38:43,578 INFO [main] [] com.github.mawen12.MonitorApp: No active profile set, falling back to 1 default profile: "default"
 2025-11-25 21:38:44,008 INFO [main] [] org.springframework.boot.web.embedded.tomcat.TomcatWebServer: Tomcat initialized with port(s): 28081 (http)
 2025-11-25 21:38:44,059 INFO [main] [] org.apache.coyote.http11.Http11NioProtocol: Initializing ProtocolHandler ["http-nio-28081"]
@@ -78,15 +78,15 @@ Consider the following:
 	If you want an embedded database (H2, HSQL or Derby), please put it on the classpath.
 	If you have database settings to be loaded from a particular profile you may need to activate it (no profiles are currently active).
 `
-      // if (!isActive.value) {
-      //   resume()
-      // }
-    } catch (e) {
-      console.error(e)
-      active.value = false
-    }
-  },
-  { immediate: true },
+        // if (!isActive.value) {
+        //   resume()
+        // }
+      } catch (e) {
+        console.error(e)
+        active.value = false
+      }
+    },
+    {immediate: true},
 )
 
 const uiStatus = computed(() => {
@@ -103,11 +103,11 @@ const uiStatus = computed(() => {
 <template>
   <the-page>
     <template v-if="uiStatus === 'loading'">
-      <loading-page />
+      <loading-page/>
     </template>
-    <template v-else-if="uiStatus === 'error'"> error </template>
+    <template v-else-if="uiStatus === 'error'"> error</template>
     <template v-else>
-      <log-code :log="log" />
+      <log-code :log="log"/>
     </template>
   </the-page>
 </template>

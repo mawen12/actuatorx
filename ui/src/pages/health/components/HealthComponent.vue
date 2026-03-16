@@ -1,7 +1,6 @@
 <script setup>
-import { computed } from 'vue'
-import { startCase } from 'lodash-es'
-import { getHealthStatusColor } from '@/utils/itemUtils'
+import {computed} from 'vue'
+import {getHealthStatusColor} from '@/utils/itemUtils'
 import {
   getHealthDetailsKeyFormatter,
   getHealthDetailsValueFormatter,
@@ -39,7 +38,7 @@ const formattedValue = (key, value) => {
   <v-card class="page-card rounded-lg" :elevation="0">
     <v-card-title class="d-flex align-center">
       <span class="text-capitalize">{{ name }}</span>
-      <v-spacer />
+      <v-spacer/>
       <span :class="statusColor">{{ status }}</span>
     </v-card-title>
 
@@ -48,7 +47,7 @@ const formattedValue = (key, value) => {
         <div v-for="(value, key, idx) in details" :key="idx" class="d-flex row items-center">
           <span class="text-body-2 text-capitalize">{{ formattedKey(key) }}</span>
 
-          <v-spacer />
+          <v-spacer/>
 
           <span class="text-subtitle-2">{{ formattedValue(key, value) }}</span>
         </div>

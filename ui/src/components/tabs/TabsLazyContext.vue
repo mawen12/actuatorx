@@ -1,5 +1,5 @@
 <script setup>
-import { computed, provide, reactive, ref } from 'vue'
+import {computed, provide, reactive, ref} from 'vue'
 
 const props = defineProps({
   entity: {
@@ -33,9 +33,9 @@ const currentTab = ref(hasTabs.value ? firstTab.value.id : undefined)
 const tabsData = computed(() => props.data ?? {})
 
 const filteredTabsData = computed(() =>
-  enableSearch.value && (search.value || customFilters.value)
-    ? props.entity.filterData(tabsData.value, search.value, customFilters)
-    : tabsData.value,
+    enableSearch.value && (search.value || customFilters.value)
+        ? props.entity.filterData(tabsData.value, search.value, customFilters)
+        : tabsData.value,
 )
 
 const changeCustomFiltersHandler = (newCustomFilters) => {

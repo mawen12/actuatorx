@@ -1,8 +1,8 @@
 <script setup>
-import { computed, ref } from 'vue'
-import { Codemirror } from 'vue-codemirror'
-import { EditorView } from '@codemirror/view'
-import { langs } from '@uiw/codemirror-extensions-langs'
+import {computed, ref} from 'vue'
+import {Codemirror} from 'vue-codemirror'
+import {EditorView} from '@codemirror/view'
+import {langs} from '@uiw/codemirror-extensions-langs'
 
 const props = defineProps({
   language: String,
@@ -37,9 +37,9 @@ const code = computed(() => props.value)
 
 <template>
   <codemirror
-    v-model="code"
-    :readonly="readonly"
-    :extensions="[EditorView.lineWrapping, ...languageExtensions, ...(extensions || [])]"
+      v-model="code"
+      :readonly="readonly"
+      :extensions="[EditorView.lineWrapping, ...languageExtensions, ...(extensions || [])]"
   />
 </template>
 

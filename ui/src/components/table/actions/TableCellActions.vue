@@ -1,6 +1,5 @@
 <script setup>
-import { property } from 'lodash-es'
-import { computed, ref } from 'vue'
+import {ref} from 'vue'
 
 const props = defineProps({
   row: Object,
@@ -36,12 +35,12 @@ const isLoading = (action) => loadingActionIds.value.includes(action.id)
       <v-tooltip location="bottom">
         <template v-slot:activator="{ props }">
           <v-btn
-            v-bind="props"
-            variant="text"
-            :icon="action.icon"
-            :loading="isLoading(action)"
-            :disabled="isDisabled(action)"
-            @click="(event) => actionClickHandler(event, action.id)"
+              v-bind="props"
+              variant="text"
+              :icon="action.icon"
+              :loading="isLoading(action)"
+              :disabled="isDisabled(action)"
+              @click="(event) => actionClickHandler(event, action.id)"
           />
         </template>
         {{ action.label }}

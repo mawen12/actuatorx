@@ -31,7 +31,7 @@ defineProps({
           <div class="text-subtitle-1 mb-1">Mappings</div>
 
           <v-chip v-for="m in item.mappings" :key="m" :value="m" color="deep-purple"
-            >{{ m }}
+          >{{ m }}
           </v-chip>
         </v-col>
       </v-row>

@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import {createRouter, createWebHashHistory} from 'vue-router'
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -6,15 +6,9 @@ const router = createRouter({
         {
             path: '/',
             component: () => import('@/layout/AppLayout.vue'),
-            redirect: '/health',
             children: [
                 {
                     path: '',
-                    name: 'Home',
-                    component: () => import('@/pages/home/HomePage.vue'),
-                },
-                {
-                    path: 'connect',
                     name: 'Connect',
                     component: () => import('@/pages/connect/ConnectPage.vue'),
                 },

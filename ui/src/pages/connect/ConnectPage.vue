@@ -1,11 +1,12 @@
 <script setup>
-import { reactive, ref } from 'vue'
-import { useConnect } from '@/apis/requests/endpoints/connect/connect'
-import { useRouter } from 'vue-router'
-import { useStorage } from '@vueuse/core'
+import {reactive, ref} from 'vue'
+import {useConnect} from '@/apis/requests/endpoints/connect/connect'
+import {useRouter} from 'vue-router'
+import {useStorage} from '@vueuse/core'
 
 const router = useRouter()
 const connected = useStorage('connected')
+const connectUrl = useStorage('connectUrl')
 const drawer = useStorage('drawer', true)
 
 const form = ref(false)
@@ -35,6 +36,7 @@ async function onSubmit() {
 
     router.push('/health')
     connected.value = true
+    connectUrl.value = model.URL
     drawer.value = true
   } catch (e) {
     console.log('err is', e.response.data.error)
@@ -52,31 +54,32 @@ async function onSubmit() {
     <v-card class="mx-auto px-6 py-8" width="500">
       <v-form v-model="form" @submit.prevent="onSubmit">
         <v-text-field
-          v-model="model.URL"
-          color="primary"
-          :readonly="loading"
-          class="mb-2"
-          placeholder="etc. http://localhost:8080/actuator"
-          :rules="[rules.required]"
-          single-line
-          clearable
+            v-model="model.URL"
+            color="primary"
+            :readonly="loading"
+            class="mb-2"
+            placeholder="etc. http://localhost:8080/actuator"
+            :rules="[rules.required]"
+            single-line
+            clearable
         >
         </v-text-field>
 
         <div v-if="error" class="text-red">
           {{ error }}
         </div>
-        <br />
+        <br/>
 
         <v-btn
-          :disabled="!form"
-          :loading="loading"
-          color="success"
-          size="large"
-          type="submit"
-          variant="elevated"
-          block
-          >Connect</v-btn
+            :disabled="!form"
+            :loading="loading"
+            color="success"
+            size="large"
+            type="submit"
+            variant="elevated"
+            block
+        >Connect
+        </v-btn
         >
       </v-form>
     </v-card>

@@ -1,54 +1,54 @@
 <script setup>
-import { Handle, Position } from '@vue-flow/core'
+import {Handle, Position} from '@vue-flow/core'
 import InlineCodeLabel from '@/components/code/InlineCodeLabel.vue'
-import { computed, inject } from 'vue'
+import {computed, inject} from 'vue'
 
 const props = defineProps({
   id: String,
   data: Object,
 })
 
-const { search, selectedNode, incomingNodeIds, outgoingNodeIds, isHighlight } =
-  inject('GraphContext')
+const {search, selectedNode, incomingNodeIds, outgoingNodeIds, isHighlight} =
+    inject('GraphContext')
 
 const isSelected = computed(() => selectedNode.value?.id === props.id)
 const incoming = computed(() => !isSelected.value && !!incomingNodeIds.value?.includes(props.id))
 const outgoing = computed(() => !isSelected.value && !!outgoingNodeIds.value?.includes(props.id))
 const highlight = computed(
-  () =>
-    !isSelected.value &&
-    !incoming.value &&
-    !outgoing.value &&
-    isHighlight(search.value, props.data),
+    () =>
+        !isSelected.value &&
+        !incoming.value &&
+        !outgoing.value &&
+        isHighlight(search.value, props.data),
 )
 const translucent = computed(
-  () =>
-    !!selectedNode.value?.id &&
-    !isSelected.value &&
-    !incoming.value &&
-    !outgoing.value &&
-    !highlight.value,
+    () =>
+        !!selectedNode.value?.id &&
+        !isSelected.value &&
+        !incoming.value &&
+        !outgoing.value &&
+        !highlight.value,
 )
 </script>
 
 <template>
   <div
-    class="custom-node"
-    :class="{
+      class="custom-node"
+      :class="{
       'custom-node--isSelected': isSelected,
       'custom-node--incoming': incoming,
       'custom-node--outgoing': outgoing,
       'custom-node--highlight': highlight,
       'custom-node--translucent': translucent,
     }"
-    style="transition: all 0.4s ease"
+      style="transition: all 0.4s ease"
   >
-    <Handle type="target" :position="Position.Left" />
+    <Handle type="target" :position="Position.Left"/>
     <v-tooltip location="bottom">
       <template v-slot:activator="{ props }">
         <div
-          v-bind="props"
-          style="
+            v-bind="props"
+            style="
             direction: rtl;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -61,8 +61,8 @@ const translucent = computed(
       </template>
       {{ data.fullName }}
     </v-tooltip>
-    <Handle type="source" :position="Position.Right" />
-    <InlineCodeLabel :code="data.package" />
+    <Handle type="source" :position="Position.Right"/>
+    <InlineCodeLabel :code="data.package"/>
   </div>
 </template>
 
@@ -82,28 +82,28 @@ const translucent = computed(
   // border: 1px solid $divider;
 
   &--isSelected {
-    background-color: rgba($color: #00ab55, $alpha: 0.16);
+    background-color: rgba($color:#00ab55, $alpha: 0.16);
     border-color: #00ab55;
     // background-color: $primary-16;
     // border-color: $primary;
   }
 
   &--incoming {
-    background-color: rgba($color: #ffc107, $alpha: 0.16);
+    background-color: rgba($color:#ffc107, $alpha: 0.16);
     border-color: #ffc107;
     // background-color: $warning-16;
     // border-color: $warning;
   }
 
   &--outgoing {
-    background-color: rgba($color: #ab47bc, $alpha: 0.16);
+    background-color: rgba($color:#ab47bc, $alpha: 0.16);
     border-color: #ab47bc;
     // background-color: $accent-16;
     // border-color: $accent;
   }
 
   &--highlight {
-    background-color: rgba($color: #1890ff, $alpha: 0.16);
+    background-color: rgba($color:#1890ff, $alpha: 0.16);
     border-color: #1890ff;
     // background-color: $info-16;
     // border-color: $info;

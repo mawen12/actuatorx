@@ -2,7 +2,7 @@
 
 <template>
   <v-container fluid class="page-root pa-4">
-    <slot />
+    <slot/>
   </v-container>
 </template>
 

@@ -17,8 +17,8 @@ defineProps({
         <v-tooltip location="bottom">
           <template v-slot:activator="{ props }">
             <span v-bind="props" class="pa-2 rounded-lg border-sm expression">{{
-              cronstrue.toString(value)
-            }}</span>
+                cronstrue.toString(value)
+              }}</span>
           </template>
           {{ value }}
         </v-tooltip>

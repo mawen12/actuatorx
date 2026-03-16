@@ -1,5 +1,5 @@
 <script setup>
-import { computed, inject, ref } from 'vue'
+import {computed, inject, ref} from 'vue'
 
 const props = defineProps({
   props: Object,
@@ -46,8 +46,8 @@ const slotProps = computed(() => props.props)
 
 <template>
   <q-tr
-    :props="slotProps"
-    :style="{
+      :props="slotProps"
+      :style="{
       position: 'relative',
       background: hasSelectedRows ? 'linear-gradient(to right, #f2f2f2, #e6eef7, #dbe9f6)' : null,
     }"
@@ -71,7 +71,7 @@ const slotProps = computed(() => props.props)
       </q-th> -->
 
       <v-btn icon size="small" variant="text" @click="closeAllRowsHandler">
-        <v-icon icon="mdi-chevron-double-right"> </v-icon>
+        <v-icon icon="mdi-chevron-double-right"></v-icon>
       </v-btn>
     </template>
 
@@ -81,7 +81,7 @@ const slotProps = computed(() => props.props)
         {{ col.label }}
       </span>
     </q-th> -->
-    
+
 
     <!-- <template v-if="hasSelectedRows">
       <q-th

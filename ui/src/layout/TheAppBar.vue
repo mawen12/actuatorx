@@ -1,13 +1,13 @@
 <script setup>
-import { useStorage } from '@vueuse/core'
-import { computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { useTheme } from 'vuetify'
+import {useStorage} from '@vueuse/core'
+import {computed} from 'vue'
+import {useRouter} from 'vue-router'
+import {useTheme} from 'vuetify'
 
 const theme = useTheme()
 
 const icon = computed(() =>
-  theme.name.value === 'dark' ? 'mdi-white-balance-sunny' : 'mdi-weather-night',
+    theme.name.value === 'dark' ? 'mdi-white-balance-sunny' : 'mdi-weather-night',
 )
 
 const connected = useStorage('connected')
@@ -17,7 +17,7 @@ const drawer = useStorage('drawer', true)
 const router = useRouter()
 
 const toConnect = () => {
-  router.push('/connect')
+  router.push('/')
   connected.value = false
   drawer.value = false
 }
@@ -34,20 +34,20 @@ const toConnect = () => {
     <template v-if="connected">
       <v-tooltip location="bottom">
         <template v-slot:activator="{ props }">
-          <v-btn icon="mdi-connection" v-bind="props" color="success" @click="toConnect" />
+          <v-btn icon="mdi-connection" v-bind="props" color="success" @click="toConnect"/>
         </template>
         Dis Connected
       </v-tooltip>
     </template>
     <v-tooltip location="bottom">
       <template v-slot:activator="{ props }">
-        <v-btn @click="theme.toggle()" :icon="icon" v-bind="props" />
+        <v-btn @click="theme.toggle()" :icon="icon" v-bind="props"/>
       </template>
       Theme
     </v-tooltip>
     <v-tooltip location="bottom">
       <template v-slot:activator="{ props }">
-        <v-btn icon="mdi-information-outline" v-bind="props" />
+        <v-btn icon="mdi-information-outline" v-bind="props"/>
       </template>
       About
     </v-tooltip>

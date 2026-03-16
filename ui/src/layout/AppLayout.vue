@@ -5,12 +5,12 @@ import TheSideBar from './TheSideBar.vue'
 
 <template>
   <v-app style="height: 100%">
-    <the-app-bar />
+    <the-app-bar/>
 
-    <the-side-bar />
+    <the-side-bar/>
 
     <v-main class="main-container">
-      <router-view />
+      <router-view/>
     </v-main>
   </v-app>
 </template>

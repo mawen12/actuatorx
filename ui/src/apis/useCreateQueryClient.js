@@ -1,6 +1,6 @@
 import {MutationCache, QueryCache, QueryClient} from "@tanstack/vue-query";
 
-export const disableGlobalErrorMeta = { disableGlobalError: true };
+export const disableGlobalErrorMeta = {disableGlobalError: true};
 
 export const useCreateQueryClient = () => {
     return new QueryClient({

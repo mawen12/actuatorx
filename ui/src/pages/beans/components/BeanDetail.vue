@@ -1,11 +1,11 @@
 <script setup>
-import { inject, onMounted } from 'vue'
+import {inject, onMounted} from 'vue'
 
 defineProps({
   item: Object,
 })
 
-const { highlightHandler } = inject('tableContext')
+const {highlightHandler} = inject('tableContext')
 
 onMounted(() => {
   console.log('bean detail mouted')
@@ -41,9 +41,9 @@ onMounted(() => {
             <div class="ga-2" style="display: flex; flex-direction: column">
               <template v-for="depen in item.dependencies" :key="depen">
                 <div
-                  class="pa-1 text-subtitle-2 text-success hover-row"
-                  style="width: fit-content"
-                  @click="highlightHandler(depen)"
+                    class="pa-1 text-subtitle-2 text-success hover-row"
+                    style="width: fit-content"
+                    @click="highlightHandler(depen)"
                 >
                   {{ depen }}
                 </div>

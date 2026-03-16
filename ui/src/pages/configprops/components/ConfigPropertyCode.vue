@@ -1,10 +1,10 @@
 <script setup>
 import yaml from 'js-yaml'
-import { computed } from 'vue'
-import { toString } from 'lodash-es'
-import { search } from '@codemirror/search'
+import {computed} from 'vue'
+import {toString} from 'lodash-es'
+import {search} from '@codemirror/search'
 import CodeEditor from '@/components/code/CodeEditor.vue'
-import { indentFoldingExtension } from '@/components/code/extensions/indentFoldingExtension'
+import {indentFoldingExtension} from '@/components/code/extensions/indentFoldingExtension'
 
 const props = defineProps({
   data: Object,
@@ -25,23 +25,23 @@ const toYaml = computed(() => {
 })
 
 const code = computed(() =>
-  yaml.dump(toYaml.value, {
-    lineWidth: 1024,
-    sortKeys: (a, b) => toString(a).localeCompare(toString(b)),
-  }),
+    yaml.dump(toYaml.value, {
+      lineWidth: 1024,
+      sortKeys: (a, b) => toString(a).localeCompare(toString(b)),
+    }),
 )
 
-const searchExtension = computed(() => search({ top: false }))
+const searchExtension = computed(() => search({top: false}))
 </script>
 
 <template>
   <v-card>
     <v-card-text>
       <code-editor
-        language="yaml"
-        :value="code"
-        readonly
-        :extensions="[indentFoldingExtension, searchExtension]"
+          language="yaml"
+          :value="code"
+          readonly
+          :extensions="[indentFoldingExtension, searchExtension]"
       />
     </v-card-text>
   </v-card>

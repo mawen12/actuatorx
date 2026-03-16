@@ -23,17 +23,17 @@ const props = defineProps({
 <template>
   <template v-if="entity.lazy">
     <template v-if="loading">
-      <loading-page :loading="loading" />
+      <loading-page :loading="loading"/>
     </template>
     <template v-else>
       <tabs-lazy-context v-bind="props">
-        <slot />
+        <slot/>
       </tabs-lazy-context>
     </template>
   </template>
   <template v-else>
     <tabs-common-context v-bind="props">
-      <slot />
+      <slot/>
     </tabs-common-context>
   </template>
 </template>

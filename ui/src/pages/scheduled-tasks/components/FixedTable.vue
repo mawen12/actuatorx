@@ -11,7 +11,7 @@ defineProps({
 
 <template>
   <table-context :entity="entity" :data="data" :all-data="allData">
-    <table-custom> </table-custom>
+    <table-custom></table-custom>
   </table-context>
 </template>
 

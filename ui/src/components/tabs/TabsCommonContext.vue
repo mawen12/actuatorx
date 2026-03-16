@@ -1,5 +1,5 @@
 <script setup>
-import { computed, provide, reactive, ref } from 'vue'
+import {computed, provide, reactive, ref} from 'vue'
 import LoadingPage from '../page/LoadingPage.vue'
 
 const props = defineProps({
@@ -32,9 +32,9 @@ const currentTab = ref(firstTab.value.id)
 const tabsData = computed(() => props.data ?? {})
 
 const filteredTabsData = computed(() =>
-  enableSearch.value && (search.value || customFilters.value)
-    ? props.entity.filterData(tabsData.value, search.value, customFilters)
-    : tabsData.value,
+    enableSearch.value && (search.value || customFilters.value)
+        ? props.entity.filterData(tabsData.value, search.value, customFilters)
+        : tabsData.value,
 )
 
 const changeCustomFiltersHandler = (newCustomFilters) => {
@@ -54,7 +54,9 @@ provide('tabsContext', {
 </script>
 
 <template>
-  <template v-if="loading"> <loading-page /> </template>
+  <template v-if="loading">
+    <loading-page/>
+  </template>
   <template v-else>
     <slot></slot>
   </template>
