@@ -16,10 +16,18 @@ import (
 type Client struct {
 	*http.Client
 	OriginURL string
+	config    ConnectConfig
+	enhancer  func(req *http.Request)
 
 	baseURL   *url.URL
 	abilities map[string]*uritemplates.UriTemplate
 	closed    bool
+}
+
+type ConnectConfig struct {
+	Url      string
+	AuthType string
+	Auth     Auther
 }
 
 func NewClient(urlStr string) (*Client, error) {
@@ -41,6 +49,47 @@ func NewClient(urlStr string) (*Client, error) {
 
 	if len(resp.Links) == 0 {
 		return nil, &EndpointInvalidErr{Endpoint: urlStr}
+	}
+
+	abilities := make(map[string]*uritemplates.UriTemplate)
+	for k, v := range resp.Links {
+		tmpl, err := uritemplates.Parse(formatURL(v.Href))
+		if err != nil {
+			return nil, &LinkInvalidErr{Link: v.Href, err: err}
+		}
+
+		abilities[k] = tmpl
+	}
+
+	c.abilities = abilities
+
+	return &c, nil
+}
+
+func Connect(config ConnectConfig) (*Client, error) {
+	uri, err := url.Parse(config.Url)
+	if err != nil {
+		return nil, err
+	}
+
+	c := Client{
+		Client:    SharedClient(),
+		OriginURL: config.Url,
+		baseURL:   uri,
+		config:    config,
+	}
+
+	if config.Auth != nil {
+		c.enhancer = config.Auth.Auth
+	}
+
+	resp, err := c.Test(context.Background())
+	if err != nil {
+		return nil, err
+	}
+
+	if len(resp.Links) == 0 {
+		return nil, &EndpointInvalidErr{Endpoint: config.Url}
 	}
 
 	abilities := make(map[string]*uritemplates.UriTemplate)
@@ -328,6 +377,9 @@ func (c *Client) post(ctx context.Context, endpoint string, tmplParams map[strin
 }
 
 func (c *Client) do(req *http.Request, out any) error {
+	if c.enhancer != nil {
+		c.enhancer(req)
+	}
 	resp, err := c.Client.Do(req)
 	if err != nil {
 		return err

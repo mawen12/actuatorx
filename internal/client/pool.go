@@ -63,7 +63,32 @@ func (p *Pool) Close() {
 	}
 }
 
-func (p *Pool) TryAcquire(ctx context.Context, urlStr string) (*Resource, error) {
+func (p *Pool) Add(urlStr string, value *Client) {
+	p.mux.Lock()
+	defer p.mux.Unlock()
+
+	p.clients[urlStr] = &Resource{
+		value:        value,
+		creationTime: time.Now(),
+	}
+}
+
+func (p *Pool) TryAcquire(ctx context.Context, urlStr string) (*Resource, bool) {
+	p.mux.RLock()
+	defer p.mux.RUnlock()
+
+	if p.closed {
+		return nil, false
+	}
+
+	c, exists := p.clients[urlStr]
+	if exists {
+		c.refs.Add(1)
+	}
+	return c, exists
+}
+
+func (p *Pool) Acquire(ctx context.Context, urlStr string) (*Resource, error) {
 	p.mux.RLock()
 
 	if p.closed {

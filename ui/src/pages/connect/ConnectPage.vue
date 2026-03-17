@@ -12,8 +12,22 @@ const drawer = useStorage('drawer', true)
 const form = ref(false)
 const loading = ref(false)
 
+const authTypeList = ref([
+  'No Auth',
+  'Basic Auth',
+  'Bearer Token',
+])
+
 const model = reactive({
   URL: '',
+  AuthType: 'No Auth',
+  BasicAuth: {
+    username: '',
+    password: '',
+  },
+  BearerToken: {
+    token: ''
+  },
 })
 
 const connectState = useConnect()
@@ -32,6 +46,9 @@ async function onSubmit() {
   try {
     await connectState.mutateAsync({
       url: model.URL,
+      authType: model.AuthType,
+      basicAuth: {...model.BasicAuth},
+      bearerToken: {...model.BearerToken},
     })
 
     router.push('/health')
@@ -64,6 +81,43 @@ async function onSubmit() {
             clearable
         >
         </v-text-field>
+
+        <!--   AUTH     -->
+        <v-select :items="authTypeList" label="Select Auth Type" v-model="model.AuthType">
+        </v-select>
+
+        <div v-if="model.AuthType === 'Basic Auth'">
+          <v-text-field
+            label="Username"
+            v-model="model.BasicAuth.username"
+            color="primary"
+            :readonly="loading"
+            class="mb-2"
+            clearable
+          >
+          </v-text-field>
+
+          <v-text-field
+            label="Password"
+            v-model="model.BasicAuth.password"
+            color="primary"
+            :readonly="loading"
+            class="mb-2"
+            clearable
+          >
+          </v-text-field>
+        </div>
+        <div v-else-if="model.AuthType === 'Bearer Token'">
+          <v-textarea
+              label="Token"
+              v-model="model.BearerToken.token"
+              color="primary"
+              class="mb-2"
+              rows="1"
+              auto-grow
+              clearable
+          ></v-textarea>
+        </div>
 
         <div v-if="error" class="text-red">
           {{ error }}

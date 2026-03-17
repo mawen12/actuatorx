@@ -19,8 +19,40 @@ func NewActuatorApi() *ActuatorApi {
 	}
 }
 
-func (a *ActuatorApi) Connect(c *gin.Context, cli *client.Client) (interface{}, error) {
-	return nil, nil
+type connectForm struct {
+	Url        string              `form:"url"`
+	AuthType   string              `form:"authType"`
+	BasicAuth  *client.BasicAuth   `form:"basicAuth"`
+	BasicToken *client.BearerToken `form:"bearerToken"`
+}
+
+func (a *ActuatorApi) Connect(c *gin.Context) {
+	var form connectForm
+	if err := c.ShouldBind(&form); err != nil {
+		errorResp(c, http.StatusBadRequest, errors.New("params is invalid"))
+		return
+	}
+
+	var auth client.Auther
+	switch form.AuthType {
+	case "Basic Auth":
+		auth = form.BasicAuth
+	case "Bearer Token":
+		auth = form.BasicToken
+	}
+
+	cli, err := client.Connect(client.ConnectConfig{
+		Url:      form.Url,
+		AuthType: form.AuthType,
+		Auth:     auth,
+	})
+	if err != nil {
+		errorResp(c, http.StatusBadRequest, err)
+		return
+	}
+
+	a.Pool.Add(form.Url, cli)
+	successResp(c, nil)
 }
 
 func (a *ActuatorApi) GetHealth(c *gin.Context, cli *client.Client) (interface{}, error) {
@@ -166,9 +198,9 @@ func (a *ActuatorApi) wrapperResult(handler func(c *gin.Context, cli *client.Cli
 
 func (a *ActuatorApi) resource(c *gin.Context) (*client.Resource, error) {
 	urlStr := c.Query("url")
-	res, err := a.TryAcquire(c.Request.Context(), urlStr)
-	if err != nil {
-		return nil, err
+	res, ok := a.TryAcquire(c.Request.Context(), urlStr)
+	if !ok {
+		return nil, errors.New("resource not exists")
 	}
 
 	return res, nil

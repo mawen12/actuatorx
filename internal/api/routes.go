@@ -18,7 +18,7 @@ func SetupRoutes(router *gin.Engine, api *ActuatorApi) {
 	ag := router.Group("/api")
 	SetupMiddleware(ag)
 	{
-		ag.POST("/connect", api.wrapperResult(api.Connect))
+		ag.POST("/connect", api.Connect)
 		ag.GET("/health", api.wrapperResult(api.GetHealth))
 		ag.GET("/metrics", api.wrapperResult(api.GetMetrics))
 		ag.POST("/metrics/:name", api.wrapperResult(api.GetMetric))

@@ -3,6 +3,7 @@ package client
 import (
 	"errors"
 	"fmt"
+	"net/http"
 	"regexp"
 )
 
@@ -52,5 +53,5 @@ type StatusCodeBadErr struct {
 }
 
 func (e StatusCodeBadErr) Error() string {
-	return fmt.Sprintf("%s %s, StatusCode Bad: %d", e.Method, e.URL, e.StatusCode)
+	return fmt.Sprintf("%s %s, StatusCode Bad: %d %s", e.Method, e.URL, e.StatusCode, http.StatusText(e.StatusCode))
 }

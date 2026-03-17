@@ -1,6 +1,34 @@
 package client
 
-import "time"
+import (
+	"net/http"
+	"time"
+)
+
+type Auther interface {
+	Auth(req *http.Request)
+}
+
+type BasicAuth struct {
+	Username string `form:"username"`
+	Password string `form:"password"`
+}
+
+func (b *BasicAuth) Auth(req *http.Request) {
+	if req != nil {
+		req.SetBasicAuth(b.Username, b.Password)
+	}
+}
+
+type BearerToken struct {
+	Token string `form:"token"`
+}
+
+func (b *BearerToken) Auth(req *http.Request) {
+	if req != nil {
+		req.Header.Set("Authorization", "Bearer "+b.Token)
+	}
+}
 
 type (
 	ActuatorResp struct {

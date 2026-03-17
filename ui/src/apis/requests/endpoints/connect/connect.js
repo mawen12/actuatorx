@@ -6,6 +6,9 @@ export const connect = async (variables) => {
         await axiosInstance.post(`/connect`, null, {
             params: {
                 url: variables.url,
+                authType: variables.authType,
+                basicAuth: variables.basicAuth,
+                bearerToken: variables.bearerToken,
             },
         })
     ).data
