@@ -15,7 +15,7 @@ export const useCreateQueryClient = () => {
                 refetchInterval: false,
                 refetchIntervalInBackground: false,
                 retry: false
-            }
+            },
         },
         queryCache: new QueryCache({}),
         mutationCache: new MutationCache({})

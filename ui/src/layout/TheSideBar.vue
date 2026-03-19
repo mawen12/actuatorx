@@ -23,14 +23,15 @@ const items = ref([
       to: '/metrics',
     },
   },
-  {
-    title: 'Info',
-    value: 'info',
-    props: {
-      prependIcon: 'mdi-information',
-      to: '/info',
-    },
-  },
+  // TODO developing
+  // {
+  //   title: 'Info',
+  //   value: 'info',
+  //   props: {
+  //     prependIcon: 'mdi-information',
+  //     to: '/info',
+  //   },
+  // },
   {
     title: 'Env',
     value: 'env',
@@ -79,14 +80,15 @@ const items = ref([
       to: '/loggers',
     },
   },
-  {
-    title: 'Logfile',
-    value: 'logfile',
-    props: {
-      prependIcon: 'mdi-post',
-      to: '/logfile',
-    },
-  },
+  // TODO developing
+  // {
+  //   title: 'Logfile',
+  //   value: 'logfile',
+  //   props: {
+  //     prependIcon: 'mdi-post',
+  //     to: '/logfile',
+  //   },
+  // },
   {
     title: 'Mappings',
     value: 'mappings',
@@ -96,7 +98,7 @@ const items = ref([
     },
   },
   {
-    title: 'HttpExchanges',
+    title: 'Http Exchanges',
     value: 'httpexchanges',
     props: {
       prependIcon: 'mdi-web',
@@ -111,50 +113,54 @@ const items = ref([
       to: '/scheduled-tasks',
     },
   },
+  // TODO developing
+  // {
+  //   title: 'Sessions',
+  //   value: 'sessions',
+  //   props: {
+  //     prependIcon: 'mdi-account-group',
+  //   },
+  // },
   {
-    title: 'Sessions',
-    value: 'sessions',
-    props: {
-      prependIcon: 'mdi-account-group',
-    },
-  },
-  {
-    title: 'Threaddump',
+    title: 'Thread dump',
     value: 'thread dump',
     props: {
       prependIcon: 'mdi-chart-box',
     },
   },
+  //  TODO developing
+  // {
+  //   title: 'Shutdown',
+  //   value: 'shutdown',
+  //   props: {
+  //     prependIcon: 'mdi-power',
+  //   },
+  // },
+  // TODO developing
+  // {
+  //   title: 'Startup',
+  //   value: 'startup',
+  //   props: {
+  //     prependIcon: 'mdi-rocket',
+  //   },
+  // },
   {
-    title: 'Shutdown',
-    value: 'shutdown',
-    props: {
-      prependIcon: 'mdi-power',
-    },
-  },
-  {
-    title: 'Startup',
-    value: 'startup',
-    props: {
-      prependIcon: 'mdi-rocket',
-    },
-  },
-  {
-    title: 'Heapdump',
+    title: 'Heap dump',
     value: 'head dump',
     props: {
       prependIcon: 'mdi-memory',
     },
   },
-  {
-    title: 'Prometheus',
-    value: 'prometheus',
-    props: {
-      prependIcon: 'mdi-finance',
-    },
-  },
+  // TODO Developing
+  // {
+  //   title: 'Prometheus',
+  //   value: 'prometheus',
+  //   props: {
+  //     prependIcon: 'mdi-finance',
+  //   },
+  // },
 ])
-const filteredResult = computed(() => {
+const filteredItems = computed(() => {
   if (search.value && search.value !== '') {
     return items.value.filter((item) => item.title.includes(search.value))
   }
@@ -171,7 +177,7 @@ const filteredResult = computed(() => {
               v-model="search"
               prepend-inner-icon="mdi-magnify"
               density="compact"
-              label="Search Abaility"
+              label="Filter"
               variant="outlined"
               active-strategy="single-leaf"
               hide-details
@@ -180,7 +186,7 @@ const filteredResult = computed(() => {
           ></v-text-field>
         </v-sheet>
 
-        <v-list :items="filteredResult" color="primary" dense="compact" nav class="drawer-list">
+        <v-list :items="filteredItems" color="primary" dense="compact" nav class="drawer-list">
         </v-list>
 
         <v-divider/>

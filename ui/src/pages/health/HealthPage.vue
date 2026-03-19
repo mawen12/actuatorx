@@ -5,6 +5,7 @@ import HealthComponent from './components/HealthComponent.vue'
 import LoadingPage from '@/components/page/LoadingPage.vue'
 import FormattedDateAndRelativeTime from '@/components/format/FormattedDateAndRelativeTime.vue'
 import ErrorBoundary from '../error/ErrorBoundary.vue'
+import AbilityCheck from "@/pages/abilities/AbilityCheck.vue";
 
 const {data, isLoading, refetch, isRefetching, isError, error} = useGetHealthQuery(
     {},
@@ -33,8 +34,8 @@ const flattenComponents = (components, currentPath) => {
     flattenedArray.push({name, ...component})
 
     if (component.components) {
-      const childrenComponnets = flattenComponents(component.childrenComponnets, path)
-      flattenedArray.push(...childrenComponnets)
+      const children = flattenComponents(component.children, path)
+      flattenedArray.push(...children)
     }
   }
 
@@ -57,66 +58,68 @@ const components = computed(() =>
 
 <template>
   <v-container fluid class="page-root w-md-100 w-lg-75 w-xl-50 pa-4">
-    <template v-if="isLoading">
-      <loading-page/>
-    </template>
-    <template v-else-if="isError">
-      <error-boundary :error="error" :handler="refetch"/>
-    </template>
-    <template v-else>
+    <ability-check ability="health">
+      <template v-if="isLoading">
+        <loading-page/>
+      </template>
+      <template v-else-if="isError">
+        <error-boundary :error="error" :handler="refetch"/>
+      </template>
+      <template v-else>
 
-      <v-card class="page-card d-flex flex-column rounded-lg" :elevation="0">
-        <v-card-title>
-          <div class="d-flex align-center">
-            <span> Health </span>
-            <v-spacer/>
-            <v-tooltip location="bottom">
+        <v-card class="page-card d-flex flex-column rounded-lg" :elevation="0">
+          <v-card-title>
+            <div class="d-flex align-center">
+              <span> Health </span>
+              <v-spacer/>
+              <v-tooltip location="bottom">
+                <template v-slot:activator="{ props }">
+                  <v-btn
+                      v-bind="props"
+                      variant="text"
+                      :disabled="isRefetching"
+                      @click="refetch"
+                      icon="mdi-refresh"
+                  />
+                </template>
+                Refresh
+              </v-tooltip>
+            </div>
+            <v-tooltip location="bottom" class="text-subtitle-2">
               <template v-slot:activator="{ props }">
-                <v-btn
-                    v-bind="props"
-                    variant="text"
-                    :disabled="isRefetching"
-                    @click="refetch"
-                    icon="mdi-refresh"
-                />
-              </template>
-              Refresh
-            </v-tooltip>
-          </div>
-          <v-tooltip location="bottom" class="text-subtitle-2">
-            <template v-slot:activator="{ props }">
                 <span v-bind="props" class="text-subtitle-2">
                   <template v-if="lastUpdateTime">
                     <formatted-date-and-relative-time :value="lastUpdateTime"/>
                   </template>
                 </span>
-            </template>
-            Last Update time
-          </v-tooltip>
-        </v-card-title>
+              </template>
+              Last Update time
+            </v-tooltip>
+          </v-card-title>
 
-        <!-- refetch loading -->
-        <v-progress-linear
-            :active="isRefetching"
-            :indeterminate="isRefetching"
-            color="green"
-            location="top"
-            absolute
-        ></v-progress-linear>
+          <!-- refetch loading -->
+          <v-progress-linear
+              :active="isRefetching"
+              :indeterminate="isRefetching"
+              color="green"
+              location="top"
+              absolute
+          ></v-progress-linear>
 
-        <v-divider/>
+          <v-divider/>
 
-        <v-card-text class="page-content">
-          <div class="d-flex flex-column ga-3">
-            <health-component
-                v-for="(component, idx) in components"
-                :key="idx"
-                :component="component"
-            />
-          </div>
-        </v-card-text>
-      </v-card>
-    </template>
+          <v-card-text class="page-content">
+            <div class="d-flex flex-column ga-3">
+              <health-component
+                  v-for="(component, idx) in components"
+                  :key="idx"
+                  :component="component"
+              />
+            </div>
+          </v-card-text>
+        </v-card>
+      </template>
+    </ability-check>
   </v-container>
 </template>
 

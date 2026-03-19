@@ -52,7 +52,11 @@ func (a *ActuatorApi) Connect(c *gin.Context) {
 	}
 
 	a.Pool.Add(form.Url, cli)
-	successResp(c, nil)
+	successResp(c, cli.Abilities())
+}
+
+func (a *ActuatorApi) Abilities(c *gin.Context, cli *client.Client) (interface{}, error) {
+	return cli.Abilities(), nil
 }
 
 func (a *ActuatorApi) GetHealth(c *gin.Context, cli *client.Client) (interface{}, error) {
@@ -182,11 +186,11 @@ func (a *ActuatorApi) UpdateTogglz(c *gin.Context, cli *client.Client) (interfac
 	return cli.UpdateTogglz(c.Request.Context(), enabled)
 }
 
-func (a *ActuatorApi) wrapperResult(handler func(c *gin.Context, cli *client.Client) (data interface{}, err error)) func(*gin.Context) {
+func (a *ActuatorApi) wrap(handler func(c *gin.Context, cli *client.Client) (data interface{}, err error)) func(*gin.Context) {
 	return func(c *gin.Context) {
 		res, err := a.resource(c)
 		if err != nil {
-			errorResp(c, http.StatusBadRequest, err)
+			errorResp(c, http.StatusUnauthorized, err)
 			return
 		}
 		defer res.Release()

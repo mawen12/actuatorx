@@ -30,42 +30,6 @@ type ConnectConfig struct {
 	Auth     Auther
 }
 
-func NewClient(urlStr string) (*Client, error) {
-	uri, err := url.Parse(urlStr)
-	if err != nil {
-		return nil, err
-	}
-
-	c := Client{
-		Client:    SharedClient(),
-		OriginURL: urlStr,
-		baseURL:   uri,
-	}
-
-	resp, err := c.Test(context.Background())
-	if err != nil {
-		return nil, err
-	}
-
-	if len(resp.Links) == 0 {
-		return nil, &EndpointInvalidErr{Endpoint: urlStr}
-	}
-
-	abilities := make(map[string]*uritemplates.UriTemplate)
-	for k, v := range resp.Links {
-		tmpl, err := uritemplates.Parse(formatURL(v.Href))
-		if err != nil {
-			return nil, &LinkInvalidErr{Link: v.Href, err: err}
-		}
-
-		abilities[k] = tmpl
-	}
-
-	c.abilities = abilities
-
-	return &c, nil
-}
-
 func Connect(config ConnectConfig) (*Client, error) {
 	uri, err := url.Parse(config.Url)
 	if err != nil {
@@ -105,6 +69,14 @@ func Connect(config ConnectConfig) (*Client, error) {
 	c.abilities = abilities
 
 	return &c, nil
+}
+
+func (c *Client) Abilities() []string {
+	var result []string
+	for key, _ := range c.abilities {
+		result = append(result, key)
+	}
+	return result
 }
 
 func (c *Client) Test(ctx context.Context) (*ActuatorResp, error) {

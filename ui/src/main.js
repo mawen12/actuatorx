@@ -20,14 +20,17 @@ import {basicSetup} from 'codemirror'
 import VueCodemirror from 'vue-codemirror'
 import router from "@/router/index.js";
 import {VueQueryPlugin} from "@tanstack/vue-query";
+import {useCreateQueryClient} from "@/apis/useCreateQueryClient.js";
 
 const app = createApp(App)
 
 const vuetify = createVuetify({})
 
+const queryClient = useCreateQueryClient()
+
 app.use(i18n)
     .use(router)
-    .use(VueQueryPlugin)
+    .use(VueQueryPlugin, {queryClient})
     .use(VueCodemirror, {extensions: [basicSetup]})
     .use(vuetify)
     .mount('#app')

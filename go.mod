@@ -5,6 +5,7 @@ go 1.25.7
 require (
 	github.com/gin-gonic/gin v1.12.0
 	github.com/jtacoma/uritemplates v1.0.0
+	github.com/lmittmann/tint v1.1.3
 )
 
 require (

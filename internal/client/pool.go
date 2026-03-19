@@ -88,47 +88,6 @@ func (p *Pool) TryAcquire(ctx context.Context, urlStr string) (*Resource, bool) 
 	return c, exists
 }
 
-func (p *Pool) Acquire(ctx context.Context, urlStr string) (*Resource, error) {
-	p.mux.RLock()
-
-	if p.closed {
-		return nil, ErrClosedPool
-	}
-
-	c, exists := p.clients[urlStr]
-	if !exists {
-		p.mux.RUnlock()
-
-		p.mux.Lock()
-		res, err := p.construct(urlStr)
-		if err != nil {
-			p.mux.Unlock()
-			return nil, err
-		}
-		p.clients[urlStr] = res
-		p.mux.Unlock()
-
-		res.refs.Add(1)
-		return res, nil
-	}
-
-	c.refs.Add(1)
-	p.mux.RUnlock()
-	return c, nil
-}
-
-func (p *Pool) construct(urlStr string) (*Resource, error) {
-	c, err := NewClient(urlStr)
-	if err != nil {
-		return nil, err
-	}
-
-	return &Resource{
-		value:        c,
-		creationTime: time.Now(),
-	}, nil
-}
-
 func (p *Pool) run(ctx context.Context) {
 	for {
 		select {

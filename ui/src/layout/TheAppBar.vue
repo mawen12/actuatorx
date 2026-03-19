@@ -11,7 +11,7 @@ const icon = computed(() =>
 )
 
 const connected = useStorage('connected')
-
+const connectUrl = useStorage('connectUrl')
 const drawer = useStorage('drawer', true)
 
 const router = useRouter()
@@ -19,6 +19,7 @@ const router = useRouter()
 const toConnect = () => {
   router.push('/')
   connected.value = false
+  connectUrl.value = null
   drawer.value = false
 }
 </script>
