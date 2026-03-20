@@ -123,9 +123,10 @@ const items = ref([
   // },
   {
     title: 'Thread dump',
-    value: 'thread dump',
+    value: 'threaddump',
     props: {
       prependIcon: 'mdi-chart-box',
+      to: '/threaddump',
     },
   },
   //  TODO developing

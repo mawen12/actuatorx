@@ -1,9 +1,11 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mawen12/actuatorx/internal/client"
 )
 
 func successResp(c *gin.Context, data interface{}) {
@@ -21,4 +23,14 @@ func serverResult(c *gin.Context, data interface{}, err error) {
 	}
 
 	successResp(c, data)
+}
+
+func downloadResult(c *gin.Context, downloader client.Downloader, err error) {
+	if err != nil {
+		errorResp(c, http.StatusBadRequest, err)
+		return
+	}
+
+	c.Header("Content-Disposition", fmt.Sprintf(`attachment; filename="%s"`, downloader.Filename()))
+	c.Data(http.StatusOK, "application/octet-stream", downloader.Bytes())
 }

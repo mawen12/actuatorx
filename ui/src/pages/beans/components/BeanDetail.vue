@@ -6,10 +6,6 @@ defineProps({
 })
 
 const {highlightHandler} = inject('tableContext')
-
-onMounted(() => {
-  console.log('bean detail mouted')
-})
 </script>
 
 <template>

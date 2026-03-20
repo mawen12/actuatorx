@@ -1,22 +1,13 @@
 <script setup>
-import {useGetMetricsQuery} from '@/apis/requests/endpoints/metrics/getMetrics'
-import LoadingPage from '@/components/page/LoadingPage.vue'
 import ThePage from '@/components/page/ThePage.vue'
-import MetricsTable from './components/MetricsTable.vue'
 import AbilityCheck from "@/pages/abilities/AbilityCheck.vue";
-
-const {isLoading, data, refetch} = useGetMetricsQuery({})
+import MetricsContent from "@/pages/metrics/MetricsContent.vue";
 </script>
 
 <template>
   <the-page>
     <ability-check ability="metrics">
-      <template v-if="isLoading">
-        <loading-page/>
-      </template>
-      <template v-else>
-        <metrics-table :data="data" :is-loading="isLoading" :refetch="refetch"/>
-      </template>
+      <metrics-content/>
     </ability-check>
   </the-page>
 </template>

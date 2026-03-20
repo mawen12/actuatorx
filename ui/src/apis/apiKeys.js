@@ -29,6 +29,6 @@ export const apiKeys = {
     itemQuartzTrigger: (group, name) => [...apiKeys.item(), 'quartz', 'triggers', group, name],
     itemSessions: () => [...apiKeys.item(), 'sessions'],
     itemTogglz: () => [...apiKeys.item(), 'togglz'],
-
+    itemThreaddump: () => [...apiKeys.item(), 'threaddump'],
     metricLatest: (metricName) => [...apiKeys.itemMetrics(), 'latest', metricName],
 }

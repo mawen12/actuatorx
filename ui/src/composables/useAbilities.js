@@ -1,6 +1,6 @@
 import {useStorage} from "@vueuse/core";
 
-const  useAbilities = (items) => {
+const useAbilities = (items) => {
     const abilities = useStorage(
         "abilities",
         new Set(items || []),

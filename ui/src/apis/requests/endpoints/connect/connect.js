@@ -1,8 +1,5 @@
 import {axiosInstance} from '@/apis/axiosInstance'
 import {useBaseMutation} from '@/apis/requests/base/useBaseMutation'
-import {useBaseQuery} from "@/apis/requests/base/useBaseQuery.js";
-import {apiKeys} from "@/apis/apiKeys.js";
-import {getConfigprops} from "@/apis/requests/endpoints/configprops/getConfigprops.js";
 
 export const connect = async (variables) => {
     return (

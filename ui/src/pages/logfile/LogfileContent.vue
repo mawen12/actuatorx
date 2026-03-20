@@ -1,11 +1,10 @@
 <script setup>
-import ThePage from '@/components/page/ThePage.vue'
+import LoadingPage from '@/components/page/LoadingPage.vue'
 import {useGetLogfile} from '@/apis/requests/endpoints/logfile/getLogFile'
 import {computed, ref, watch} from 'vue'
 import {isNil} from 'lodash-es'
 import {useIntervalFn} from '@vueuse/core'
-import AbilityCheck from "@/pages/abilities/AbilityCheck.vue";
-import LogfileContent from "@/pages/logfile/LogfileContent.vue";
+import LogCode from './components/LogCode.vue'
 
 const log = ref(undefined)
 const requestFlag = ref(false)
@@ -67,11 +66,13 @@ const uiStatus = computed(() => {
 </script>
 
 <template>
-  <the-page>
-    <ability-check ability="logfile">
-      <logfile-content/>
-    </ability-check>
-  </the-page>
+  <template v-if="uiStatus === 'loading'">
+    <loading-page/>
+  </template>
+  <template v-else-if="uiStatus === 'error'"> error</template>
+  <template v-else>
+    <log-code :log="log"/>
+  </template>
 </template>
 
 <style scoped></style>

@@ -52,7 +52,7 @@ func (a *ActuatorApi) Connect(c *gin.Context) {
 	}
 
 	a.Pool.Add(form.Url, cli)
-	successResp(c, cli.Abilities())
+	successResp(c, nil)
 }
 
 func (a *ActuatorApi) Abilities(c *gin.Context, cli *client.Client) (interface{}, error) {
@@ -186,7 +186,15 @@ func (a *ActuatorApi) UpdateTogglz(c *gin.Context, cli *client.Client) (interfac
 	return cli.UpdateTogglz(c.Request.Context(), enabled)
 }
 
-func (a *ActuatorApi) wrap(handler func(c *gin.Context, cli *client.Client) (data interface{}, err error)) func(*gin.Context) {
+func (a *ActuatorApi) GetThreadDump(c *gin.Context, cli *client.Client) (interface{}, error) {
+	return cli.ThreadDump(c.Request.Context())
+}
+
+func (a *ActuatorApi) DownloadThreadDump(c *gin.Context, cli *client.Client) (interface{}, error) {
+	return cli.DownloadThreadDump(c.Request.Context())
+}
+
+func (a *ActuatorApi) wrap(handler func(c *gin.Context, cli *client.Client) (data interface{}, err error)) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		res, err := a.resource(c)
 		if err != nil {
@@ -196,7 +204,12 @@ func (a *ActuatorApi) wrap(handler func(c *gin.Context, cli *client.Client) (dat
 		defer res.Release()
 
 		resp, err := handler(c, res.Value())
-		serverResult(c, resp, err)
+		switch d := resp.(type) {
+		case client.Downloader:
+			downloadResult(c, d, err)
+		default:
+			serverResult(c, resp, err)
+		}
 	}
 }
 

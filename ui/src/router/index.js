@@ -77,6 +77,11 @@ const router = createRouter({
                     name: 'Scheduled Tasks',
                     component: () => import('@/pages/scheduled-tasks/ScheduledTasksPage.vue'),
                 },
+                {
+                    path: 'threaddump',
+                    name: 'Thread Dump',
+                    component: () => import('@/pages/threaddump/ThreaddumpPage.vue'),
+                }
             ],
         },
     ],

@@ -61,7 +61,9 @@ async function onSubmit() {
     connectUrl.value = model.URL
     drawer.value = true
 
-    const result = await getAbilitiesState.mutateAsync({})
+    const result = await getAbilitiesState.mutateAsync({
+      url: model.URL
+    })
 
     addAll(result)
 
@@ -99,22 +101,22 @@ async function onSubmit() {
 
         <div v-if="model.AuthType === 'Basic Auth'">
           <v-text-field
-            label="Username"
-            v-model="model.BasicAuth.username"
-            color="primary"
-            :readonly="loading"
-            class="mb-2"
-            clearable
+              label="Username"
+              v-model="model.BasicAuth.username"
+              color="primary"
+              :readonly="loading"
+              class="mb-2"
+              clearable
           >
           </v-text-field>
 
           <v-text-field
-            label="Password"
-            v-model="model.BasicAuth.password"
-            color="primary"
-            :readonly="loading"
-            class="mb-2"
-            clearable
+              label="Password"
+              v-model="model.BasicAuth.password"
+              color="primary"
+              :readonly="loading"
+              class="mb-2"
+              clearable
           >
           </v-text-field>
         </div>

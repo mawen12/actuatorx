@@ -41,17 +41,19 @@ const actionsHandler = (actionId, row) => {
 <template>
   <table-context :entity="entity" :data="data" :all-data="allData">
     <table-custom>
+      <!--   Scope column   -->
       <template v-slot:item.scope="{ value, item }">
         <v-chip
             :data-row-id="item.name"
             border="opacity-40 sm"
             rounded="xl"
             :color="scopeColor[value] ?? 'grey'"
-        >{{ value }}
-        </v-chip
         >
+          {{ value }}
+        </v-chip>
       </template>
 
+      <!--  Actions column    -->
       <template v-slot:item.actions="{ item }">
         <v-tooltip location="bottom">
           <template v-slot:activator="{ props }">
@@ -69,6 +71,7 @@ const actionsHandler = (actionId, row) => {
         </v-tooltip>
       </template>
 
+      <!--   Expand Detail   -->
       <template v-slot:expanded-row="{ columns, item }">
         <tr class="expanded-row">
           <td :colspan="columns.length" style="padding: 0px">

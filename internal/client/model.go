@@ -1,6 +1,7 @@
 package client
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 )
@@ -28,6 +29,29 @@ func (b *BearerToken) Auth(req *http.Request) {
 	if req != nil {
 		req.Header.Set("Authorization", "Bearer "+b.Token)
 	}
+}
+
+type Downloader interface {
+	Filename() string
+	Bytes() []byte
+	String() string
+}
+
+type SimpleDownloader struct {
+	filename string
+	bs       []byte
+}
+
+func (d *SimpleDownloader) Filename() string {
+	return d.filename
+}
+
+func (d *SimpleDownloader) Bytes() []byte {
+	return d.bs
+}
+
+func (d *SimpleDownloader) String() string {
+	return fmt.Sprintf("file: %s, length: %d", d.filename, len(d.bs))
 }
 
 type (
@@ -59,11 +83,11 @@ type (
 	}
 
 	MetricResp struct {
-		Name           string                `json:"name"`
-		Description    string                `json:"description"`
-		BaseUnit       string                `json:"baseUnit"`
-		Measurements   []MetricMeasurement   `json:"measurements"`
-		AvaialableTags []MetricAvaialableTag `json:"availableTags"`
+		Name          string               `json:"name"`
+		Description   string               `json:"description"`
+		BaseUnit      string               `json:"baseUnit"`
+		Measurements  []MetricMeasurement  `json:"measurements"`
+		AvailableTags []MetricAvailableTag `json:"availableTags"`
 	}
 
 	MetricMeasurement struct {
@@ -71,7 +95,7 @@ type (
 		Value     any    `json:"value"`
 	}
 
-	MetricAvaialableTag struct {
+	MetricAvailableTag struct {
 		Tag    string   `json:"tag"`
 		Values []string `json:"values"`
 	}
@@ -253,7 +277,7 @@ type (
 	RequestMappingConditions struct {
 		Consumes []Produce `json:"consumes"`
 		Headers  []Header  `json:"headers"`
-		Methdos  []string  `json:"methods"`
+		Methods  []string  `json:"methods"`
 		Params   []Header  `json:"params"`
 		Patterns []string  `json:"patterns"`
 		Produces []Produce `json:"produces"`
@@ -311,7 +335,7 @@ type (
 type (
 	ScheduledTasksResp struct {
 		Cron       []Cron       `json:"cron"`
-		Cusotm     []Custom     `json:"custom"`
+		Custom     []Custom     `json:"custom"`
 		FixedDelay []FixedDelay `json:"fixedDelay"`
 		FixedRate  []FixedRate  `json:"fixedRate"`
 	}
@@ -421,6 +445,7 @@ type (
 		RequestRecovery bool              `json:"requestRecovery"`
 		Triggers        []JobTrigger      `json:"triggers"`
 	}
+
 	JobTrigger struct {
 		Group            string `json:"group"`
 		Name             string `json:"name"`
@@ -462,12 +487,10 @@ type (
 	}
 
 	DailyTimeIntervalTrigger struct {
-		Interval       int      `json:"interval"`
+		SimpleTrigger
 		DaysOfWeek     []string `json:"daysOfWeek"`
 		StartTimeOfDay string   `json:"startTimeOfDay"`
 		EndTimeOfDay   string   `json:"endTimeOfDay"`
-		RepeatCount    int      `json:"repeatCount"`
-		TimesTriggered int      `json:"timesTriggered"`
 	}
 
 	CalendarIntervalTrigger struct {
@@ -491,17 +514,65 @@ type (
 		Enabled  bool           `json:"enabled"`
 		Strategy *string        `json:"strategy"`
 		Params   map[string]any `json:"params"`
-		Metadata struct {
-			Label            string `json:"label"`
-			Groups           []any  `json:"groups"`
-			EnabledByDefault bool   `json:"enabledByDefault"`
-			Attributes       any    `json:"attributes"`
-		} `json:"metadata"`
+		Metadata TogglzMetadata `json:"metadata"`
+	}
+
+	TogglzMetadata struct {
+		Label            string `json:"label"`
+		Groups           []any  `json:"groups"`
+		EnabledByDefault bool   `json:"enabledByDefault"`
+		Attributes       any    `json:"attributes"`
 	}
 
 	TogglzReq struct {
 		Enabled    bool    `json:"enabled"`
 		Strategy   *string `json:"strategy"`
 		Parameters *string `json:"parameters"`
+	}
+)
+
+type (
+	ThreadResp struct {
+		Threads []Thread `json:"threads"`
+	}
+
+	Thread struct {
+		ThreadName          string          `json:"threadName"`
+		ThreadId            int             `json:"threadId"`
+		BlockedTime         int64           `json:"blockedTime"`
+		BlockedCount        int             `json:"blockedCount"`
+		WaitedTime          int64           `json:"waitedTime"`
+		WaitedCount         int             `json:"waitedCount"`
+		LockOwnerId         int             `json:"lockOwnerId"`
+		Daemon              bool            `json:"daemon"`
+		InNative            bool            `json:"inNative"`
+		Suspend             bool            `json:"suspend"`
+		ThreadState         string          `json:"threadState"`
+		Priority            int             `json:"priority"`
+		StackTrace          []StackFrame    `json:"stackTrace"`
+		LockedMonitors      []LockedMonitor `json:"lockedMonitors"`
+		LockedSynchronizers []LockInfo      `json:"lockedSynchronizers"`
+		LockInfo            LockInfo        `json:"lockInfo"`
+	}
+
+	StackFrame struct {
+		ModuleName    string `json:"moduleName"`
+		ModuleVersion string `json:"moduleVersion"`
+		MethodName    string `json:"methodName"`
+		FileName      string `json:"fileName"`
+		LineNumber    int    `json:"lineNumber"`
+		ClassName     string `json:"className"`
+		NativeMethod  bool   `json:"nativeMethod"`
+	}
+
+	LockedMonitor struct {
+		LockInfo         `json:"lockInfo"`
+		LockedStackDepth int        `json:"lockedStackDepth"`
+		LockedStackFrame StackFrame `json:"lockedStackFrame"`
+	}
+
+	LockInfo struct {
+		ClassName        string `json:"className"`
+		IdentifyHashCode int64  `json:"identifyHashCode"`
 	}
 )

@@ -38,5 +38,7 @@ func SetupRoutes(router *gin.Engine, api *ActuatorApi) {
 		ag.GET("/scheduledtasks", api.wrap(api.GetScheduledTasks))
 		ag.GET("/togglz", api.wrap(api.GetTogglz))
 		ag.POST("/togglz/:instanceId", api.wrap(api.UpdateTogglz))
+		ag.GET("/threaddump", api.wrap(api.GetThreadDump))
+		ag.GET("/threaddump/download", api.wrap(api.DownloadThreadDump))
 	}
 }

@@ -13,7 +13,7 @@ export const getBeans = async (variables) => {
         }
     })).data
 
-    const result = Object.entries(data.contexts).map(([key, value]) => ({
+    return Object.entries(data.contexts).map(([key, value]) => ({
         name: key,
         value: Object.entries(value.beans).map(([beanName, bean]) => {
             const index = bean.type.lastIndexOf('.')
@@ -28,8 +28,6 @@ export const getBeans = async (variables) => {
             }
         }),
     }))
-
-    return result
 }
 
 export const useGetBeans = (options) => useBaseMutation(getBeans, options)

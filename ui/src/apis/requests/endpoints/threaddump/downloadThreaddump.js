@@ -4,12 +4,13 @@ import {useStorage} from "@vueuse/core";
 
 const connectUrl = useStorage('connectUrl')
 
-export const evictAllCaches = async (variables) => {
-    return (await axiosInstance.delete(`caches`, {
+export const downloadThreaddump = async (variables) => {
+    return (await axiosInstance.get(`threaddump/download`, {
         params: {
             url: connectUrl.value,
-        }
+        },
+        responseType: 'blob',
     })).data
 }
 
-export const useEvictAllCaches = (options) => useBaseMutation(evictAllCaches, options)
+export const useDownloadThreaddump = (options) => useBaseMutation(downloadThreaddump, options)

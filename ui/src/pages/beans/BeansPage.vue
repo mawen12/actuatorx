@@ -1,25 +1,13 @@
 <script setup>
-import {useGetBeansQuery} from '@/apis/requests/endpoints/beans/getBeans'
-import TabsContext from '@/components/tabs/TabsContext.vue'
-import TabsCustom from '@/components/tabs/TabsCustom.vue'
 import ThePage from '@/components/page/ThePage.vue'
-import {beansTabsEntity} from '@/entities/beans/beansTabs.entity'
 import AbilityCheck from "@/pages/abilities/AbilityCheck.vue";
-
-const {data, isLoading, refetch} = useGetBeansQuery({})
+import BeansContent from "@/pages/beans/BeansContent.vue";
 </script>
 
 <template>
   <the-page>
     <ability-check ability="beans">
-      <tabs-context
-          :entity="beansTabsEntity"
-          :data="data"
-          :loading="isLoading"
-          :refetch-handler="refetch"
-      >
-        <tabs-custom/>
-      </tabs-context>
+      <beans-content/>
     </ability-check>
   </the-page>
 </template>

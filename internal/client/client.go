@@ -278,6 +278,35 @@ func (c *Client) UpdateTogglz(ctx context.Context, enabled bool) (*TogglzResp, e
 	return &resp, nil
 }
 
+func (c *Client) ThreadDump(ctx context.Context) (*ThreadResp, error) {
+	var resp ThreadResp
+	if err := c.get(ctx, "threaddump", emptyTmplParams, &resp); err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+func (c *Client) DownloadThreadDump(ctx context.Context) (Downloader, error) {
+	u, err := c.evaluateTmpl("threaddump", map[string]interface{}{})
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Accept", "text/plain")
+
+	bs := make([]byte, 0)
+	err = c.do(req, &bs)
+
+	return &SimpleDownloader{
+		filename: "stack.log",
+		bs:       bs,
+	}, err
+}
+
 // internal methods
 
 func (c *Client) evaluateTmpl(endpoint string, params map[string]interface{}) (*url.URL, error) {
@@ -364,6 +393,12 @@ func (c *Client) do(req *http.Request, out any) error {
 
 	if out != nil {
 		switch v := out.(type) {
+		case *[]byte:
+			body, err := io.ReadAll(resp.Body)
+			if err != nil {
+				return err
+			}
+			*v = body
 		case *string:
 			body, err := io.ReadAll(resp.Body)
 			if err != nil {
