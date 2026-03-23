@@ -1,9 +1,8 @@
 <script setup>
 import {computed, ref} from 'vue'
-import {useStorage} from '@vueuse/core'
+import {useConnectionState} from '@/composables/useConnectionState.js'
 
-const connected = useStorage('connected')
-const drawer = useStorage('drawer', true)
+const {connected, drawer} = useConnectionState()
 
 const search = ref('')
 const items = ref([
@@ -145,13 +144,14 @@ const items = ref([
   //     prependIcon: 'mdi-rocket',
   //   },
   // },
-  {
-    title: 'Heap dump',
-    value: 'head dump',
-    props: {
-      prependIcon: 'mdi-memory',
-    },
-  },
+  // TODO developing
+  // {
+  //   title: 'Heap dump',
+  //   value: 'head dump',
+  //   props: {
+  //     prependIcon: 'mdi-memory',
+  //   },
+  // },
   // TODO Developing
   // {
   //   title: 'Prometheus',
@@ -192,10 +192,10 @@ const filteredItems = computed(() => {
 
         <v-divider/>
 
-        <v-card height="120" class="mt-2" variant="tonal">
-          <v-card-title> Summary</v-card-title>
-          <v-card-text> Fixed height content</v-card-text>
-        </v-card>
+<!--        <v-card height="120" class="mt-2" variant="tonal">-->
+<!--          <v-card-title> Summary</v-card-title>-->
+<!--          <v-card-text> Fixed height content</v-card-text>-->
+<!--        </v-card>-->
       </v-sheet>
     </v-navigation-drawer>
   </template>

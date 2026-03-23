@@ -2,13 +2,10 @@ package client
 
 import (
 	"context"
-	"errors"
 	"sync"
 	"sync/atomic"
 	"time"
 )
-
-var ErrClosedPool = errors.New("closed pool")
 
 type Resource struct {
 	value        *Client

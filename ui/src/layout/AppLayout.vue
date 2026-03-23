@@ -21,8 +21,4 @@ import TheSideBar from './TheSideBar.vue'
   display: flex;
   flex-direction: column;
 }
-
-/* :deep(.v-main) {
-  overflow: hidden !important;
-} */
 </style>

@@ -2,14 +2,12 @@
 import {reactive, ref} from 'vue'
 import {useConnect} from '@/apis/requests/endpoints/connect/connect'
 import {useRouter} from 'vue-router'
-import {useStorage} from '@vueuse/core'
 import useAbilities from "@/composables/useAbilities.js";
 import {useGetAbilities} from "@/apis/requests/endpoints/abilities/getAbilities.js";
+import {useConnectionState} from '@/composables/useConnectionState.js'
 
 const router = useRouter()
-const connected = useStorage('connected')
-const connectUrl = useStorage('connectUrl')
-const drawer = useStorage('drawer', true)
+const {setConnectedState} = useConnectionState()
 
 const {addAll} = useAbilities()
 
@@ -56,21 +54,26 @@ async function onSubmit() {
       basicAuth: {...model.BasicAuth},
       bearerToken: {...model.BearerToken},
     })
+  } catch (e) {
+    console.log('err is', e.response.data.error)
+    error.value = e.response.data.error
+    return
+  } finally {
+    loading.value = false
+  }
 
-    connected.value = true
-    connectUrl.value = model.URL
-    drawer.value = true
-
+  setConnectedState(model.URL)
+  try {
     const result = await getAbilitiesState.mutateAsync({
       url: model.URL
     })
 
     addAll(result)
 
-    router.push('/health')
+    await router.push('/health')
   } catch (e) {
-    console.log('err is', e.response.error)
-    error.value = e.response.error
+    console.log('err is', e.response.data.error)
+    error.value = e.response.data.error
   } finally {
     loading.value = false
   }
