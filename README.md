@@ -26,7 +26,7 @@ It currently provides base functionality of Spring Boot Actuator, and will suppo
 **1. start the actuatorx**
 
 ```bash
-./actuatorx 
+./actuatorx
 ```
 
 **2. access the page**
@@ -36,4 +36,3 @@ http://localhost:4000
 ```
 
 **3. input the actuator url and auth**
-

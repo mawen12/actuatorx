@@ -1,19 +1,47 @@
-.PHONY: ui-build go-build build clean run
+# ==================================================================================== #
+# HELPERS
+# ==================================================================================== #
+## help: print this help message
+.PHONY: help
+help:
+	@echo 'Usage:'
+	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/ /'
 
-BIN := bin/actuatorx
-CMD := ./cmd/actuatorx
+.PHONY: confirm
+confirm:
+	@echo -n 'Are you sure? [y/N] ' && read ans && [ $${ans:-N} = y ]
 
-ui-build:
-	cd ui && npm run build
 
-go-build:
-	mkdir -p bin
-	go build -o ${BIN} ${CMD}
+# ==================================================================================== #
+# DEVELOPMENT
+# ==================================================================================== #
+## run: run the cmd application
+.PHONY: run
+run:
+	go run main.go
 
-build: ui-build go-build
-
+.PHONY: clean
 clean:
 	rm -rf bin
 
-run: build
-	GIN_MODE=release ./${BIN}
+# ==================================================================================== #
+# BUILD
+# ==================================================================================== #
+## build: build the amd64 and arm64 applications
+.PHONE: build
+build: clean build/amd64 build/arm64
+
+## build/amd64: build the amd64 application
+.PHONY: build/amd64
+build/amd64:
+	@echo 'Building cmd...'
+	cd ui && npm run build
+	mkdir -p bin && GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build  -o=bin/linux_amd64/actuatorx ./cmd/actuatorx
+
+## build/arm64: build the arm64 application
+.PHONY: build/arm64
+build/arm64:
+	@echo 'Building cmd...'
+	cd ui && npm run build
+	mkdir -p bin && GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build  -o=bin/linux_arm64/actuatorx ./cmd/actuatorx
+
