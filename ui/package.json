@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "rm -rf ../static/assets ../static/index.html && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "@mdi/font": "^7.4.47",
+    "@types/lodash-es": "^4.17.12",
     "@vitejs/plugin-vue": "^6.0.4",
     "sass": "^1.97.2",
     "sass-embedded": "^1.97.1",

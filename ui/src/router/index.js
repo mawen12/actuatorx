@@ -1,4 +1,5 @@
-import {createRouter, createWebHashHistory} from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
+import BeansPage from '@/pages/beans/BeansPage.vue'
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -36,6 +37,7 @@ const router = createRouter({
                     path: 'beans',
                     name: 'Beans',
                     component: () => import('@/pages/beans/BeansPage.vue'),
+                    // component: BeansPage,
                 },
                 {
                     path: 'conditions',

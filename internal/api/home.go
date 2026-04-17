@@ -8,22 +8,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetHome(prefix string) http.Handler {
-	if prefix != "" {
-		prefix = "/" + prefix
-	}
-
-	return http.StripPrefix(prefix, static.GetHandler())
+func GetHome() http.Handler {
+	return http.StripPrefix("", static.GetHandler())
 }
 
-func GetAssets(prefix string) http.Handler {
-	if prefix != "" {
-		prefix = "/" + prefix + "/static"
-	} else {
-		prefix = "/static"
-	}
-
-	return http.StripPrefix(prefix, static.GetHandler())
+func GetAssets() http.Handler {
+	return http.StripPrefix("static", static.GetHandler())
 }
 
 func GetInfo(c *gin.Context) {

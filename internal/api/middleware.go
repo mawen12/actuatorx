@@ -1,9 +1,6 @@
 package api
 
 import (
-	"log/slog"
-	"time"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,30 +13,30 @@ func corsMiddleware() gin.HandlerFunc {
 	}
 }
 
-func loggerMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		start := time.Now()
-		path := c.Request.URL.Path
+// func loggerMiddleware() gin.HandlerFunc {
+// 	return func(c *gin.Context) {
+// 		start := time.Now()
+// 		path := c.Request.URL.Path
 
-		c.Next()
+// 		c.Next()
 
-		latency := time.Now().Sub(start)
-		fields := make([]slog.Attr, 0)
-		fields = append(fields,
-			slog.Int("status", c.Writer.Status()),
-			slog.String("method", c.Request.Method),
-			slog.String("remote_addr", c.ClientIP()),
-			slog.Int64("duration_ms", latency.Milliseconds()),
-			slog.String("path", path),
-		)
+// 		latency := time.Now().Sub(start)
+// 		fields := make([]slog.Attr, 0)
+// 		fields = append(fields,
+// 			slog.Int("status", c.Writer.Status()),
+// 			slog.String("method", c.Request.Method),
+// 			slog.String("remote_addr", c.ClientIP()),
+// 			slog.Int64("duration_ms", latency.Milliseconds()),
+// 			slog.String("path", path),
+// 		)
 
-		level := slog.LevelInfo
-		if err := c.Errors.Last(); err != nil {
-			fields = append(fields, slog.String("err", err.Error()))
-			level = slog.LevelError
-		}
+// 		level := slog.LevelInfo
+// 		if err := c.Errors.Last(); err != nil {
+// 			fields = append(fields, slog.String("err", err.Error()))
+// 			level = slog.LevelError
+// 		}
 
-		slog.LogAttrs(c.Request.Context(), level, "http_request", fields...)
+// 		slog.LogAttrs(c.Request.Context(), level, "http_request", fields...)
 
-	}
-}
+// 	}
+// }

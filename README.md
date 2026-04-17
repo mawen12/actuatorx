@@ -41,3 +41,10 @@ http://localhost:4000
 ## Windows support
 
 https://go.dev/wiki/Windows
+
+更换 go 版本
+```bash
+export GOROOT=/opt/go/go-1.20
+export GOPATH=$HOME/go
+export PATH=$GOROOT/bin:$GOPATH/bin:$PATH
+```

@@ -4,10 +4,10 @@ import TableContext from '@/components/table/TableContext.vue'
 import TableCustom from '@/components/table/TableCustom.vue'
 import BeanDetail from './BeanDetail.vue'
 import {useBeanGraphDialog} from './useBeanGraphDialog'
-
-const BeanGraphDialog = defineAsyncComponent(() =>
-    import('./BeanGraphDialog.vue')
-)
+import BeanGraphDialog from './BeanGraphDialog.vue'
+// const BeanGraphDialog = defineAsyncComponent(() =>
+//     import('./BeanGraphDialog.vue')
+// )
 
 const props = defineProps({
   entity: Object,

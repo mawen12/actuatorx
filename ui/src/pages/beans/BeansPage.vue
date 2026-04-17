@@ -7,10 +7,9 @@ import BeansContent from "@/pages/beans/BeansContent.vue";
 <template>
   <the-page>
     <ability-check ability="beans">
-      <beans-content/>
+      <beans-content />
     </ability-check>
   </the-page>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
