@@ -34,4 +34,5 @@ go.work.sum
 node_modules
 dist
 assets
+index.html
 bin/
