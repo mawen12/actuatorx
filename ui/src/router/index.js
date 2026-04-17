@@ -36,8 +36,8 @@ const router = createRouter({
                 {
                     path: 'beans',
                     name: 'Beans',
-                    component: () => import('@/pages/beans/BeansPage.vue'),
-                    // component: BeansPage,
+                    // component: () => import('@/pages/beans/BeansPage.vue'),
+                    component: BeansPage,
                 },
                 {
                     path: 'conditions',
