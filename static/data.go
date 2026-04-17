@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-//go:embed index.html assets
+//go:embed index.html assets favicon.ico
 var assets embed.FS
 
 func GetFilesystem() http.FileSystem {

@@ -1,5 +1,5 @@
-import {axiosInstance} from '@/apis/axiosInstance'
-import {useBaseMutation} from '@/apis/requests/base/useBaseMutation'
+import { axiosInstance } from '@/apis/axiosInstance'
+import { useBaseMutation } from '@/apis/requests/base/useBaseMutation'
 
 export const connect = async (variables) => {
     return (
@@ -7,8 +7,9 @@ export const connect = async (variables) => {
             params: {
                 url: variables.url,
                 authType: variables.authType,
-                basicAuth: variables.basicAuth,
-                bearerToken: variables.bearerToken,
+                basicAuthUsername: variables.basicAuth.username,
+                basicAuthPassword: variables.basicAuth.password,
+                bearerToken: variables.bearerToken.token,
             },
         })
     ).data

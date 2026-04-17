@@ -1,6 +1,6 @@
 # actuatorx
 
-For Spring Boot Actuator, build by golang and vue。
+For Spring Boot Actuator, build by `golang` and `vue`。
 
 Inspired by [ostara](https://github.com/krud-dev/ostara) and [pgweb](https://github.com/sosedoff/pgweb)。
 
@@ -21,13 +21,36 @@ It currently provides base functionality of Spring Boot Actuator, and will suppo
 - [Scheduled Tasks](https://docs.spring.io/spring-boot/api/rest/actuator/scheduledtasks.html)
 - [Thread Dump](https://docs.spring.io/spring-boot/api/rest/actuator/threaddump.html)
 
+## Feature Examples
+
+**Login**
+
+<img src="doc/images/login.png" alt="Login" width="1200" height="800" />
+
+**Health**
+
+<img src="doc/images/health.png" alt="Health" width="1200" height="800" />
+
+**Beans**
+
+<img src="doc/images/beans.png" alt="Beans" width="1200" height="800" />
+
+<img src="doc/images/beans-dependency-graph.png" alt="Beans dependency graph" width="1200" height="800" />
+
 ## Usage
 
-**1. start the actuatorx**
+**1. start the actuatorx with default port(4000)**
 
 ```bash
 ./actuatorx
 ```
+
+or start with custom port
+
+```bash
+./actuator --port 9080
+```
+
 
 **2. access the page**
 
@@ -37,7 +60,16 @@ http://localhost:4000
 
 **3. input the actuator url and auth**
 
+## Language and core framework information
 
-## Windows support
+| `Tech` | `Version` |
+| --- | --- |
+| `Golang` | `1.25.7` |
+| `Gin` | `1.12.0` |
+| `Vue` | `7.3.1` |
+| `vuetify` | `3.11.6` |  
 
-https://go.dev/wiki/Windows
+
+## Design
+
+[design](doc/design.md)
