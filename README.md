@@ -36,3 +36,8 @@ http://localhost:4000
 ```
 
 **3. input the actuator url and auth**
+
+
+## Windows support
+
+https://go.dev/wiki/Windows
