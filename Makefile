@@ -29,13 +29,14 @@ clean:
 # ==================================================================================== #
 ## build: build the amd64 and arm64 applications
 .PHONE: build
-build: clean build/amd64 build/arm64
+build: clean build/amd64 build/arm64 build/win
 
 ## build/amd64: build the amd64 application
 .PHONY: build/amd64
 build/amd64:
 	@echo 'Building cmd...'
 	cd ui && npm run build
+	mkdir -p bin && GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build  -o=bin/actuatorx ./cmd/actuatorx
 	mkdir -p bin && GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build  -o=bin/linux_amd64/actuatorx ./cmd/actuatorx
 
 ## build/arm64: build the arm64 application
@@ -45,3 +46,9 @@ build/arm64:
 	cd ui && npm run build
 	mkdir -p bin && GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build  -o=bin/linux_arm64/actuatorx ./cmd/actuatorx
 
+## build/win: build the windows application
+.PHONY: build/win
+build/win:
+	@echo 'Building cmd...'
+	cd ui && npm run build
+	mkdir -p bin && GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -o=bin/windows-amd64/actuatorx ./cmd/actuatorx

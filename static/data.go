@@ -2,18 +2,27 @@ package static
 
 import (
 	"embed"
+	"io/fs"
 	"net/http"
-	"os"
 )
 
-//go:embed index.html
+//go:embed index.html assets
 var assets embed.FS
 
 func GetFilesystem() http.FileSystem {
-	if os.Getenv("ACTUATOR_ASSETS_DEVMODE") == "1" {
-		return http.Dir("./static")
+	sub, err := fs.Sub(assets, ".")
+	if err != nil {
+		panic(err)
 	}
-	return http.FS(assets)
+	return http.FS(sub)
+}
+
+func GetAssetsFilesystem() http.FileSystem {
+	sub, err := fs.Sub(assets, "assets")
+	if err != nil {
+		panic(err)
+	}
+	return http.FS(sub)
 }
 
 func GetHandler() http.Handler {

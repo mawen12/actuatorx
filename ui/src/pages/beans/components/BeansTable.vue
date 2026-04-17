@@ -1,13 +1,9 @@
 <script setup>
-import {defineAsyncComponent} from 'vue'
 import TableContext from '@/components/table/TableContext.vue'
 import TableCustom from '@/components/table/TableCustom.vue'
 import BeanDetail from './BeanDetail.vue'
-import {useBeanGraphDialog} from './useBeanGraphDialog'
-
-const BeanGraphDialog = defineAsyncComponent(() =>
-    import('./BeanGraphDialog.vue')
-)
+import { useBeanGraphDialog } from './useBeanGraphDialog'
+import BeanGraphDialog from "@/pages/beans/components/BeanGraphDialog.vue";
 
 const props = defineProps({
   entity: Object,
@@ -16,7 +12,7 @@ const props = defineProps({
   refetchHandler: Function,
 })
 
-const {openBeanGraphDialog} = useBeanGraphDialog()
+const { openBeanGraphDialog } = useBeanGraphDialog()
 
 const scopeColor = {
   singleton: 'blue-darken-2',
@@ -30,7 +26,7 @@ const scopeColor = {
 const actionsHandler = (actionId, row) => {
   switch (actionId) {
     case 'showGraph':
-      openBeanGraphDialog({bean: row, allBeans: props.allData})
+      openBeanGraphDialog({ bean: row, allBeans: props.allData })
       break
     default:
       break
@@ -43,12 +39,7 @@ const actionsHandler = (actionId, row) => {
     <table-custom>
       <!--   Scope column   -->
       <template v-slot:item.scope="{ value, item }">
-        <v-chip
-            :data-row-id="item.name"
-            border="opacity-40 sm"
-            rounded="xl"
-            :color="scopeColor[value] ?? 'grey'"
-        >
+        <v-chip :data-row-id="item.name" border="opacity-40 sm" rounded="xl" :color="scopeColor[value] ?? 'grey'">
           {{ value }}
         </v-chip>
       </template>
@@ -57,13 +48,8 @@ const actionsHandler = (actionId, row) => {
       <template v-slot:item.actions="{ item }">
         <v-tooltip location="bottom">
           <template v-slot:activator="{ props }">
-            <v-btn
-                icon
-                size="small"
-                v-bind="props"
-                variant="text"
-                @click.stop="(event) => actionsHandler('showGraph', item)"
-            >
+            <v-btn icon size="small" v-bind="props" variant="text"
+              @click.stop="(event) => actionsHandler('showGraph', item)">
               <v-icon>mdi-sitemap</v-icon>
             </v-btn>
           </template>
@@ -75,14 +61,14 @@ const actionsHandler = (actionId, row) => {
       <template v-slot:expanded-row="{ columns, item }">
         <tr class="expanded-row">
           <td :colspan="columns.length" style="padding: 0px">
-            <bean-detail :item="item"/>
+            <bean-detail :item="item" />
           </td>
         </tr>
       </template>
     </table-custom>
   </table-context>
 
-  <bean-graph-dialog/>
+  <bean-graph-dialog />
 </template>
 
 <style scoped></style>

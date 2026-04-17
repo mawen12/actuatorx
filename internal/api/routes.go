@@ -1,6 +1,9 @@
 package api
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/mawen12/actuatorx/static"
+)
 
 func SetupMiddleware(group *gin.RouterGroup) {
 	group.Use(corsMiddleware())
@@ -11,10 +14,10 @@ func SetupMiddleware(group *gin.RouterGroup) {
 }
 
 func SetupRoutes(router *gin.Engine, api *ActuatorApi) {
-	router.GET("/", gin.WrapH(GetHome("")))
-	router.GET("/static/*path", gin.WrapH(GetAssets("")))
+	router.GET("/", gin.WrapH(GetHome()))
+	router.GET("/static/*path", gin.WrapH(GetAssets()))
 
-	router.Static("/assets", "./static/assets")
+	router.StaticFS("/assets", static.GetAssetsFilesystem())
 
 	ag := router.Group("/api")
 	SetupMiddleware(ag)
