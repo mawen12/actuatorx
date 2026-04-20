@@ -1,12 +1,12 @@
 # actuatorx
 
-For Spring Boot Actuator, build by `golang` and `vue`。
+A Spring Boot Actuator dashboard built with `golang` and `vue`.
 
-Inspired by [ostara](https://github.com/krud-dev/ostara) and [pgweb](https://github.com/sosedoff/pgweb)。
+Inspired by [ostara](https://github.com/krud-dev/ostara) and [pgweb](https://github.com/sosedoff/pgweb).
 
-It currently provides base functionality of Spring Boot Actuator, and will support more features in the future.
+It currently provides the core functionality of Spring Boot Actuator and will support more features in the future.
 
-## Endpoints document
+## Endpoint Documentation
 
 - [Design](doc/design.md)
 - [Health](doc/health.md)
@@ -40,28 +40,27 @@ It currently provides base functionality of Spring Boot Actuator, and will suppo
 
 ## Usage
 
-**1. start the actuatorx with default port(4000)**
+**1. Start actuatorx on the default port (4000)**
 
 ```bash
 ./actuatorx
 ```
 
-or start with custom port
+Or start it on a custom port:
 
 ```bash
-./actuator --port 9080
+./actuatorx --port 9080
 ```
 
-
-**2. access the page**
+**2. Open the page in your browser**
 
 ```bash
 http://localhost:4000
 ```
 
-**3. input the actuator url and auth**
+**3. Enter the Actuator URL and authentication information**
 
-## Language and core framework information
+## Language and Core Framework Information
 
 | `Tech` | `Version` |
 | --- | --- |
@@ -69,8 +68,3 @@ http://localhost:4000
 | `Gin` | `1.12.0` |
 | `Vue` | `7.3.1` |
 | `vuetify` | `3.11.6` |  
-
-
-## Design
-
-[design](doc/design.md)
