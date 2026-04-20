@@ -1,33 +1,35 @@
 # Configprops
 
-- Show configprops as table group by application context
-- Support search by property prefix and name
-- Support property detail
+- Show configuration properties in a table grouped by application context.
+- Search by property prefix and name.
+- View property details.
 
 ![Configprops](images/configprops.png)
 
-## Spring Boot doc 
+## Frontend page
 
-https://docs.spring.io/spring-boot/api/rest/actuator/configprops.html
+- `ConfigpropsPage.vue`
 
-## Spring Boot Endpoint 
+## Frontend API
 
-- `/actutor/configprops`
-- `/actutor/configprops/{prefix}`
+- `getConfigprops.js`
+
+## Backend API
+
+- `api.go#GetConfigprops`
+
 
 ## Backend client
 
 - `client.go#Configprops`
 
-## Backend api
+## Spring Boot Endpoint 
 
-`api.go#GetConfigprops`
+- `/actuator/configprops`
+- `/actuator/configprops/{prefix}`
 
-## Frontend api
+## Spring Boot docs 
 
-`getConfigprops.js`
+https://docs.spring.io/spring-boot/api/rest/actuator/configprops.html
 
-## Frontend page
-
-`ConfigpropsPage.vue`
 

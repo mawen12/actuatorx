@@ -1,35 +1,36 @@
 # Beans
 
-- show data as table group by application context
-- search by bean name
-- click the dependency jump to bean
-- bean dependency grpah
+- Show bean data in a table grouped by application context.
+- Search by bean name.
+- Click a dependency to jump to the corresponding bean.
+- View the bean dependency graph.
 
 ![Beans](images/beans.png)
 
 ![Bean dependency graph](images/beans-dependency-graph.png)
 
-## Spring Boot doc
+## Frontend page
 
-https://docs.spring.io/spring-boot/api/rest/actuator/beans.html
+- `BeansPage.vue`
 
-## Spring Boot Endpoint 
+## Frontend API
 
-`/actutor/beans`
+- `getbeans.js`
+
+## Backend API
+
+- `api.go#Getbeans`
 
 ## Backend client
 
-`client.go#beans`
+- `client.go#beans`
 
-## Backend api
+## Spring Boot Endpoint 
 
-`api.go#Getbeans`
+- `/actuator/beans`
 
-## Frontend api
+## Spring Boot docs
 
-`getbeans.js`
+https://docs.spring.io/spring-boot/api/rest/actuator/beans.html
 
-## Frontend page
-
-`BeansPage.vue`
 

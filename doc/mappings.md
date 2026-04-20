@@ -1,20 +1,20 @@
 # Mappings
 
-- show mappings as table
-- search by url and handler
-- mapping detail
+- Show mappings in a table.
+- Search by URL and handler.
+- View mapping details.
 
 ![Mappings](images/mappings.png)
 
 ## Frontend page
 
-`MappingsPage.vue`
+- `MappingsPage.vue`
 
-## Frontend api
+## Frontend API
 
 - `getMappings.js`
 
-## Backend api
+## Backend API
 
 - `api.go#GetMappings`
 
@@ -24,9 +24,9 @@
 
 ## Spring Boot Endpoint 
 
-- `/actutor/mappings`
+- `/actuator/mappings`
 
-## Spring Boot doc 
+## Spring Boot docs 
 
 https://docs.spring.io/spring-boot/api/rest/actuator/mappings.html
 

@@ -6,20 +6,21 @@ Inspired by [ostara](https://github.com/krud-dev/ostara) and [pgweb](https://git
 
 It currently provides base functionality of Spring Boot Actuator, and will support more features in the future.
 
-## Supported Endpoints
+## Endpoints document
 
-- [Health](https://docs.spring.io/spring-boot/api/rest/actuator/health.html)
-- [Metrics](https://docs.spring.io/spring-boot/api/rest/actuator/metrics.html)
-- [Environment](https://docs.spring.io/spring-boot/api/rest/actuator/env.html)
-- [Beans](https://docs.spring.io/spring-boot/api/rest/actuator/beans.html)
-- [Conditions](https://docs.spring.io/spring-boot/api/rest/actuator/conditions.html)
-- [Configprops](https://docs.spring.io/spring-boot/api/rest/actuator/configprops.html)
-- [Caches](https://docs.spring.io/spring-boot/api/rest/actuator/caches.html)
-- [Loggers](https://docs.spring.io/spring-boot/api/rest/actuator/loggers.html)
-- [Mappings](https://docs.spring.io/spring-boot/api/rest/actuator/mappings.html)
-- [Http Exchanges](https://docs.spring.io/spring-boot/api/rest/actuator/httpexchanges.html)
-- [Scheduled Tasks](https://docs.spring.io/spring-boot/api/rest/actuator/scheduledtasks.html)
-- [Thread Dump](https://docs.spring.io/spring-boot/api/rest/actuator/threaddump.html)
+- [Design](doc/design.md)
+- [Health](doc/health.md)
+- [Metrics](doc/metrics.md)
+- [Environment](doc/env.md)
+- [Beans](doc/beans.md)
+- [Conditions](doc/conditions.md)
+- [Configprops](doc/configprops.md)
+- [Caches](doc/caches.md)
+- [Loggers](doc/loggers.md)
+- [Mappings](doc/mappings.md)
+- [Http Exchanges](doc/http_exchanges.md)
+- [Scheduled Tasks](doc/scheduled_tasks.md)
+- [Thread Dump](doc/thread_dump.md)
 
 ## Feature Examples
 

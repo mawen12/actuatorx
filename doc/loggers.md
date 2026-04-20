@@ -1,21 +1,21 @@
 # Loggers
 
-- show loggers as table
-- search by logger name
-- set and reset the logger level
+- Show loggers in a table.
+- Search by logger name.
+- Set or reset the logger level.
 
 ![Loggers](images/loggers.png)
 
 ## Frontend page
 
-`LoggersPage.vue`
+- `LoggersPage.vue`
 
-## Frontend api
+## Frontend API
 
 - `getLoggers.js`
 - `setLoggerLevel.js`
 
-## Backend api
+## Backend API
 
 - `api.go#GetLoggers`
 - `api.go#SetLoggerLevel`
@@ -27,10 +27,10 @@
 
 ## Spring Boot Endpoint 
 
-- `/actutor/loggers`
-- `/actutor/loggers/{name}`
+- `/actuator/loggers`
+- `/actuator/loggers/{name}`
 
-## Spring Boot doc 
+## Spring Boot docs 
 
 https://docs.spring.io/spring-boot/api/rest/actuator/loggers.html
 

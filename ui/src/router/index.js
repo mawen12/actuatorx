@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import BeansPage from '@/pages/beans/BeansPage.vue'
+import ScheduledTasksPage from '@/pages/scheduled-tasks/ScheduledTasksPage.vue'
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -78,7 +79,9 @@ const router = createRouter({
                 {
                     path: 'scheduled-tasks',
                     name: 'Scheduled Tasks',
-                    component: () => import('@/pages/scheduled-tasks/ScheduledTasksPage.vue'),
+                    // component: () => import('@/pages/scheduled-tasks/ScheduledTasksPage.vue'),
+                    // change to use static import to avoid load failed
+                    component: ScheduledTasksPage,
                 },
                 {
                     path: 'threaddump',

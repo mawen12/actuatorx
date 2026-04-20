@@ -14,15 +14,24 @@ import (
 	"github.com/lmittmann/tint"
 )
 
+const version = "0.1"
+
 type config struct {
-	port int
+	port    int
+	version bool
 }
 
 func main() {
 	var cfg config
 
 	flag.IntVar(&cfg.port, "port", 4000, "Server Port")
+	flag.BoolVar(&cfg.version, "version", false, "print version and exit")
 	flag.Parse()
+
+	if cfg.version {
+		fmt.Printf("ActuatorX Version \"%s\"\n", version)
+		os.Exit(0)
+	}
 
 	log := path.Join(os.TempDir(), "actuatorx.log")
 	logfile, err := os.OpenFile(log, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)

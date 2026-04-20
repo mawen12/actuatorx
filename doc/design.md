@@ -2,54 +2,53 @@
 
 ## Backend design
 
-Backend use `gin` as http server, the main code is in `internal` package, the core endpoint is `internal/api/api.go`.
+The backend uses `gin` as the HTTP server. Most of the core code is located in the `internal` package, and the main endpoint implementation is in `internal/api/api.go`.
 
-`api.go` receive the request from frontend, then call the `client.go` for retrieve information. 
+`api.go` receives requests from the frontend and then calls `client.go` to retrieve the required information.
 
 ## Frontend design
 
-Frontend use `vue` + `vuetify` to build, the code is in `ui` package。
+The frontend is built with `vue` and `vuetify`, and its code is located in the `ui` package.
 
 ### Table
 
-The main view component is `table`, it is defined with these component:
-- `TableContext.vue` define in `ui/src/components/table` 
-- `TableCustom.vue` define in `ui/src/components/table`
-- `XxxTableEntity` define in `ui/src/entities`
+The main table view is composed of the following components:
+- `TableContext.vue`, defined in `ui/src/components/table`
+- `TableCustom.vue`, defined in `ui/src/components/table`
+- `XxxTableEntity`, defined in `ui/src/entities`
 
 #### TableEntity
 
-The entity define the column count, column type, column value, column action。
+This entity defines the column count, column types, displayed values, and available actions.
 
 | `Field` | `Desc` |
 | --- | --- |
-| `id` | identify the entity |
-| `itemValue` | provide to `vuetify#table#item-value`, should be unique | 
-| `showToolbar` | whethever show the search toolbar |
-| `headers` | define the columns information |
-| `headers.[].key` | define fetch the field from row as value if value is not set, when it = `data-table-expand`, vuetify render it as expand icon |
-| `headers.[].value` | define how to fetch the value from row, it will override the `headers.[].key` |
-| `headers.[].sortable` | row sort |
-| `headers.[].align` | column value align |
-| `headers.[].width` | column value width |
-| `rowAction` | when set the `headers.[].key` = `data-table-expand`，then click the row to show the component |
-| `rowAction.type` | the row action type |
-| `rowAction.component` | when click the row then show this component |
-| `massActions` | multi row selected actions |
-| `globalActions` | global actions in the tool bar |
-| `getAnchor` | use to get the item, only use by `beans`, when click the dependency then jump to bean |
-| `filterData` | when use search tool bar, then use this to filter data |
+| `id` | identifies the entity |
+| `itemValue` | passed to `vuetify#table#item-value` and should be unique |
+| `showToolbar` | whether to show the search toolbar |
+| `headers` | defines the column metadata |
+| `headers.[].key` | defines which field from the row is used as the value when no custom value is set; when it equals `data-table-expand`, Vuetify renders it as an expand icon |
+| `headers.[].value` | defines how to retrieve the value from the row and overrides `headers.[].key` |
+| `headers.[].sortable` | controls row sorting |
+| `headers.[].align` | controls the alignment of the column value |
+| `headers.[].width` | controls the width of the column |
+| `rowAction` | when `headers.[].key` is set to `data-table-expand`, clicking the row shows the configured component |
+| `rowAction.type` | the type of row action |
+| `rowAction.component` | the component to display when a row is clicked |
+| `massActions` | actions for multiple selected rows |
+| `globalActions` | global actions in the toolbar |
+| `getAnchor` | used to get the target item; currently only used by `beans`, where clicking a dependency jumps to the related bean |
+| `filterData` | used by the search toolbar to filter data |
 
 #### TableContext
 
-The TableEntity will pass to the TableContext, it parse the entity, provide actions and data for table render.
+`TableEntity` is passed to `TableContext`, which parses the entity and provides the actions and data needed to render the table.
 
 #### TableCustom
 
-The TableCustom is responsible for display the data.
+`TableCustom` is responsible for displaying the data.
 
-### Api
+### API
 
-actuatorx use `axios` + `tanstack/vue-query` for fetch the information。
-it is defined in `ui/src/apis`。
+actuatorx uses `axios` and `tanstack/vue-query` to fetch information. These are defined in `ui/src/apis`. 
 

@@ -1,38 +1,38 @@
 # Metrics
 
-- Show data as table
-- Support search by metric name
-- Support metric detail(details, tags, measurements)
-- Support filter by metric tag
+- Show metrics in a table.
+- Search by metric name.
+- View metric details, including tags and measurements.
+- Filter metrics by tag.
 
 ![Metrics](images/metric.png)
 
-## Spring Boot doc
+## Frontend page
 
-https://docs.spring.io/spring-boot/api/rest/actuator/metrics.html
+- `Metrics.vue`
 
-## Spring Boot Endpoint 
+## Frontend API
 
-- `/actutor/metrics`
-- `/actutor/metrics/{requiredMetricName}`
+- `getMetrics.js`
+- `getMetricDetails.js`
+- `getLatestMetric.js`
+
+## Backend API
+
+- `api.go#GetMetrics`
+- `api.go#GetMetric`
 
 ## Backend client
 
 - `client.go#Metrics`
 - `client.go#Metric`
 
-## Backend api
+## Spring Boot Endpoint 
 
-- `api.go#GetMetrics`
-- `api.go#GetMetric`
+- `/actuator/metrics`
+- `/actuator/metrics/{requiredMetricName}`
 
-## Frontend api
+## Spring Boot docs
 
-- `getMetrics.js`
-- `getMetricDetails.js`
-- `getLatestMetric.js`
-
-## Frontend page
-
-`Metrics.vue`
+https://docs.spring.io/spring-boot/api/rest/actuator/metrics.html
 

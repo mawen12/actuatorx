@@ -1,32 +1,31 @@
 # Conditions
 
-- Show data as table group by application context
-- Support search by name
-- Support condition detail
+- Show condition data in a table grouped by application context.
+- Search by condition name.
+- View condition details.
 
 ![Conditions](images/conditions.png)
 
-## Spring Boot doc
+## Frontend page
 
-https://docs.spring.io/spring-boot/api/rest/actuator/conditions.html
+- `ConditionsPage.vue`
 
-## Spring Boot Endpoint 
+## Frontend API
 
-`/actutor/conditions`
+- `getConditions.js`
+
+## Backend API
+
+- `api.go#GetConditions`
 
 ## Backend client
 
-`client.go#Conditions`
+- `client.go#Conditions`
 
-## Backend api
+## Spring Boot Endpoint 
 
-`api.go#GetConditions`
+- `/actuator/conditions`
 
-## Frontend api
+## Spring Boot docs
 
-`getConditions.js`
-
-## Frontend page
-
-`ConditionsPage.vue`
-
+https://docs.spring.io/spring-boot/api/rest/actuator/conditions.html

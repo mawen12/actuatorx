@@ -1,20 +1,20 @@
 # Http Exchanges
 
-- show http exchanges as table
-- search by url and handler
-- http exchange detail
+- Show HTTP exchanges in a table.
+- Search by method and URL.
+- View HTTP exchange details.
 
 ![Http Exchanges](images/http-exchanges.png)
 
 ## Frontend page
 
-`HttpExchangesPage.vue`
+- `HttpExchangesPage.vue`
 
-## Frontend api
+## Frontend API
 
 - `getHttpExchanges.js`
 
-## Backend api
+## Backend API
 
 - `api.go#GetHttpExchanges`
 
@@ -24,9 +24,9 @@
 
 ## Spring Boot Endpoint 
 
-- `/actutor/httpexchanges`
+- `/actuator/httpexchanges`
 
-## Spring Boot doc 
+## Spring Boot docs 
 
 https://docs.spring.io/spring-boot/api/rest/actuator/httpexchanges.html
 

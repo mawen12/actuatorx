@@ -1,30 +1,29 @@
 # Health
 
-- Show data as multi card
+- Show health data as multiple cards.
 
 ![Health](images/health.png)
 
-## Spring Boot doc
+## Frontend page
 
-https://docs.spring.io/spring-boot/api/rest/actuator/health.html
+- `HealthPage.vue`
 
-## Spring Boot Endpoint 
+## Frontend API
 
-`/actutor/health`
+- `getHealth.js`
+
+## Backend API
+
+- `api.go#GetHealth`
 
 ## Backend client
 
-`client.go#Health`
+- `client.go#Health`
 
-## Backend api
+## Spring Boot Endpoint 
 
-`api.go#GetHealth`
+- `/actuator/health`
 
-## Frontend api
+## Spring Boot docs
 
-`getHealth.js`
-
-## Frontend page
-
-`HealthPage.vue`
-
+https://docs.spring.io/spring-boot/api/rest/actuator/health.html

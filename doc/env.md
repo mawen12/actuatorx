@@ -1,33 +1,34 @@
 # Env
 
-- Show env as table group by env file
-- Support search by property name
-- Support copy the property name and value
+- Show environment properties in a table grouped by property source.
+- Search by property name.
+- Copy property names and values.
 
 ![Env](images/env.png)
 
-## Spring Boot doc 
+## Frontend page
 
-https://docs.spring.io/spring-boot/api/rest/actuator/env.html
+- `EnvPage.vue`
 
-## Spring Boot Endpoint 
+## Frontend API
 
-- `/actutor/env`
-- `/actutor/env/{toMatch}`
+- `getEnv.js`
+
+## Backend API
+
+- `api.go#GetEnv`
 
 ## Backend client
 
 - `client.go#Env`
 
-## Backend api
+## Spring Boot Endpoint 
 
-`api.go#GetEnv`
+- `/actuator/env`
+- `/actuator/env/{toMatch}`
 
-## Frontend api
 
-`getEnv.js`
+## Spring Boot docs 
 
-## Frontend page
-
-`EnvPage.vue`
+https://docs.spring.io/spring-boot/api/rest/actuator/env.html
 

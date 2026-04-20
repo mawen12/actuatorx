@@ -1,22 +1,22 @@
 # Caches
 
-- show caches as table
-- search by cache name and manager
-- evict cache and all caches
+- Show caches in a table.
+- Search by cache name and manager.
+- Evict a single cache or all caches.
 
 ![Caches](images/caches.png)
 
 ## Frontend page
 
-`CachesPage.vue`
+- `CachesPage.vue`
 
-## Frontend api
+## Frontend API
 
 - `getCaches.js`
 - `evictAllCache.js`
 - `evictCache.js`
 
-## Backend api
+## Backend API
 
 - `api.go#GetCaches`
 - `api.go#EvictAllCaches`
@@ -30,10 +30,10 @@
 
 ## Spring Boot Endpoint 
 
-- `/actutor/caches`
-- `/actutor/caches/{cache}`
+- `/actuator/caches`
+- `/actuator/caches/{cache}`
 
-## Spring Boot doc 
+## Spring Boot docs 
 
 https://docs.spring.io/spring-boot/api/rest/actuator/caches.html
 
