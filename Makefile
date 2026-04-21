@@ -18,7 +18,7 @@ confirm:
 ## run: run the cmd application
 .PHONY: run
 run:
-	go run main.go
+	go run ./cmd/actuatorx
 
 .PHONY: clean
 clean:
@@ -29,7 +29,7 @@ clean:
 # ==================================================================================== #
 ## build: build the amd64 and arm64 applications
 .PHONE: build
-build: clean build/amd64 build/arm64 build/win
+build: clean build/amd64 build/arm64 build/win build/macos
 
 ## build/amd64: build the amd64 application
 .PHONY: build/amd64
