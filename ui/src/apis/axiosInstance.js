@@ -4,8 +4,14 @@ import {useConnectionState} from '@/composables/useConnectionState.js'
 
 const {resetConnectionState} = useConnectionState()
 
+const currentUrl = window.location.href
+const url = new URL(currentUrl)
+const ip = url.hostname
+const port = url.port || (url.protocol === 'https:' ? 443 : 80)
+const backendUrl = `http://${ip}:${port}/api`
+
 const axiosInstance = axios.create({
-    baseURL: "http://localhost:4000/api",
+    baseURL: backendUrl,
 })
 
 axiosInstance.interceptors.response.use(
