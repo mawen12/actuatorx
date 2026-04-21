@@ -20,10 +20,11 @@ func NewActuatorApi() *ActuatorApi {
 }
 
 type connectForm struct {
-	Url        string              `form:"url"`
-	AuthType   string              `form:"authType"`
-	BasicAuth  *client.BasicAuth   `form:"basicAuth"`
-	BasicToken *client.BearerToken `form:"bearerToken"`
+	Url               string `form:"url"`
+	AuthType          string `form:"authType"`
+	BasicAuthUsername string `form:"basicAuthUsername"`
+	BasicAuthPassword string `form:"basicAuthPassword"`
+	BasicToken        string `form:"bearerToken"`
 }
 
 func (a *ActuatorApi) Connect(c *gin.Context) {
@@ -36,9 +37,14 @@ func (a *ActuatorApi) Connect(c *gin.Context) {
 	var auth client.Auther
 	switch form.AuthType {
 	case "Basic Auth":
-		auth = form.BasicAuth
+		auth = &client.BasicAuth{
+			Username: form.BasicAuthUsername,
+			Password: form.BasicAuthPassword,
+		}
 	case "Bearer Token":
-		auth = form.BasicToken
+		auth = &client.BearerToken{
+			Token: form.BasicToken,
+		}
 	}
 
 	cli, err := client.Connect(client.ConnectConfig{

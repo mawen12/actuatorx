@@ -17,6 +17,7 @@ func SetupRoutes(router *gin.Engine, api *ActuatorApi) {
 	router.GET("/", gin.WrapH(GetHome()))
 	router.GET("/static/*path", gin.WrapH(GetAssets()))
 
+	router.GET("/favicon.ico", gin.WrapH(static.GetHandler()))
 	router.StaticFS("/assets", static.GetAssetsFilesystem())
 
 	ag := router.Group("/api")
