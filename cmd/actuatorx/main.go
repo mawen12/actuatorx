@@ -19,6 +19,7 @@ const version = "0.1"
 type config struct {
 	port    int
 	version bool
+	debug   bool
 }
 
 func main() {
@@ -26,11 +27,18 @@ func main() {
 
 	flag.IntVar(&cfg.port, "port", 4000, "Server Port")
 	flag.BoolVar(&cfg.version, "version", false, "print version and exit")
+	flag.BoolVar(&cfg.debug, "debug", false, "set gin debug")
 	flag.Parse()
 
 	if cfg.version {
 		fmt.Printf("ActuatorX Version \"%s\"\n", version)
 		os.Exit(0)
+	}
+
+	if cfg.debug {
+		gin.SetMode(gin.DebugMode)
+	} else {
+		gin.SetMode(gin.ReleaseMode)
 	}
 
 	log := path.Join(os.TempDir(), "actuatorx.log")
@@ -47,6 +55,7 @@ func main() {
 	})))
 
 	slog.Info("Starting server", "port", cfg.port)
+	fmt.Println("Starting server", fmt.Sprintf(":%d", cfg.port))
 
 	router := gin.New()
 
