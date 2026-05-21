@@ -44,7 +44,7 @@ build/amd64:
 build/arm64:
 	@echo 'Building linux_arm64...'
 	cd ui && npm run build
-	mkdir -p bin && GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build  -o=bin/actuatorx_linux_arm64 ./cmd/actuatorx
+	mkdir -p bin && GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -o=bin/actuatorx_linux_arm64 ./cmd/actuatorx
 
 ## build/win: build the windows application
 .PHONY: build/win
@@ -59,3 +59,18 @@ build/macos:
 	@echo 'Building darwin...'
 	cd ui && npm run build
 	mkdir -p bin && GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go build -o=bin/actuatorx_darwin-arm64 ./cmd/actuatorx	
+
+## build/docker: build the docker image
+.PHONY: build/docker
+build/docker:
+	@echo 'Building docker image'
+	cd ui && npm run build
+	docker build -f Dockerfile -t actuatorx:0.1 .
+
+## run/docker: run the docker container
+.PHONY: run/docker
+run/docker:
+	docker rm -i actuatorx
+	docker run -d --name actuatorx --network host localhost/actuatorx:0.1		
+
+	
