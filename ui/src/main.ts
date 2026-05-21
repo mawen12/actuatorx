@@ -18,9 +18,9 @@ import {i18n} from './i18n'
 // codemirror
 import {basicSetup} from 'codemirror'
 import VueCodemirror from 'vue-codemirror'
-import router from "@/router/index.js";
+import router from "@/router/index.ts";
 import {VueQueryPlugin} from "@tanstack/vue-query";
-import {useCreateQueryClient} from "@/apis/useCreateQueryClient.js";
+import {useCreateQueryClient} from "@/apis/useCreateQueryClient.ts";
 
 // pinia
 import { createPinia } from 'pinia'

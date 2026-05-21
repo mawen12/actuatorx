@@ -1,7 +1,16 @@
-import {useMutation, useQueryClient} from '@tanstack/vue-query'
+import {useMutation, useQueryClient, type MutationFunction, type UseMutationResult} from '@tanstack/vue-query'
 import {disableGlobalErrorMeta} from '@/apis/useCreateQueryClient'
 
-export const useBaseMutation = (mutationFn, options) => {
+export type BaseUseMutationResult<Data, Variables> = UseMutationResult<Data, unknown, Variables>;
+
+export type BaseMutationOptions<Data, Variables> = Omit<UseMutationOptions<Data, unknown, Variables>, 'mutationFn'> & {
+  refetchNone?: boolean;
+  disableGlobalError?: boolean;
+  invalidateQueriesKeyFn?: (data: Data, variables: Variables) => unknown[];
+  invalidateQueriesKeysFn?: (data: Data, variables: Variables) => unknown[][];
+};
+
+export const useBaseMutation = (mutationFn: MutationFunction<Data, Variables>, options: BaseMutationOptions<Data, Variables>) => {
     const queryClient = useQueryClient()
 
     return useMutation({

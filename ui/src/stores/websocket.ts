@@ -1,11 +1,10 @@
 import { defineStore } from "pinia";
 
-export const useWebsocketStore = defineStore({
-    id: 'websocket',
+export const useWebsocketStore = defineStore('websocket', {
     state: () => ({
         uid: '',
         status: "open",
-        err: null,
+        err: '',
     }),
 
     getters: {
@@ -13,15 +12,15 @@ export const useWebsocketStore = defineStore({
     },
 
     actions: {
-        setUid(uid) {
+        setUid(uid: string) {
             this.uid = uid
         },
 
-        setStatus(status) {
+        setStatus(status: string) {
             this.status = status
         },
 
-        setErr(err) {
+        setErr(err: string) {
             this.err = err
         }
     }
