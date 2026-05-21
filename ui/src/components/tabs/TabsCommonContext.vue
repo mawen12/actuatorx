@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {computed, provide, reactive, ref} from 'vue'
 import LoadingPage from '../page/LoadingPage.vue'
 

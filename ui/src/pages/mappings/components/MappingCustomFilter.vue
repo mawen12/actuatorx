@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {inject, toRef, watch} from 'vue'
 
 const props = defineProps({

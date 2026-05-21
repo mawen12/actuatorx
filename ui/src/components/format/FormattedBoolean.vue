@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {FALSE_LABEL_ID, TRUE_LABEL_ID} from '@/constants/ui'
 
 defineProps({

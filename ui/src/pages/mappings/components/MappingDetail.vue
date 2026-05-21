@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import MappingDispatcherServletDetail from './MappingDispatcherServletDetail.vue'
 import MappingServletDetail from './MappingServletDetail.vue'
 import MappingServletFilterDetail from './MappingServletFilterDetail.vue'

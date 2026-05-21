@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import yaml from 'js-yaml'
 import {computed} from 'vue'
 import {toString} from 'lodash-es'

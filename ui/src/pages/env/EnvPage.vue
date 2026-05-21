@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {useGetEnvQuery} from '@/apis/requests/endpoints/env/getEnv'
 import ThePage from '@/components/page/ThePage.vue'
 import AbilityCheck from "@/pages/abilities/AbilityCheck.vue";

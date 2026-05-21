@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {inject, useSlots} from 'vue'
 import TableToolbar from './TableToolbar.vue'
 

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import AbilityCheck from "@/pages/abilities/AbilityCheck.vue";
 import HealthContent from "@/pages/health/HealthContent.vue";
 </script>

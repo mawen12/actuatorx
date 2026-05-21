@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {reactive, ref, watch} from 'vue'
 import {useGetMetricDetailsQuery} from '@/apis/requests/endpoints/metrics/getMetricDetails'
 import MetricTags from './MetricTags.vue'

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {useVueFlow, VueFlow} from '@vue-flow/core'
 import {Background} from '@vue-flow/background'
 import {MiniMap, MiniMapNode} from '@vue-flow/minimap'

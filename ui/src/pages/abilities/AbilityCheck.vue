@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import useAbilities from "@/composables/useAbilities.js";
 import {computed} from "vue";
 

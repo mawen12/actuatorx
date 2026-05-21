@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {reactive, ref} from 'vue'
 import {useConnect} from '@/apis/requests/endpoints/connect/connect'
 import {useRouter} from 'vue-router'

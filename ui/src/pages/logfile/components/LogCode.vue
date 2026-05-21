@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {computed} from 'vue'
 import {search} from '@codemirror/search'
 import {logLanguage} from '@/components/code/extensions/logLanguageExtension'

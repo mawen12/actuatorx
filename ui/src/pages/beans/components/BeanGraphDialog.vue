@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { beanGraphDialogState as state, useBeanGraphDialog } from './useBeanGraphDialog'
 import GraphContext from '@/components/graph/GraphContext.vue'
 import GraphComponent from '@/components/graph/GraphComponent.vue'

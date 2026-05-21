@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {useEvictAllCaches} from '@/apis/requests/endpoints/caches/evictAllCaches'
 import {useEvictCache} from '@/apis/requests/endpoints/caches/evictCache'
 import TableContext from '@/components/table/TableContext.vue'

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {computed, inject, nextTick, provide, reactive, ref, watch} from 'vue'
 import {debounce, isEmpty} from 'lodash-es'
 import {highlightElement} from '@/utils/highlightElement'

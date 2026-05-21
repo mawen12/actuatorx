@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import ConditionNegativeMatchDetail from './ConditionNegativeMatchDetail.vue'
 import ConditionPositiveMatchDetail from './ConditionPositiveMatchDetail.vue'
 

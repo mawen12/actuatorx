@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import TabsContext from '@/components/tabs/TabsContext.vue'
 import TabsCustom from '@/components/tabs/TabsCustom.vue'
 import {mappingsTabsEntity} from '@/entities/mappings/mappingsTabs.entity'

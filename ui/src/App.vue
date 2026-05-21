@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import WebsocketProvider from '@/contexts/WebsocketProvider.vue'
 </script>
 

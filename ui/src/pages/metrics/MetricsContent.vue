@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {useGetMetricsQuery} from '@/apis/requests/endpoints/metrics/getMetrics'
 import LoadingPage from '@/components/page/LoadingPage.vue'
 import MetricsTable from './components/MetricsTable.vue'

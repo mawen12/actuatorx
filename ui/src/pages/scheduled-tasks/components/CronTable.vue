@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import TableContext from '@/components/table/TableContext.vue'
 import TableCustom from '@/components/table/TableCustom.vue'
 import cronstrue from 'cronstrue/i18n'

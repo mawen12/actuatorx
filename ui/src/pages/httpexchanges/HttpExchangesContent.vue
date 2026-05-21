@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import LoadingPage from '@/components/page/LoadingPage.vue'
 import {useGetHttpExchangesQuery} from '@/apis/requests/endpoints/httpexchanges/getHttpExchanges'
 import HttpExchangesTable from './components/HttpExchangesTable.vue'

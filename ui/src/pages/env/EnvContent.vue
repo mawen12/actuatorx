@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {useGetEnvQuery} from '@/apis/requests/endpoints/env/getEnv'
 import TabsContext from '@/components/tabs/TabsContext.vue'
 import {envTabsEntity} from '@/entities/env/envTabs.entity'

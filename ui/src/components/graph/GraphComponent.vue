@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {inject} from 'vue'
 import VueFlowCustom from './VueFlowCustom.vue'
 import LoadingPage from '../page/LoadingPage.vue'

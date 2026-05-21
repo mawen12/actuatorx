@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import TheAppBar from './TheAppBar.vue'
 import TheSideBar from './TheSideBar.vue'
 </script>

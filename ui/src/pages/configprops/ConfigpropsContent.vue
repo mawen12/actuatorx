@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {useGetConfigpropsQuery} from '@/apis/requests/endpoints/configprops/getConfigprops'
 import TabsContext from '@/components/tabs/TabsContext.vue'
 import TabsCustom from '@/components/tabs/TabsCustom.vue'

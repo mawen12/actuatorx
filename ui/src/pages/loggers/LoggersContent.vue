@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {useGetLoggersQuery} from '@/apis/requests/endpoints/loggers/getLoggers'
 import LoadingPage from '@/components/page/LoadingPage.vue'
 import LoggersTable from './components/LoggersTable.vue'

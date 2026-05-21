@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {useGetHealthQuery} from '@/apis/requests/endpoints/health/getHealth'
 import {computed, ref, watch} from 'vue'
 import HealthComponent from './components/HealthComponent.vue'

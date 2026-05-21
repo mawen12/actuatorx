@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import ThePage from '@/components/page/ThePage.vue'
 import AbilityCheck from "@/pages/abilities/AbilityCheck.vue";
 import MetricsContent from "@/pages/metrics/MetricsContent.vue";

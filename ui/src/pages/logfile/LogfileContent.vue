@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import LoadingPage from '@/components/page/LoadingPage.vue'
 import {useGetLogfile} from '@/apis/requests/endpoints/logfile/getLogFile'
 import {computed, ref, watch} from 'vue'

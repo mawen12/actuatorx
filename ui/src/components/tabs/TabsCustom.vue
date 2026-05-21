@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {computed, inject, watch} from 'vue'
 import TabsToolbar from './TabsToolbar.vue'
 import {useMemoize} from '@vueuse/core'

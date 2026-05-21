@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import TabsLazyContext from './TabsLazyContext.vue'
 import TabsCommonContext from './TabsCommonContext.vue'
 import LoadingPage from '../page/LoadingPage.vue'

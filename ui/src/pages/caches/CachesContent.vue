@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import LoadingPage from '@/components/page/LoadingPage.vue'
 import CachesTable from './components/CachesTable.vue'
 import {useGetCachesQuery} from '@/apis/requests/endpoints/caches/getCaches'

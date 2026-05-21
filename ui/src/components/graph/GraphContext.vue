@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {computed, provide, ref, watch} from 'vue'
 import {getIncomers, getOutgoers, MarkerType} from '@vue-flow/core'
 import {getLayoutElements} from '@/utils/vueflowUtils'

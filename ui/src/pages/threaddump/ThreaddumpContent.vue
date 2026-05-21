@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import LoadingPage from '@/components/page/LoadingPage.vue'
 import ThreaddumpTable from './components/ThreaddumpTable.vue'
 import {useGetThreaddumpQuery} from "@/apis/requests/endpoints/threaddump/getThreaddump.js";

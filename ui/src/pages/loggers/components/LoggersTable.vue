@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {useSetLoggerLevel} from '@/apis/requests/endpoints/loggers/setLoggerLevels'
 import TableContext from '@/components/table/TableContext.vue'
 import TableCustom from '@/components/table/TableCustom.vue'

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import ThePage from '@/components/page/ThePage.vue'
 import AbilityCheck from "@/pages/abilities/AbilityCheck.vue";
 import ScheduledTasksContent from "@/pages/scheduled-tasks/ScheduledTasksContent.vue";

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {useGetConditionsQuery} from '@/apis/requests/endpoints/conditions/getConditions'
 import {conditionsTabsEntity} from '@/entities/conditions/conditionsTabs.entity'
 import TabsContext from '@/components/tabs/TabsContext.vue'
