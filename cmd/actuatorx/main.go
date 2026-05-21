@@ -31,11 +31,11 @@ func main() {
 		os.Exit(0)
 	}
 
-	if cfg.debug {
-		gin.SetMode(gin.DebugMode)
-	} else {
-		gin.SetMode(gin.ReleaseMode)
-	}
+	// if cfg.debug {
+	// 	gin.SetMode(gin.DebugMode)
+	// } else {
+	// 	gin.SetMode(gin.ReleaseMode)
+	// }
 
 	logger, err := NewLogger("actuatorx.log")
 	if err != nil {
