@@ -1,7 +1,10 @@
 package api
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
+	"github.com/mawen12/actuatorx/internal/websocket"
 	"github.com/mawen12/actuatorx/static"
 )
 
@@ -13,12 +16,14 @@ func SetupMiddleware(group *gin.RouterGroup) {
 	})
 }
 
-func SetupRoutes(router *gin.Engine, api *ActuatorApi) {
+func SetupRoutes(router *gin.Engine, api *ActuatorApi, hub *websocket.Hub) {
 	router.GET("/", gin.WrapH(GetHome()))
 	router.GET("/static/*path", gin.WrapH(GetAssets()))
 
 	router.GET("/favicon.ico", gin.WrapH(static.GetHandler()))
 	router.StaticFS("/assets", static.GetAssetsFilesystem())
+
+	router.GET("/ws", serveWs(hub))
 
 	ag := router.Group("/api")
 	SetupMiddleware(ag)
@@ -44,5 +49,19 @@ func SetupRoutes(router *gin.Engine, api *ActuatorApi) {
 		ag.POST("/togglz/:instanceId", api.wrap(api.UpdateTogglz))
 		ag.GET("/threaddump", api.wrap(api.GetThreadDump))
 		ag.GET("/threaddump/download", api.wrap(api.DownloadThreadDump))
+	}
+}
+
+func serveWs(hub *websocket.Hub) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		conn, err := websocket.Upgrader.Upgrade(c.Writer, c.Request, nil)
+		if err != nil {
+			errorResp(c, http.StatusUnauthorized, err)
+			return
+		}
+
+		client := websocket.NewClientAndRegister(hub, conn)
+		client.Init()
+		client.Run()
 	}
 }

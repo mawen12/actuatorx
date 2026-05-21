@@ -6,6 +6,12 @@
       ]
     }
   },
+  "include": [
+    "src/**/*.js",
+    "src/**/*.vue",
+    "src/**/*.json",
+    "vite.config.js"
+  ],
   "exclude": [
     "node_modules",
     "dist"

@@ -8,6 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/mawen12/actuatorx/internal/api"
+	"github.com/mawen12/actuatorx/internal/websocket"
 )
 
 const version = "0.1.1"
@@ -46,12 +47,15 @@ func main() {
 	slog.Info("Starting server", "port", cfg.port)
 	fmt.Println("Starting server", fmt.Sprintf(":%d", cfg.port))
 
+	hub := websocket.NewHub()
+	defer hub.Close()
+
 	router := gin.New()
 
 	router.Use(gin.Recovery())
 
 	actuatorApi := api.NewActuatorApi()
-	api.SetupRoutes(router, actuatorApi)
+	api.SetupRoutes(router, actuatorApi, hub)
 
 	if err := router.Run(fmt.Sprintf(":%d", cfg.port)); err != nil {
 		panic(err)

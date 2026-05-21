@@ -22,6 +22,9 @@ import router from "@/router/index.js";
 import {VueQueryPlugin} from "@tanstack/vue-query";
 import {useCreateQueryClient} from "@/apis/useCreateQueryClient.js";
 
+// pinia
+import { createPinia } from 'pinia'
+
 const app = createApp(App)
 
 const vuetify = createVuetify({})
@@ -33,4 +36,5 @@ app.use(i18n)
     .use(VueQueryPlugin, {queryClient})
     .use(VueCodemirror, {extensions: [basicSetup]})
     .use(vuetify)
+    .use(createPinia())
     .mount('#app')
