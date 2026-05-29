@@ -307,7 +307,7 @@ func (c *Client) DownloadThreadDump(ctx context.Context) (Downloader, error) {
 	}, err
 }
 
-// internal methods
+// internal methodsl, "
 
 func (c *Client) evaluateTmpl(endpoint string, params map[string]interface{}) (*url.URL, error) {
 	tmpl, exists := c.abilities[endpoint]

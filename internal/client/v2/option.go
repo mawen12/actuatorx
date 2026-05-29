@@ -1,4 +1,4 @@
-package client
+package v2
 
 import (
 	"bytes"
@@ -32,6 +32,23 @@ func WithBaseURL(base string) RequestOption {
 func WithMiddleware(middlewares ...middleware) RequestOption {
 	return RequestOptionFunc(func(r *RequestConfig) error {
 		r.Middlewares = append(r.Middlewares, middlewares...)
+		return nil
+	})
+}
+
+type HTTPClient interface {
+	Do(*http.Request) (*http.Response, error)
+}
+
+func WithHTTPClient(client HTTPClient) RequestOption {
+	return RequestOptionFunc(func(r *RequestConfig) error {
+		if client == nil {
+			return errors.New("option: custom http client cannot be nil")
+		}
+
+		if c, ok := client.(*http.Client); ok {
+			r.HTTPClient = c
+		}
 		return nil
 	})
 }

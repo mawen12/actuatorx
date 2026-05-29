@@ -1,4 +1,4 @@
-package client
+package v2
 
 import (
 	"bytes"
@@ -9,6 +9,7 @@ import (
 	"io"
 	"math"
 	"math/rand"
+	"mime"
 	"net/http"
 	"net/url"
 	"runtime"
@@ -336,7 +337,41 @@ func (cfg *RequestConfig) Execute() (err error) {
 		// return fmt.Sprintf(res.Body.)
 	}
 
-	// TODO by mawen
+	contents, err := io.ReadAll(res.Body)
+	_ = res.Body.Close()
+	if err != nil {
+		return fmt.Errorf("error reading response body: %w", err)
+	}
+
+	contentType := res.Header.Get("content-type")
+	mediaType, _, _ := mime.ParseMediaType(contentType)
+	isJSON := strings.Contains(mediaType, "application/json") || strings.HasSuffix(mediaType, "+json")
+	// handle not json, return plaintext
+	if !isJSON {
+		switch dst := cfg.ResponseBodyInto.(type) {
+		case *string:
+			*dst = string(contents)
+		case **string:
+			tmp := string(contents)
+			*dst = &tmp
+		case *[]byte:
+			*dst = contents
+		default:
+			return fmt.Errorf("expected destination type of 'string' or '[]byte' for responses with content-type '%s' that is not 'application/json'", contentType)
+		}
+		return nil
+	}
+
+	// handle json parse to det
+	switch dst := cfg.ResponseBodyInto.(type) {
+	case *[]byte:
+		*dst = contents
+	default:
+		err = json.NewDecoder(bytes.NewReader(contents)).Decode(cfg.ResponseBodyInto)
+		if err != nil {
+			return fmt.Errorf("error parsing response json: %w", err)
+		}
+	}
 
 	return nil
 }
@@ -455,4 +490,20 @@ func isBeforeContextDeadline(t time.Time, ctx context.Context) bool {
 		return true
 	}
 	return t.Before(d)
+}
+
+func DefaultClientOptions() []RequestOption {
+	defaults := []RequestOption{WithHTTPClient(defaultHttpClient())}
+	return defaults
+}
+
+const defaultResponseHeaderTimeout = 10 * time.Minute
+
+func defaultHttpClient() *http.Client {
+	if t, ok := http.DefaultTransport.(*http.Transport); ok {
+		t = t.Clone()
+		t.ResponseHeaderTimeout = defaultResponseHeaderTimeout
+		return &http.Client{Transport: t}
+	}
+	return &http.Client{Transport: http.DefaultTransport}
 }
