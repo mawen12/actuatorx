@@ -286,6 +286,7 @@ func (c *Client) UpdateTogglz(ctx context.Context, opts ...RequestOption) (*Togg
 	return &res, err
 }
 
+
 func (c *Client) ThreadDump(ctx context.Context, opts ...RequestOption) (*ThreadResp, error) {
 	urlStr, err := c.GetAbility("threaddump")
 	if err != nil {

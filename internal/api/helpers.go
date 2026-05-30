@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/mawen12/actuatorx/internal/client"
+	"github.com/mawen12/actuatorx/internal/v1/client"
 )
 
 func readBool(qs url.Values, key string, defaultBool bool) bool {
