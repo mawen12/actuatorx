@@ -175,6 +175,11 @@ func (cfg *RequestConfig) AddHeader(key, value string) {
 	}
 }
 
+func (cfg *RequestConfig) SetBasicAuthHeader(username, password string) {
+	cfg.Request.SetBasicAuth(username, password)
+	cfg.authHeaderOverride = true
+}
+
 func (cfg *RequestConfig) DelHeader(key string) {
 	cfg.Request.Header.Del(key)
 	if strings.EqualFold(key, "Authorization") {

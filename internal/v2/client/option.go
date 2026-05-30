@@ -71,6 +71,13 @@ func WithHeader(key, value string) RequestOption {
 	})
 }
 
+func WithBasicAuthHeader(username, password string) RequestOption {
+	return RequestOptionFunc(func(r *RequestConfig) error {
+		r.SetBasicAuthHeader(username, password)
+		return nil
+	})
+}
+
 func WithHeaderAdd(key, value string) RequestOption {
 	return RequestOptionFunc(func(r *RequestConfig) error {
 		r.AddHeader(key, value)

@@ -4,43 +4,70 @@ import (
 	"flag"
 	"fmt"
 	"log/slog"
+	"net/http"
 	"os"
+	"time"
 
-	"github.com/mawen12/actuatorx/internal/logger"
+	"github.com/alexedwards/scs/v2"
+	"github.com/alexedwards/scs/v2/memstore"
+	"github.com/go-playground/form/v4"
+	"github.com/mawen12/actuatorx/internal/v2/client"
 	"github.com/mawen12/actuatorx/pkg/env"
 )
 
-const version = "0.1.1"
-
-type config struct {
-	port    int
-	version bool
-	debug   bool
+type application struct {
+	debug          bool
+	logger         *slog.Logger
+	sessionManager *scs.SessionManager
+	formDecoder    *form.Decoder
+	clients        map[string]*client.Client
 }
 
-func main() {
-	var cfg config
+var (
+	addr    = flag.String("addr", env.Get("ADDR", ":4000"), "HTTP netword address")
+	version = flag.Bool("version", env.GetBool("VERSION", false), "Print version and exit")
+	debug   = flag.Bool("debug", env.GetBool("DEBUG", false), "Enable debug mode")
+)
 
-	flag.IntVar(&cfg.port, "port", env.GetInt("PORT", 4000), "Server Port")
-	flag.BoolVar(&cfg.version, "version", env.GetBool("VERSION", false), "print version and exit")
-	flag.BoolVar(&cfg.debug, "debug", env.GetBool("DEBUG", false), "set gin debug")
+func main() {
 	flag.Parse()
 
-	if cfg.version {
-		fmt.Printf("ActuatorX Version \"%s\"\n", version)
+	if *version {
+		fmt.Printf("ActuatorX Version \"%s\"\n", "0.1")
 		os.Exit(0)
 	}
 
-	logger, err := logger.NewLogger("actuatorx.log")
-	if err != nil {
-		fmt.Printf("new logger failed: %v, will fallback to stdout", err)
-	}
-	defer logger.Close()
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+		Level:     slog.LevelDebug,
+		AddSource: true,
+	}))
 
-	slog.Info("Starting server", "port", cfg.port)
-	fmt.Println("Starting server", fmt.Sprintf(":%d", cfg.port))
+	sessionManager := scs.New()
+	sessionManager.Store = memstore.New()
+	sessionManager.Lifetime = 12 * time.Hour
+	sessionManager.Cookie.Secure = true
+	sessionManager.Cookie.SameSite = http.SameSiteStrictMode
 
-	if err := serve(); err != nil {
-		slog.Error("Start serve", "err", err)
+	app := &application{
+		debug:          *debug,
+		logger:         logger,
+		sessionManager: sessionManager,
+		formDecoder:    form.NewDecoder(),
+		clients:        make(map[string]*client.Client),
 	}
+
+	srv := &http.Server{
+		Addr:         *addr,
+		Handler:      app.routes(),
+		ErrorLog:     slog.NewLogLogger(logger.Handler(), slog.LevelError),
+		IdleTimeout:  time.Minute,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}
+
+	logger.Info("starting server", "addr", *addr)
+
+	err := srv.ListenAndServe()
+	logger.Error(err.Error())
+	os.Exit(1)
 }

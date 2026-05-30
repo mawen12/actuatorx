@@ -3,17 +3,20 @@ package main
 import (
 	"net/http"
 
+	"github.com/justinas/alice"
 	"github.com/mawen12/actuatorx/static"
 )
 
-func routes(api *ActuatorApiV2) http.Handler {
-	mux := &http.ServeMux{}
+func (app *application) routes() http.Handler {
+	mux := http.NewServeMux()
 
 	mux.Handle("/", GetHome())
 	mux.Handle("/static/*path", static.GetHandler())
 	mux.Handle("/favicon.svg", static.GetHandler())
 
-	mux.HandleFunc("POST /api/connect", api.Connect)
+	dynamic := alice.New(app.sessionManager.LoadAndSave)
+
+	mux.Handle("POST /api/connect", api.Connect)
 	mux.HandleFunc("GET /abilities", api.wrap(api.Abilities))
 	mux.HandleFunc("GET /health", api.wrap(api.GetHealth))
 	mux.HandleFunc("GET /metrics", api.wrap(api.GetMetrics))
@@ -34,5 +37,7 @@ func routes(api *ActuatorApiV2) http.Handler {
 	mux.HandleFunc("POST /togglz", api.wrap(api.UpdateTogglz))
 	mux.HandleFunc("GET /threaddump", api.wrap(api.GetThreadDump))
 
-	return recovery(log(cors(mux)))
+	standard := alice.New(recoverPanic, logRequest, commonHeader, cors)
+
+	return standard.Then(mux)
 }

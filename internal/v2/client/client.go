@@ -39,11 +39,10 @@ func (u *UriTemplate) ExpandWithParam(param map[string]interface{}) (string, err
 	return u.UriTemplate.Expand(param)
 }
 
-func NewClient(opts ...RequestOption) (r Client) {
+func NewClient(opts ...RequestOption) *Client {
 	opts = append(DefaultClientOptions(), opts...)
 
-	r = Client{Options: opts}
-	return
+	return &Client{Options: opts}
 }
 
 func (c *Client) Init(ctx context.Context) error {
@@ -71,7 +70,15 @@ func (c *Client) Links(ctx context.Context) (*ActuatorResp, error) {
 	return &res, err
 }
 
-func (c *Client) AbilityCheck(ability string) (*UriTemplate, error) {
+func (c *Client) Abilities(ctx context.Context) []string {
+	result := make([]string, 0)
+	for key, _ := range c.abilities {
+		result = append(result, key)
+	}
+	return result
+}
+
+func (c *Client) abilityCheck(ability string) (*UriTemplate, error) {
 	template, exists := c.abilities[ability]
 	if !exists {
 		return nil, &AbilityError{Ability: ability}
@@ -79,8 +86,8 @@ func (c *Client) AbilityCheck(ability string) (*UriTemplate, error) {
 	return template, nil
 }
 
-func (c *Client) GetAbility(ability string) (string, error) {
-	link, err := c.AbilityCheck("health")
+func (c *Client) getAbility(ability string) (string, error) {
+	link, err := c.abilityCheck("health")
 	if err != nil {
 		return "", err
 	}
@@ -88,8 +95,8 @@ func (c *Client) GetAbility(ability string) (string, error) {
 	return link.Expand()
 }
 
-func (c *Client) GetAbilityWithParam(ability string, param map[string]interface{}) (string, error) {
-	link, err := c.AbilityCheck("health")
+func (c *Client) getAbilityWithParam(ability string, param map[string]interface{}) (string, error) {
+	link, err := c.abilityCheck("health")
 	if err != nil {
 		return "", err
 	}
@@ -98,7 +105,7 @@ func (c *Client) GetAbilityWithParam(ability string, param map[string]interface{
 }
 
 func (c *Client) Health(ctx context.Context, opts ...RequestOption) (*HealthResp, error) {
-	urlStr, err := c.GetAbility("health")
+	urlStr, err := c.getAbility("health")
 	if err != nil {
 		return nil, err
 	}
@@ -109,7 +116,7 @@ func (c *Client) Health(ctx context.Context, opts ...RequestOption) (*HealthResp
 }
 
 func (c *Client) Metrics(ctx context.Context, opts ...RequestOption) (*MetricsResp, error) {
-	urlStr, err := c.GetAbility("metrics")
+	urlStr, err := c.getAbility("metrics")
 	if err != nil {
 		return nil, err
 	}
@@ -121,7 +128,7 @@ func (c *Client) Metrics(ctx context.Context, opts ...RequestOption) (*MetricsRe
 
 // tags should be provide in opts
 func (c *Client) Metric(ctx context.Context, metricName string, opts ...RequestOption) (*MetricResp, error) {
-	urlStr, err := c.GetAbilityWithParam("metrics-requiredMetricName", map[string]interface{}{
+	urlStr, err := c.getAbilityWithParam("metrics-requiredMetricName", map[string]interface{}{
 		"requiredMetricName": metricName,
 	})
 	if err != nil {
@@ -134,7 +141,7 @@ func (c *Client) Metric(ctx context.Context, metricName string, opts ...RequestO
 }
 
 func (c *Client) Env(ctx context.Context, opts ...RequestOption) (*EnvResp, error) {
-	urlStr, err := c.GetAbility("env")
+	urlStr, err := c.getAbility("env")
 	if err != nil {
 		return nil, err
 	}
@@ -145,7 +152,7 @@ func (c *Client) Env(ctx context.Context, opts ...RequestOption) (*EnvResp, erro
 }
 
 func (c *Client) Beans(ctx context.Context, opts ...RequestOption) (*BeansResp, error) {
-	urlStr, err := c.GetAbility("beans")
+	urlStr, err := c.getAbility("beans")
 	if err != nil {
 		return nil, err
 	}
@@ -156,7 +163,7 @@ func (c *Client) Beans(ctx context.Context, opts ...RequestOption) (*BeansResp, 
 }
 
 func (c *Client) Conditions(ctx context.Context, opts ...RequestOption) (*ConditionsResp, error) {
-	urlStr, err := c.GetAbility("conditions")
+	urlStr, err := c.getAbility("conditions")
 	if err != nil {
 		return nil, err
 	}
@@ -167,7 +174,7 @@ func (c *Client) Conditions(ctx context.Context, opts ...RequestOption) (*Condit
 }
 
 func (c *Client) Configprops(ctx context.Context, opts ...RequestOption) (*ConditionsResp, error) {
-	urlStr, err := c.GetAbility("configprops")
+	urlStr, err := c.getAbility("configprops")
 	if err != nil {
 		return nil, err
 	}
@@ -178,7 +185,7 @@ func (c *Client) Configprops(ctx context.Context, opts ...RequestOption) (*Condi
 }
 
 func (c *Client) Caches(ctx context.Context, opts ...RequestOption) (*CachesResp, error) {
-	urlStr, err := c.GetAbility("caches")
+	urlStr, err := c.getAbility("caches")
 	if err != nil {
 		return nil, err
 	}
@@ -189,7 +196,7 @@ func (c *Client) Caches(ctx context.Context, opts ...RequestOption) (*CachesResp
 }
 
 func (c *Client) EvictAllCaches(ctx context.Context, opts ...RequestOption) error {
-	urlStr, err := c.GetAbility("caches")
+	urlStr, err := c.getAbility("caches")
 	if err != nil {
 		return err
 	}
@@ -199,7 +206,7 @@ func (c *Client) EvictAllCaches(ctx context.Context, opts ...RequestOption) erro
 
 // cacheManager 通过 opt 传递
 func (c *Client) EvictCache(ctx context.Context, cache string, opts ...RequestOption) error {
-	urlStr, err := c.GetAbilityWithParam("caches-cache", map[string]interface{}{
+	urlStr, err := c.getAbilityWithParam("caches-cache", map[string]interface{}{
 		"cache": cache,
 	})
 	if err != nil {
@@ -210,7 +217,7 @@ func (c *Client) EvictCache(ctx context.Context, cache string, opts ...RequestOp
 }
 
 func (c *Client) Loggers(ctx context.Context, opts ...RequestOption) (*LoggersResp, error) {
-	urlStr, err := c.GetAbility("loggers")
+	urlStr, err := c.getAbility("loggers")
 	if err != nil {
 		return nil, err
 	}
@@ -221,7 +228,7 @@ func (c *Client) Loggers(ctx context.Context, opts ...RequestOption) (*LoggersRe
 }
 
 func (c *Client) SetLoggerLevel(ctx context.Context, name string, opts ...RequestOption) error {
-	urlStr, err := c.GetAbilityWithParam("loggers-name", map[string]interface{}{
+	urlStr, err := c.getAbilityWithParam("loggers-name", map[string]interface{}{
 		"name": name,
 	})
 	if err != nil {
@@ -232,7 +239,7 @@ func (c *Client) SetLoggerLevel(ctx context.Context, name string, opts ...Reques
 }
 
 func (c *Client) Mappings(ctx context.Context, opts ...RequestOption) (*MappingsResp, error) {
-	urlStr, err := c.GetAbility("mappings")
+	urlStr, err := c.getAbility("mappings")
 	if err != nil {
 		return nil, err
 	}
@@ -243,7 +250,7 @@ func (c *Client) Mappings(ctx context.Context, opts ...RequestOption) (*Mappings
 }
 
 func (c *Client) HttpExchanges(ctx context.Context, opts ...RequestOption) (*HttpExchangesResp, error) {
-	urlStr, err := c.GetAbility("httpexchanges")
+	urlStr, err := c.getAbility("httpexchanges")
 	if err != nil {
 		return nil, err
 	}
@@ -254,7 +261,7 @@ func (c *Client) HttpExchanges(ctx context.Context, opts ...RequestOption) (*Htt
 }
 
 func (c *Client) ScheduledTasks(ctx context.Context, opts ...RequestOption) (*ScheduledTasksResp, error) {
-	urlStr, err := c.GetAbility("scheduledtasks")
+	urlStr, err := c.getAbility("scheduledtasks")
 	if err != nil {
 		return nil, err
 	}
@@ -265,7 +272,7 @@ func (c *Client) ScheduledTasks(ctx context.Context, opts ...RequestOption) (*Sc
 }
 
 func (c *Client) Togglz(ctx context.Context, opts ...RequestOption) (*TogglzResp, error) {
-	urlStr, err := c.GetAbility("togglz")
+	urlStr, err := c.getAbility("togglz")
 	if err != nil {
 		return nil, err
 	}
@@ -276,7 +283,7 @@ func (c *Client) Togglz(ctx context.Context, opts ...RequestOption) (*TogglzResp
 }
 
 func (c *Client) UpdateTogglz(ctx context.Context, opts ...RequestOption) (*TogglzResp, error) {
-	urlStr, err := c.GetAbility("togglz")
+	urlStr, err := c.getAbility("togglz")
 	if err != nil {
 		return nil, err
 	}
@@ -286,9 +293,8 @@ func (c *Client) UpdateTogglz(ctx context.Context, opts ...RequestOption) (*Togg
 	return &res, err
 }
 
-
 func (c *Client) ThreadDump(ctx context.Context, opts ...RequestOption) (*ThreadResp, error) {
-	urlStr, err := c.GetAbility("threaddump")
+	urlStr, err := c.getAbility("threaddump")
 	if err != nil {
 		return nil, err
 	}
