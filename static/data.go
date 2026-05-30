@@ -9,6 +9,7 @@ import (
 //go:embed index.html assets favicon.ico
 var assets embed.FS
 
+
 func GetFilesystem() http.FileSystem {
 	sub, err := fs.Sub(assets, ".")
 	if err != nil {

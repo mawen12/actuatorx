@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -100,7 +101,7 @@ func (c *Client) Test(ctx context.Context) (*ActuatorResp, error) {
 		return nil, ErrNotFound
 	}
 
-	return nil, fmt.Errorf(errMsg)
+	return nil, errors.New(errMsg)
 }
 
 func (c *Client) Health(ctx context.Context) (resp *HealthResp, err error) {
