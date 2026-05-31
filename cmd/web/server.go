@@ -13,10 +13,10 @@ import (
 	"time"
 )
 
-func serve() error {
+func (app *application) serve() error {
 	srv := &http.Server{
-		Addr:         ":4010",
-		Handler:      routes(NewActuatorApiV2()),
+		Addr:         fmt.Sprintf(":%d", app.config.port),
+		Handler:      app.routes(),
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
 	}

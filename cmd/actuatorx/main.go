@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/mawen12/actuatorx/internal/api"
+	"github.com/mawen12/actuatorx/internal/v1/api"
 )
 
 const version = "0.1.1"

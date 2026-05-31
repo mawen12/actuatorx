@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log/slog"
 	"net/http"
 	"os"
@@ -16,26 +15,23 @@ import (
 )
 
 type application struct {
-	debug          bool
+	config         config
 	logger         *slog.Logger
 	sessionManager *scs.SessionManager
 	formDecoder    *form.Decoder
 	clients        map[string]*client.Client
 }
 
-var (
-	addr    = flag.String("addr", env.Get("ADDR", ":4000"), "HTTP netword address")
-	version = flag.Bool("version", env.GetBool("VERSION", false), "Print version and exit")
-	debug   = flag.Bool("debug", env.GetBool("DEBUG", false), "Enable debug mode")
-)
+type config struct {
+	port  int
+	debug bool
+}
 
 func main() {
+	var cfg config
+	flag.IntVar(&cfg.port, "port", env.GetInt("PORT", 4000), "Server port")
+	flag.BoolVar(&cfg.debug, "debug", env.GetBool("DEBUG", false), "Enable debug mode")
 	flag.Parse()
-
-	if *version {
-		fmt.Printf("ActuatorX Version \"%s\"\n", "0.1")
-		os.Exit(0)
-	}
 
 	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
 		Level:     slog.LevelDebug,
@@ -49,25 +45,15 @@ func main() {
 	sessionManager.Cookie.SameSite = http.SameSiteStrictMode
 
 	app := &application{
-		debug:          *debug,
+		config:         cfg,
 		logger:         logger,
 		sessionManager: sessionManager,
 		formDecoder:    form.NewDecoder(),
 		clients:        make(map[string]*client.Client),
 	}
 
-	srv := &http.Server{
-		Addr:         *addr,
-		Handler:      app.routes(),
-		ErrorLog:     slog.NewLogLogger(logger.Handler(), slog.LevelError),
-		IdleTimeout:  time.Minute,
-		ReadTimeout:  5 * time.Second,
-		WriteTimeout: 10 * time.Second,
+	if err := app.serve(); err != nil {
+		logger.Error(err.Error())
+		os.Exit(1)
 	}
-
-	logger.Info("starting server", "addr", *addr)
-
-	err := srv.ListenAndServe()
-	logger.Error(err.Error())
-	os.Exit(1)
 }

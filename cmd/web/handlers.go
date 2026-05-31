@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
-	client2 "github.com/mawen12/actuatorx/internal/v2/client"
+	"github.com/mawen12/actuatorx/internal/v2/client"
 	"github.com/mawen12/actuatorx/static"
 )
 
@@ -33,17 +33,17 @@ func (app *application) Connect(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	opts := make([]client2.RequestOption, 0)
-	opts = append(opts, client2.WithBaseURL(form.Url))
+	opts := make([]client.RequestOption, 0)
+	opts = append(opts, client.WithBaseURL(form.Url))
 
 	switch form.AuthType {
 	case "Basic Auth":
-		opts = append(opts, client2.WithBasicAuthHeader(form.BasicAuthUsername, form.BasicAuthPassword))
+		opts = append(opts, client.WithBasicAuthHeader(form.BasicAuthUsername, form.BasicAuthPassword))
 	case "Bearer Token":
-		opts = append(opts, client2.WithHeader("Authorization", "Bearer "+form.BasicToken))
+		opts = append(opts, client.WithHeader("Authorization", "Bearer "+form.BasicToken))
 	}
 
-	cli := client2.NewClient(opts...)
+	cli := client.NewClient(opts...)
 	err = cli.Init(r.Context())
 	if err != nil {
 		serveError(w, err)
@@ -61,21 +61,34 @@ func (app *application) Connect(w http.ResponseWriter, r *http.Request) {
 	writeJson(w, r, nil)
 }
 
-func (app *application) Abilities(w http.ResponseWriter, r *http.Request, cli *client2.Client) (interface{}, error) {
-	uid := r.Context().Value("uid").(string)
-	app.clients[uid]
+func (app *application) wrap(handler func(http.ResponseWriter, *http.Request) (interface{}, error)) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		data, err := handler(w, r)
+		if err != nil {
+			serveError(w, err)
+			return
+		}
+
+		writeJson(w, r, data)
+	}
+}
+
+func (app *application) Abilities(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	cli := app.contextGetClient(r)
 	return cli.Abilities(r.Context()), nil
 }
 
-func (app *application) GetHealth(w http.ResponseWriter, r *http.Request, cli *client2.Client) (interface{}, error) {
+func (app *application) GetHealth(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	cli := app.contextGetClient(r)
 	return cli.Health(r.Context())
 }
 
-func (app *application) GetMetrics(w http.ResponseWriter, r *http.Request, cli *client2.Client) (interface{}, error) {
+func (app *application) GetMetrics(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	cli := app.contextGetClient(r)
 	return cli.Metrics(r.Context())
 }
 
-func (app *application) GetMetric(w http.ResponseWriter, r *http.Request, cli *client2.Client) (interface{}, error) {
+func (app *application) GetMetric(w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	name := r.PathValue("name")
 	if name == "" {
 		return nil, errors.New("name parameter is required")
@@ -88,34 +101,46 @@ func (app *application) GetMetric(w http.ResponseWriter, r *http.Request, cli *c
 		return nil, err
 	}
 
-	return cli.Metric(r.Context(), name, m)
+	opts := make([]client.RequestOption, 0)
+	for k, v := range m {
+		opts = append(opts, client.WithQueryAdd(k, v))
+	}
+
+	cli := app.contextGetClient(r)
+	return cli.Metric(r.Context(), name, opts...)
 }
 
-func (app *application) GetEnv(w http.ResponseWriter, r *http.Request, cli *client2.Client) (interface{}, error) {
+func (app *application) GetEnv(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	cli := app.contextGetClient(r)
 	return cli.Env(r.Context())
 }
 
-func (app *application) GetBeans(w http.ResponseWriter, r *http.Request, cli *client2.Client) (interface{}, error) {
+func (app *application) GetBeans(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	cli := app.contextGetClient(r)
 	return cli.Beans(r.Context())
 }
 
-func (app *application) GetConditions(w http.ResponseWriter, r *http.Request, cli *client2.Client) (interface{}, error) {
+func (app *application) GetConditions(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	cli := app.contextGetClient(r)
 	return cli.Conditions(r.Context())
 }
 
-func (app *application) GetConfigprops(w http.ResponseWriter, r *http.Request, cli *client2.Client) (interface{}, error) {
+func (app *application) GetConfigprops(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	cli := app.contextGetClient(r)
 	return cli.Configprops(r.Context())
 }
 
-func (app *application) GetCaches(w http.ResponseWriter, r *http.Request, cli *client2.Client) (interface{}, error) {
+func (app *application) GetCaches(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	cli := app.contextGetClient(r)
 	return cli.Caches(r.Context())
 }
 
-func (app *application) EvictAllCaches(w http.ResponseWriter, r *http.Request, cli *client2.Client) (interface{}, error) {
+func (app *application) EvictAllCaches(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	cli := app.contextGetClient(r)
 	return nil, cli.EvictAllCaches(r.Context())
 }
 
-func (app *application) EvictCache(w http.ResponseWriter, r *http.Request, cli *client2.Client) (interface{}, error) {
+func (app *application) EvictCache(w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	cacheManager := r.PathValue("cacheManager")
 	if cacheManager == "" {
 		return nil, errors.New("cacheManager parameter is required")
@@ -126,14 +151,18 @@ func (app *application) EvictCache(w http.ResponseWriter, r *http.Request, cli *
 		return nil, errors.New("name parameter is required")
 	}
 
-	return nil, cli.EvictCache(r.Context(), cacheManager, name)
+	opt := client.WithQueryAdd("cacheManager", cacheManager)
+
+	cli := app.contextGetClient(r)
+	return nil, cli.EvictCache(r.Context(), name, opt)
 }
 
-func (app *application) GetLoggers(w http.ResponseWriter, r *http.Request, cli *client2.Client) (interface{}, error) {
+func (app *application) GetLoggers(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	cli := app.contextGetClient(r)
 	return cli.Loggers(r.Context())
 }
 
-func (app *application) SetLoggerlevel(w http.ResponseWriter, r *http.Request, cli *client2.Client) (interface{}, error) {
+func (app *application) SetLoggerlevel(w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	name := r.URL.Query().Get("name")
 	if name == "" {
 		return nil, errors.New("name parameter is required")
@@ -141,26 +170,33 @@ func (app *application) SetLoggerlevel(w http.ResponseWriter, r *http.Request, c
 
 	level := r.URL.Query().Get("level")
 
-	return nil, cli.SetLoggerLevel(r.Context(), name, level)
+	opt := client.WithJSONSet("configuredLevel", level)
+
+	cli := app.contextGetClient(r)
+	return nil, cli.SetLoggerLevel(r.Context(), name, opt)
 }
 
-func (app *application) GetMappings(w http.ResponseWriter, r *http.Request, cli *client2.Client) (interface{}, error) {
+func (app *application) GetMappings(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	cli := app.contextGetClient(r)
 	return cli.Mappings(r.Context())
 }
 
-func (app *application) GetHttpExchanges(w http.ResponseWriter, r *http.Request, cli *client2.Client) (interface{}, error) {
+func (app *application) GetHttpExchanges(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	cli := app.contextGetClient(r)
 	return cli.HttpExchanges(r.Context())
 }
 
-func (app *application) GetScheduledTasks(w http.ResponseWriter, r *http.Request, cli *client2.Client) (interface{}, error) {
+func (app *application) GetScheduledTasks(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	cli := app.contextGetClient(r)
 	return cli.ScheduledTasks(r.Context())
 }
 
-func (app *application) GetTogglz(w http.ResponseWriter, r *http.Request, cli *client2.Client) (interface{}, error) {
+func (app *application) GetTogglz(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	cli := app.contextGetClient(r)
 	return cli.Togglz(r.Context())
 }
 
-func (app *application) UpdateTogglz(w http.ResponseWriter, r *http.Request, cli *client2.Client) (interface{}, error) {
+func (app *application) UpdateTogglz(w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	enabledStr := r.URL.Query().Get("enabled")
 	if enabledStr == "" {
 		return nil, errors.New("enabled parameter is required")
@@ -171,30 +207,17 @@ func (app *application) UpdateTogglz(w http.ResponseWriter, r *http.Request, cli
 		return nil, errors.New("enabled parameter is invalid")
 	}
 
-	return cli.UpdateTogglz(r.Context(), enabled)
-}
-
-func (app *application) GetThreadDump(w http.ResponseWriter, r *http.Request, cli *client2.Client) (interface{}, error) {
-	return cli.ThreadDump(r.Context())
-}
-
-type apiHandler func(w http.ResponseWriter, r *http.Request, cli *client2.Client) (data interface{}, err error)
-
-func (app *application) wrap(handler apiHandler) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		url := r.URL.Query().Get("url")
-		cli, ok := a.TryAcquire(r.Context(), url)
-		if !ok {
-			serveError(w, errors.New("resource not exists"))
-			return
-		}
-		defer cli.Release()
-
-		data, err := handler(w, r, cli.Value())
-		if err != nil {
-			serveError(w, err)
-			return
-		}
-		writeJson(w, r, data)
+	name := r.URL.Query().Get("name")
+	if name == "" {
+		return nil, errors.New("name parameter is required")
 	}
+
+	opts := []client.RequestOption{client.WithJSONSet("name", name), client.WithJSONSet("enabled", enabled)}
+	cli := app.contextGetClient(r)
+	return cli.UpdateTogglz(r.Context(), opts...)
+}
+
+func (app *application) GetThreadDump(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	cli := app.contextGetClient(r)
+	return cli.ThreadDump(r.Context())
 }

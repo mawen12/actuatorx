@@ -80,10 +80,12 @@ func (app *application) authenticate(next http.Handler) http.Handler {
 			return
 		}
 
-		_, exists := app.clients[uid]
+		cli, exists := app.clients[uid]
 		if exists {
 			ctx := context.WithValue(r.Context(), isAuthenticationContextKey, true)
 			r = r.WithContext(ctx)
+
+			app.contextSetClient(r, cli)
 		}
 
 		next.ServeHTTP(w, r)
@@ -93,7 +95,7 @@ func (app *application) authenticate(next http.Handler) http.Handler {
 func (app *application) requireAuthentication(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if !app.isAuthenticated(r) {
-			serveError(w, errors.New("need to login"))
+			serveError(w, errors.New("need to connect"))
 			return
 		}
 
