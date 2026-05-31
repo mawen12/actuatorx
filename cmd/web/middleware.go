@@ -62,12 +62,12 @@ func logRequest(next http.Handler) http.Handler {
 	})
 }
 
-func noSurf(next http.Handler) http.Handler {
+func (app *application) noSurf(next http.Handler) http.Handler {
 	csrfHandler := nosurf.New(next)
 	csrfHandler.SetBaseCookie(http.Cookie{
 		HttpOnly: true,
 		Path:     "/",
-		Secure:   true,
+		Secure:   !app.config.debug,
 	})
 	return csrfHandler
 }
@@ -85,7 +85,7 @@ func (app *application) authenticate(next http.Handler) http.Handler {
 			ctx := context.WithValue(r.Context(), isAuthenticationContextKey, true)
 			r = r.WithContext(ctx)
 
-			app.contextSetClient(r, cli)
+			r = app.contextSetClient(r, cli)
 		}
 
 		next.ServeHTTP(w, r)

@@ -13,9 +13,9 @@ const isAuthenticationContextKey = contextKey("isAuthenticated")
 
 const clientContextKey = contextKey("client")
 
-func (app *application) contextSetClient(r *http.Request, cli *client.Client) {
+func (app *application) contextSetClient(r *http.Request, cli *client.Client) *http.Request {
 	ctx := context.WithValue(r.Context(), clientContextKey, cli)
-	r.WithContext(ctx)
+	return r.WithContext(ctx)
 }
 
 func (app *application) contextGetClient(r *http.Request) *client.Client {

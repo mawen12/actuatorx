@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/google/uuid"
 	"github.com/mawen12/actuatorx/internal/v2/client"
 	"github.com/mawen12/actuatorx/static"
 )
@@ -56,9 +57,23 @@ func (app *application) Connect(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	app.sessionManager.Put(r.Context(), "client", *cli)
+	uid := uuid.NewString()
+	app.clients[uid] = cli
+	app.sessionManager.Put(r.Context(), "uid", uid)
 
-	writeJson(w, r, nil)
+	w.WriteHeader(200)
+}
+
+func (app *application) Disconnect(w http.ResponseWriter, r *http.Request) {
+	uid := app.sessionManager.GetString(r.Context(), "uid")
+	delete(app.clients, uid)
+
+	if err := app.sessionManager.RenewToken(r.Context()); err != nil {
+		serveError(w, err)
+		return
+	}
+
+	w.WriteHeader(200)
 }
 
 func (app *application) wrap(handler func(http.ResponseWriter, *http.Request) (interface{}, error)) http.HandlerFunc {
@@ -94,16 +109,16 @@ func (app *application) GetMetric(w http.ResponseWriter, r *http.Request) (inter
 		return nil, errors.New("name parameter is required")
 	}
 
+	opts := make([]client.RequestOption, 0)
+
+	// tags is optional
 	var m map[string]string
 	r.Body = http.MaxBytesReader(w, r.Body, int64(1024*1024))
 	dec := json.NewDecoder(r.Body)
-	if err := dec.Decode(m); err != nil {
-		return nil, err
-	}
-
-	opts := make([]client.RequestOption, 0)
-	for k, v := range m {
-		opts = append(opts, client.WithQueryAdd(k, v))
+	if err := dec.Decode(m); err == nil {
+		for k, v := range m {
+			opts = append(opts, client.WithQueryAdd(k, v))
+		}
 	}
 
 	cli := app.contextGetClient(r)

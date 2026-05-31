@@ -6,6 +6,7 @@ require (
 	github.com/alexedwards/scs/v2 v2.9.0
 	github.com/gin-gonic/gin v1.12.0
 	github.com/go-playground/form/v4 v4.3.0
+	github.com/google/uuid v1.6.0
 	github.com/jtacoma/uritemplates v1.0.0
 	github.com/justinas/alice v1.2.0
 	github.com/justinas/nosurf v1.2.0

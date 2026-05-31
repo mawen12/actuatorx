@@ -69,11 +69,6 @@ func writeJson(w http.ResponseWriter, r *http.Request, data any) {
 	js = append(js, '\n')
 
 	w.Header().Set("Content-Type", "application/json")
-	{
-		if start, ok := r.Context().Value("start").(time.Time); ok {
-			w.Header().Set("Logs-Viewer-Cost-Ms", fmt.Sprint(time.Since(start).Milliseconds()))
-		}
-	}
 
 	w.WriteHeader(200)
 	w.Write(js)

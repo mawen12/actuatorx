@@ -87,7 +87,7 @@ func (c *Client) abilityCheck(ability string) (*UriTemplate, error) {
 }
 
 func (c *Client) getAbility(ability string) (string, error) {
-	link, err := c.abilityCheck("health")
+	link, err := c.abilityCheck(ability)
 	if err != nil {
 		return "", err
 	}
@@ -96,7 +96,7 @@ func (c *Client) getAbility(ability string) (string, error) {
 }
 
 func (c *Client) getAbilityWithParam(ability string, param map[string]interface{}) (string, error) {
-	link, err := c.abilityCheck("health")
+	link, err := c.abilityCheck(ability)
 	if err != nil {
 		return "", err
 	}
@@ -223,7 +223,7 @@ func (c *Client) Loggers(ctx context.Context, opts ...RequestOption) (*LoggersRe
 	}
 
 	var res LoggersResp
-	err = ExecuteNewRequest(ctx, http.MethodDelete, urlStr, nil, &res, append(c.Options, opts...)...)
+	err = ExecuteNewRequest(ctx, http.MethodGet, urlStr, nil, &res, append(c.Options, opts...)...)
 	return &res, err
 }
 

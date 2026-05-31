@@ -41,7 +41,7 @@ func main() {
 	sessionManager := scs.New()
 	sessionManager.Store = memstore.New()
 	sessionManager.Lifetime = 12 * time.Hour
-	sessionManager.Cookie.Secure = true
+	sessionManager.Cookie.Secure = !cfg.debug
 	sessionManager.Cookie.SameSite = http.SameSiteStrictMode
 
 	app := &application{
