@@ -72,7 +72,7 @@ func (c *Client) Links(ctx context.Context) (*ActuatorResp, error) {
 
 func (c *Client) Abilities(ctx context.Context) []string {
 	result := make([]string, 0)
-	for key, _ := range c.abilities {
+	for key := range c.abilities {
 		result = append(result, key)
 	}
 	return result
@@ -173,13 +173,13 @@ func (c *Client) Conditions(ctx context.Context, opts ...RequestOption) (*Condit
 	return &res, err
 }
 
-func (c *Client) Configprops(ctx context.Context, opts ...RequestOption) (*ConditionsResp, error) {
+func (c *Client) Configprops(ctx context.Context, opts ...RequestOption) (*ConfigpropsResp, error) {
 	urlStr, err := c.getAbility("configprops")
 	if err != nil {
 		return nil, err
 	}
 
-	var res ConditionsResp
+	var res ConfigpropsResp
 	err = ExecuteNewRequest(ctx, http.MethodGet, urlStr, nil, &res, append(c.Options, opts...)...)
 	return &res, err
 }
@@ -302,4 +302,15 @@ func (c *Client) ThreadDump(ctx context.Context, opts ...RequestOption) (*Thread
 	var res ThreadResp
 	err = ExecuteNewRequest(ctx, http.MethodGet, urlStr, nil, &res, append(c.Options, opts...)...)
 	return &res, err
+}
+
+func (c *Client) DownloadThreadDump(ctx context.Context, opts ...RequestOption) ([]byte, error) {
+	urlStr, err := c.getAbility("threaddump")
+	if err != nil {
+		return nil, err
+	}
+
+	var res []byte
+	err = ExecuteNewRequest(ctx, http.MethodGet, urlStr, nil, &res, append(c.Options, opts...)...)
+	return res, err
 }

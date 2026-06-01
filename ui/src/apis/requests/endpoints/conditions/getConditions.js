@@ -1,17 +1,11 @@
-import {axiosInstance} from '@/apis/axiosInstance'
-import {useBaseMutation} from '@/apis/requests/base/useBaseMutation'
-import {useBaseQuery} from '@/apis/requests/base/useBaseQuery'
-import {apiKeys} from '@/apis/apiKeys'
-import {useStorage} from "@vueuse/core";
-
-const connectUrl = useStorage('connectUrl')
+import { apiKeys } from '@/apis/apiKeys';
+import { axiosInstance } from '@/apis/axiosInstance';
+import { useBaseMutation } from '@/apis/requests/base/useBaseMutation';
+import { useBaseQuery } from '@/apis/requests/base/useBaseQuery';
+import { useStorage } from "@vueuse/core";
 
 export const getConditions = async (variables) => {
-    const data = (await axiosInstance.get(`conditions`, {
-        params: {
-            url: connectUrl.value,
-        }
-    })).data
+    const data = (await axiosInstance.get(`conditions`)).data
 
     const result = Object.entries(data.contexts).map(([key, value]) => ({
         name: key,

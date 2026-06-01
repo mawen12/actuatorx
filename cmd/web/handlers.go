@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
+	"io"
 	"net/http"
 	"strconv"
 
@@ -67,6 +69,8 @@ func (app *application) Connect(w http.ResponseWriter, r *http.Request) {
 func (app *application) Disconnect(w http.ResponseWriter, r *http.Request) {
 	uid := app.sessionManager.GetString(r.Context(), "uid")
 	delete(app.clients, uid)
+
+	app.logger.Info("client disconnected", "uid", uid)
 
 	if err := app.sessionManager.RenewToken(r.Context()); err != nil {
 		serveError(w, err)
@@ -212,6 +216,11 @@ func (app *application) GetTogglz(w http.ResponseWriter, r *http.Request) (inter
 }
 
 func (app *application) UpdateTogglz(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	instanceId := r.PathValue("instanceId")
+	if instanceId == "" {
+		return nil, errors.New("instanceId parameter is required")
+	}
+
 	enabledStr := r.URL.Query().Get("enabled")
 	if enabledStr == "" {
 		return nil, errors.New("enabled parameter is required")
@@ -222,12 +231,7 @@ func (app *application) UpdateTogglz(w http.ResponseWriter, r *http.Request) (in
 		return nil, errors.New("enabled parameter is invalid")
 	}
 
-	name := r.URL.Query().Get("name")
-	if name == "" {
-		return nil, errors.New("name parameter is required")
-	}
-
-	opts := []client.RequestOption{client.WithJSONSet("name", name), client.WithJSONSet("enabled", enabled)}
+	opts := []client.RequestOption{client.WithJSONSet("name", instanceId), client.WithJSONSet("enabled", enabled)}
 	cli := app.contextGetClient(r)
 	return cli.UpdateTogglz(r.Context(), opts...)
 }
@@ -235,4 +239,27 @@ func (app *application) UpdateTogglz(w http.ResponseWriter, r *http.Request) (in
 func (app *application) GetThreadDump(w http.ResponseWriter, r *http.Request) (interface{}, error) {
 	cli := app.contextGetClient(r)
 	return cli.ThreadDump(r.Context())
+}
+
+func (app *application) DownloadThreadDump(w http.ResponseWriter, r *http.Request) {
+	opt := client.WithHeader("Accept", "text/plain")
+
+	cli := app.contextGetClient(r)
+
+	bs, err := cli.DownloadThreadDump(r.Context(), opt)
+	if err != nil {
+		serveError(w, err)
+		return
+	}
+
+	w.Header().Set("Content-Disposition", "attachment;")
+	w.Header().Set("Content-Type", "application/octet-stream")
+
+	reader := bytes.NewReader(bs)
+
+	_, err = io.Copy(w, reader)
+	if err != nil {
+		serveError(w, err)
+		return
+	}
 }

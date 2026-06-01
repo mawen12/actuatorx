@@ -23,14 +23,18 @@ type application struct {
 }
 
 type config struct {
-	port  int
-	debug bool
+	port         int
+	debug        bool
+	handlerDebug bool
+	pprof        bool
 }
 
 func main() {
 	var cfg config
 	flag.IntVar(&cfg.port, "port", env.GetInt("PORT", 4000), "Server port")
 	flag.BoolVar(&cfg.debug, "debug", env.GetBool("DEBUG", false), "Enable debug mode")
+	flag.BoolVar(&cfg.handlerDebug, "handler-debug", env.GetBool("HANDLER_DEBUG", false), "Enable debug handler")
+	flag.BoolVar(&cfg.pprof, "pprof", env.GetBool("PPROF", false), "Enable debug handler")
 	flag.Parse()
 
 	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
@@ -50,6 +54,13 @@ func main() {
 		sessionManager: sessionManager,
 		formDecoder:    form.NewDecoder(),
 		clients:        make(map[string]*client.Client),
+	}
+
+	if cfg.pprof {
+		go func() {
+			logger.Info("pprof listening on :6060", "path", "/debug/pprof")
+			logger.Error(http.ListenAndServe("localhost:6060", nil).Error())
+		}()
 	}
 
 	if err := app.serve(); err != nil {

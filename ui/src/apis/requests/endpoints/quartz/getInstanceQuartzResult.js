@@ -1,16 +1,13 @@
-import {useBaseMutation} from '@/apis/requests/base/useBaseMutation'
-import {useBaseQuery} from '@/apis/requests/base/useBaseQuery'
-import {apiKeys} from '@/apis/apiKeys'
-import {getInstanceQuartz} from './getInstanceQuartz'
-import {getInstanceQuartzJobs} from './getInstanceQuartzJobs'
-import {getInstanceQuartzJob} from './getInstanceQuartzJob'
-import {v4 as uuidv4} from 'uuid'
-import {getInstanceQuartzTriggers} from './getInstanceQuartzTriggers'
-import {isEmpty} from 'lodash-es'
-import {getInstanceQuartzTrigger} from './getInstanceQuartzTrigger'
-import {useStorage} from "@vueuse/core";
-
-const connectUrl = useStorage('connectUrl')
+import { apiKeys } from '@/apis/apiKeys'
+import { useBaseMutation } from '@/apis/requests/base/useBaseMutation'
+import { useBaseQuery } from '@/apis/requests/base/useBaseQuery'
+import { isEmpty } from 'lodash-es'
+import { v4 as uuidv4 } from 'uuid'
+import { getInstanceQuartz } from './getInstanceQuartz'
+import { getInstanceQuartzJob } from './getInstanceQuartzJob'
+import { getInstanceQuartzJobs } from './getInstanceQuartzJobs'
+import { getInstanceQuartzTrigger } from './getInstanceQuartzTrigger'
+import { getInstanceQuartzTriggers } from './getInstanceQuartzTriggers'
 
 export const getInstanceQuartzResult = async (variables) => {
     const quartz = await getInstanceQuartz(variables)

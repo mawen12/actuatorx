@@ -1,18 +1,11 @@
-import {axiosInstance} from '@/apis/axiosInstance'
-import {useBaseMutation} from '@/apis/requests/base/useBaseMutation'
-import {useBaseQuery} from '@/apis/requests/base/useBaseQuery'
-import {apiKeys} from '@/apis/apiKeys'
-import {v4 as uuidv4} from 'uuid'
-import {useStorage} from "@vueuse/core";
-
-const connectUrl = useStorage('connectUrl')
+import { apiKeys } from '@/apis/apiKeys'
+import { axiosInstance } from '@/apis/axiosInstance'
+import { useBaseMutation } from '@/apis/requests/base/useBaseMutation'
+import { useBaseQuery } from '@/apis/requests/base/useBaseQuery'
+import { v4 as uuidv4 } from 'uuid'
 
 export const getMappings = async (variables) => {
-    const data = (await axiosInstance.get(`mappings`, {
-        params: {
-            url: connectUrl.value,
-        }
-    })).data
+    const data = (await axiosInstance.get(`mappings`)).data
 
     return Object.entries(data.contexts).map(([key, value]) => ({
         name: key,
