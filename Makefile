@@ -18,7 +18,7 @@ confirm:
 ## run: run the cmd application
 .PHONY: run
 run:
-	go run ./cmd/web
+	go run ./cmd/web --debug --handler-debug --pprof --port 5000
 
 .PHONY: clean
 clean:
@@ -36,29 +36,29 @@ build: clean build/amd64 build/arm64 build/win build/macos
 build/amd64:
 	@echo 'Building linux_amd64...'
 	cd ui && npm run build
-	mkdir -p bin && GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build  -o=bin/actuatorx ./cmd/actuatorx
-	mkdir -p bin && GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build  -o=bin/actuatorx_linux_amd64 ./cmd/actuatorx
+	mkdir -p bin && GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build  -o=bin/actuatorx ./cmd/web
+	mkdir -p bin && GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build  -o=bin/actuatorx_linux_amd64 ./cmd/web
 
 ## build/arm64: build the arm64 application
 .PHONY: build/arm64
 build/arm64:
 	@echo 'Building linux_arm64...'
 	cd ui && npm run build
-	mkdir -p bin && GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -o=bin/actuatorx_linux_arm64 ./cmd/actuatorx
+	mkdir -p bin && GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -o=bin/actuatorx_linux_arm64 ./cmd/web
 
 ## build/win: build the windows application
 .PHONY: build/win
 build/win:
 	@echo 'Building windows...'
 	cd ui && npm run build
-	mkdir -p bin && GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -o=bin/actuatorx_windows-amd64.exe ./cmd/actuatorx
+	mkdir -p bin && GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -o=bin/actuatorx_windows-amd64.exe ./cmd/web
 
 ## build/macos: build the macos application
 .PHONY: build/macos
 build/macos:
 	@echo 'Building darwin...'
 	cd ui && npm run build
-	mkdir -p bin && GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go build -o=bin/actuatorx_darwin-arm64 ./cmd/actuatorx	
+	mkdir -p bin && GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go build -o=bin/actuatorx_darwin-arm64 ./cmd/web	
 
 ## build/docker: build the docker image
 .PHONY: build/docker
