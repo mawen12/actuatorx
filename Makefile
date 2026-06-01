@@ -18,7 +18,7 @@ confirm:
 ## run: run the cmd application
 .PHONY: run
 run:
-	go run ./cmd/actuatorx
+	go run ./cmd/web
 
 .PHONY: clean
 clean:
@@ -72,5 +72,3 @@ build/docker:
 run/docker:
 	docker rm -i actuatorx
 	docker run -d --name actuatorx --network host localhost/actuatorx:0.1		
-
-	

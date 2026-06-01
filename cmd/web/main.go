@@ -10,7 +10,7 @@ import (
 	"github.com/alexedwards/scs/v2"
 	"github.com/alexedwards/scs/v2/memstore"
 	"github.com/go-playground/form/v4"
-	"github.com/mawen12/actuatorx/internal/v2/client"
+	"github.com/mawen12/actuatorx/internal/client"
 	"github.com/mawen12/actuatorx/pkg/env"
 )
 

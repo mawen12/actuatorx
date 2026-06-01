@@ -6,8 +6,8 @@ import (
 )
 
 func GetBool(key string, def bool) bool {
-	valueStr := os.Getenv(key)
-	if valueStr == "" {
+	valueStr, exists := os.LookupEnv(key)
+	if !exists {
 		return def
 	}
 
@@ -20,8 +20,8 @@ func GetBool(key string, def bool) bool {
 }
 
 func GetInt(key string, def int) int {
-	valueStr := os.Getenv(key)
-	if valueStr == "" {
+	valueStr, exists := os.LookupEnv(key)
+	if !exists {
 		return def
 	}
 
@@ -34,8 +34,8 @@ func GetInt(key string, def int) int {
 }
 
 func Get(key, def string) string {
-	value := os.Getenv(key)
-	if value == "" {
+	value, exists := os.LookupEnv(key)
+	if !exists {
 		return def
 	}
 

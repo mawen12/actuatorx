@@ -9,7 +9,7 @@ import (
 	"strconv"
 
 	"github.com/google/uuid"
-	"github.com/mawen12/actuatorx/internal/v2/client"
+	"github.com/mawen12/actuatorx/internal/client"
 	"github.com/mawen12/actuatorx/static"
 )
 
@@ -84,6 +84,7 @@ func (app *application) wrap(handler func(http.ResponseWriter, *http.Request) (i
 	return func(w http.ResponseWriter, r *http.Request) {
 		data, err := handler(w, r)
 		if err != nil {
+			app.logger.Warn("handler err", "err", err)
 			serveError(w, err)
 			return
 		}
@@ -216,8 +217,8 @@ func (app *application) GetTogglz(w http.ResponseWriter, r *http.Request) (inter
 }
 
 func (app *application) UpdateTogglz(w http.ResponseWriter, r *http.Request) (interface{}, error) {
-	instanceId := r.PathValue("instanceId")
-	if instanceId == "" {
+	name := r.PathValue("name")
+	if name == "" {
 		return nil, errors.New("instanceId parameter is required")
 	}
 
@@ -231,9 +232,10 @@ func (app *application) UpdateTogglz(w http.ResponseWriter, r *http.Request) (in
 		return nil, errors.New("enabled parameter is invalid")
 	}
 
-	opts := []client.RequestOption{client.WithJSONSet("name", instanceId), client.WithJSONSet("enabled", enabled)}
+	opt := client.WithJSONSet("enabled", enabled)
+
 	cli := app.contextGetClient(r)
-	return cli.UpdateTogglz(r.Context(), opts...)
+	return nil, cli.UpdateTogglz(r.Context(), name, opt)
 }
 
 func (app *application) GetThreadDump(w http.ResponseWriter, r *http.Request) (interface{}, error) {

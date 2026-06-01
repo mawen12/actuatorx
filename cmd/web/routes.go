@@ -65,7 +65,7 @@ func (app *application) routes() http.Handler {
 		mux.Handle("GET /api/httpexchanges", protectedHandlerFunc(app.GetHttpExchanges))
 		mux.Handle("GET /api/scheduledtasks", protectedHandlerFunc(app.GetScheduledTasks))
 		mux.Handle("GET /api/togglz", protectedHandlerFunc(app.GetTogglz))
-		mux.Handle("POST /api/togglz/{instanceId}", protectedHandlerFunc(app.UpdateTogglz))
+		mux.Handle("POST /api/togglz/{name}", protectedHandlerFunc(app.UpdateTogglz))
 		mux.Handle("GET /api/threaddump", protectedHandlerFunc(app.GetThreadDump))
 		mux.Handle("GET /api/threaddump/download", protected.ThenFunc(app.DownloadThreadDump))
 	}

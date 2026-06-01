@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/mawen12/actuatorx/internal/v2/client"
+	"github.com/mawen12/actuatorx/internal/client"
 )
 
 type contextKey string

@@ -128,6 +128,14 @@ const items = ref([
       to: '/threaddump',
     },
   },
+  {
+    title: 'Togglz',
+    value: 'togglz',
+    props: {
+      prependIcon: 'mdi-chart-box',
+      to: '/togglz',
+    },
+  },
   //  TODO developing
   // {
   //   title: 'Shutdown',
