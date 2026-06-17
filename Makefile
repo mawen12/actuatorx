@@ -67,20 +67,20 @@ build/macos:
 build/container:
 	@echo 'Building the image'
 	cd ui && npm run build
-	${CONTAINER} build -f Dockerfile -t actuatorx:0.1 .
+	${CONTAINER} build -f Dockerfile -t actuatorx:0.2 .
 
 ## run/container: run the container on linux
 .PHONY: run/linux-container
 run/linux-container:
 	@echo 'Run the container'
 	${CONTAINER} rm -if actuatorx
-	${CONTAINER} run -d --name actuatorx --network host localhost/actuatorx:0.1
+	${CONTAINER} run -d --name actuatorx --network host localhost/actuatorx:0.2
 
 ## run/container: run the container on macos or windows
 .PHONY: run/container
 run/container:
 	@echo 'Run the container'
 	${CONTAINER} rm -if actuatorx
-	${CONTAINER} run -d --name actuatorx -p 4000:4000 localhost/actuatorx:0.1
+	${CONTAINER} run -d --name actuatorx -p 4000:4000 localhost/actuatorx:0.2
 
 	
