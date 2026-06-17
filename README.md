@@ -68,3 +68,13 @@ http://localhost:4000
 | `Gin` | `1.12.0` |
 | `Vue` | `7.3.1` |
 | `vuetify` | `3.11.6` |  
+
+## Docker
+
+```bash
+> make build/container
+
+## linux: should use --network host
+## macos: should use -p 4000:400 then access host by host.docker.internal
+> make run/container 
+```

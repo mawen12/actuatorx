@@ -1,3 +1,5 @@
+CONTAINER ?= podman
+
 # ==================================================================================== #
 # HELPERS
 # ==================================================================================== #
@@ -58,17 +60,27 @@ build/win:
 build/macos:
 	@echo 'Building darwin...'
 	cd ui && npm run build
-	mkdir -p bin && GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go build -o=bin/actuatorx_darwin-arm64 ./cmd/web	
+	mkdir -p bin && GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go build -o=bin/actuatorx_darwin-arm64 ./cmd/web
 
-## build/docker: build the docker image
-.PHONY: build/docker
-build/docker:
-	@echo 'Building docker image'
+## build/container: build the image
+.PHONY: build/container
+build/container:
+	@echo 'Building the image'
 	cd ui && npm run build
-	docker build -f Dockerfile -t actuatorx:0.1 .
+	${CONTAINER} build -f Dockerfile -t actuatorx:0.1 .
 
-## run/docker: run the docker container
-.PHONY: run/docker
-run/docker:
-	docker rm -i actuatorx
-	docker run -d --name actuatorx --network host localhost/actuatorx:0.1		
+## run/container: run the container on linux
+.PHONY: run/linux-container
+run/linux-container:
+	@echo 'Run the container'
+	${CONTAINER} rm -if actuatorx
+	${CONTAINER} run -d --name actuatorx --network host localhost/actuatorx:0.1
+
+## run/container: run the container on macos or windows
+.PHONY: run/container
+run/container:
+	@echo 'Run the container'
+	${CONTAINER} rm -if actuatorx
+	${CONTAINER} run -d --name actuatorx -p 4000:4000 localhost/actuatorx:0.1
+
+	
