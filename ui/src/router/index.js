@@ -87,7 +87,12 @@ const router = createRouter({
                     path: 'threaddump',
                     name: 'Thread Dump',
                     component: () => import('@/pages/threaddump/ThreaddumpPage.vue'),
-                }
+                },
+                {
+                    path: 'togglz',
+                    name: 'Togglz',
+                    component: () => import('@/pages/togglz/TogglzPage.vue'),
+                },
             ],
         },
     ],

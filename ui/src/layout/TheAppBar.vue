@@ -3,6 +3,7 @@ import {computed} from 'vue'
 import {useRouter} from 'vue-router'
 import {useTheme} from 'vuetify'
 import {useConnectionState} from '@/composables/useConnectionState.js'
+import {useDisconnect} from "@/apis/requests/endpoints/connect/disconnect.js";
 
 const theme = useTheme()
 
@@ -12,9 +13,12 @@ const icon = computed(() =>
 
 const {connected, drawer, resetConnectionState} = useConnectionState()
 
+const disconectState = useDisconnect()
+
 const router = useRouter()
 
-const toConnect = () => {
+const toConnect = async () => {
+  await disconectState.mutateAsync({})
   router.push('/')
   resetConnectionState()
 }

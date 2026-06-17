@@ -1,417 +1,317 @@
 package client
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
-	"net/url"
 	"strings"
 
 	"github.com/jtacoma/uritemplates"
+	"github.com/mawen12/actuatorx/internal/model"
 )
 
+type AbilityError struct {
+	Ability string
+}
+
+func (a *AbilityError) Error() string {
+	return fmt.Sprintf("Ability: %s not found", a.Ability)
+}
+
 type Client struct {
-	*http.Client
-	OriginURL string
-	config    ConnectConfig
-	enhancer  func(req *http.Request)
+	Options []RequestOption
 
-	baseURL   *url.URL
-	abilities map[string]*uritemplates.UriTemplate
-	closed    bool
+	abilities map[string]*UriTemplate
 }
 
-type ConnectConfig struct {
-	Url      string
-	AuthType string
-	Auth     Auther
+var emptyTmplParams map[string]interface{}
+
+type UriTemplate struct {
+	*uritemplates.UriTemplate
+	Source       string
+	ActuatorLink model.ActuatorLink
 }
 
-func Connect(config ConnectConfig) (*Client, error) {
-	uri, err := url.Parse(config.Url)
+func (u *UriTemplate) Expand() (string, error) {
+	return u.UriTemplate.Expand(emptyTmplParams)
+}
+
+func (u *UriTemplate) ExpandWithParam(param map[string]interface{}) (string, error) {
+	return u.UriTemplate.Expand(param)
+}
+
+func NewClient(opts ...RequestOption) *Client {
+	opts = append(DefaultClientOptions(), opts...)
+
+	return &Client{Options: opts}
+}
+
+func (c *Client) Init(ctx context.Context) error {
+	res, err := c.Links(ctx)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	c := Client{
-		Client:    SharedClient(),
-		OriginURL: config.Url,
-		baseURL:   uri,
-		config:    config,
-	}
-
-	if config.Auth != nil {
-		c.enhancer = config.Auth.Auth
-	}
-
-	resp, err := c.Test(context.Background())
-	if err != nil {
-		return nil, err
-	}
-
-	if len(resp.Links) == 0 {
-		return nil, &EndpointInvalidErr{Endpoint: config.Url}
-	}
-
-	abilities := make(map[string]*uritemplates.UriTemplate)
-	for k, v := range resp.Links {
-		tmpl, err := uritemplates.Parse(formatURL(v.Href))
+	c.abilities = make(map[string]*UriTemplate)
+	for ability, link := range res.Links {
+		raw := strings.ReplaceAll(link.Href, "{*path}", "{+path}")
+		template, err := uritemplates.Parse(raw)
 		if err != nil {
-			return nil, &LinkInvalidErr{Link: v.Href, err: err}
+			return fmt.Errorf("parse %s failed: %v", link.Href, err)
 		}
-
-		abilities[k] = tmpl
+		c.abilities[ability] = &UriTemplate{Source: ability, ActuatorLink: link, UriTemplate: template}
 	}
 
-	c.abilities = abilities
-
-	return &c, nil
+	return nil
 }
 
-func (c *Client) Abilities() []string {
-	var result []string
-	for key, _ := range c.abilities {
+func (c *Client) Links(ctx context.Context) (*model.ActuatorResp, error) {
+	var res model.ActuatorResp
+	err := ExecuteNewRequest(ctx, http.MethodGet, "", nil, &res, c.Options...)
+	return &res, err
+}
+
+func (c *Client) Abilities(ctx context.Context) []string {
+	result := make([]string, 0)
+	for key := range c.abilities {
 		result = append(result, key)
 	}
 	return result
 }
 
-func (c *Client) Test(ctx context.Context) (*ActuatorResp, error) {
-	var resp ActuatorResp
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, c.baseURL.String(), nil)
+func (c *Client) abilityCheck(ability string) (*UriTemplate, error) {
+	template, exists := c.abilities[ability]
+	if !exists {
+		return nil, &AbilityError{Ability: ability}
+	}
+	return template, nil
+}
+
+func (c *Client) getAbility(ability string) (string, error) {
+	link, err := c.abilityCheck(ability)
+	if err != nil {
+		return "", err
+	}
+
+	return link.Expand()
+}
+
+func (c *Client) getAbilityWithParam(ability string, param map[string]interface{}) (string, error) {
+	link, err := c.abilityCheck(ability)
+	if err != nil {
+		return "", err
+	}
+
+	return link.ExpandWithParam(param)
+}
+
+func (c *Client) Health(ctx context.Context, opts ...RequestOption) (*model.HealthResp, error) {
+	urlStr, err := c.getAbility("health")
 	if err != nil {
 		return nil, err
 	}
 
-	err = c.do(req, &resp)
-	if err == nil {
-		return &resp, nil
-	}
-
-	errMsg := err.Error()
-
-	if regexErrConnectionRefused.MatchString(errMsg) {
-		return nil, ErrConnectionRefused
-	}
-	if regexErrNotFound.MatchString(errMsg) {
-		return nil, ErrNotFound
-	}
-
-	return nil, fmt.Errorf(errMsg)
+	var res model.HealthResp
+	err = ExecuteNewRequest(ctx, http.MethodGet, urlStr, nil, &res, append(c.Options, opts...)...)
+	return &res, err
 }
 
-func (c *Client) Health(ctx context.Context) (resp *HealthResp, err error) {
-	err = c.get(ctx, "health", emptyTmplParams, &resp)
-	return
+func (c *Client) Metrics(ctx context.Context, opts ...RequestOption) (*model.MetricsResp, error) {
+	urlStr, err := c.getAbility("metrics")
+	if err != nil {
+		return nil, err
+	}
+
+	var res model.MetricsResp
+	err = ExecuteNewRequest(ctx, http.MethodGet, urlStr, nil, &res, append(c.Options, opts...)...)
+	return &res, err
 }
 
-func (c *Client) Metrics(ctx context.Context) (resp *MetricsResp, err error) {
-	err = c.get(ctx, "metrics", emptyTmplParams, &resp)
-	return
-}
-
-func (c *Client) Metric(ctx context.Context, metricName string, tags map[string]string) (*MetricResp, error) {
-	var resp MetricResp
-
-	u, err := c.evaluateTmpl("metrics-requiredMetricName", map[string]interface{}{
+// tags should be provide in opts
+func (c *Client) Metric(ctx context.Context, metricName string, opts ...RequestOption) (*model.MetricResp, error) {
+	urlStr, err := c.getAbilityWithParam("metrics-requiredMetricName", map[string]interface{}{
 		"requiredMetricName": metricName,
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	if len(tags) > 0 {
-		q := u.Query()
-		for k, v := range tags {
-			q.Add("tag", fmt.Sprintf("%s:%s", k, v))
-		}
-		u.RawQuery = q.Encode()
-	}
+	var res model.MetricResp
+	err = ExecuteNewRequest(ctx, http.MethodGet, urlStr, nil, &res, append(c.Options, opts...)...)
+	return &res, err
+}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
+func (c *Client) Env(ctx context.Context, opts ...RequestOption) (*model.EnvResp, error) {
+	urlStr, err := c.getAbility("env")
 	if err != nil {
 		return nil, err
 	}
-	if err := c.do(req, &resp); err != nil {
+
+	var res model.EnvResp
+	err = ExecuteNewRequest(ctx, http.MethodGet, urlStr, nil, &res, append(c.Options, opts...)...)
+	return &res, err
+}
+
+func (c *Client) Beans(ctx context.Context, opts ...RequestOption) (*model.BeansResp, error) {
+	urlStr, err := c.getAbility("beans")
+	if err != nil {
 		return nil, err
 	}
-	return &resp, nil
+
+	var res model.BeansResp
+	err = ExecuteNewRequest(ctx, http.MethodGet, urlStr, nil, &res, append(c.Options, opts...)...)
+	return &res, err
 }
 
-func (c *Client) Env(ctx context.Context) (*EnvResp, error) {
-	var resp EnvResp
-	if err := c.get(ctx, "env", emptyTmplParams, &resp); err != nil {
+func (c *Client) Conditions(ctx context.Context, opts ...RequestOption) (*model.ConditionsResp, error) {
+	urlStr, err := c.getAbility("conditions")
+	if err != nil {
 		return nil, err
 	}
-	return &resp, nil
+
+	var res model.ConditionsResp
+	err = ExecuteNewRequest(ctx, http.MethodGet, urlStr, nil, &res, append(c.Options, opts...)...)
+	return &res, err
 }
 
-func (c *Client) Beans(ctx context.Context) (*BeansResp, error) {
-	var resp BeansResp
-	if err := c.get(ctx, "beans", emptyTmplParams, &resp); err != nil {
+func (c *Client) Configprops(ctx context.Context, opts ...RequestOption) (*model.ConfigpropsResp, error) {
+	urlStr, err := c.getAbility("configprops")
+	if err != nil {
 		return nil, err
 	}
-	return &resp, nil
+
+	var res model.ConfigpropsResp
+	err = ExecuteNewRequest(ctx, http.MethodGet, urlStr, nil, &res, append(c.Options, opts...)...)
+	return &res, err
 }
 
-func (c *Client) Conditions(ctx context.Context) (*ConditionsResp, error) {
-	var resp ConditionsResp
-	if err := c.get(ctx, "conditions", emptyTmplParams, &resp); err != nil {
+func (c *Client) Caches(ctx context.Context, opts ...RequestOption) (*model.CachesResp, error) {
+	urlStr, err := c.getAbility("caches")
+	if err != nil {
 		return nil, err
 	}
-	return &resp, nil
+
+	var res model.CachesResp
+	err = ExecuteNewRequest(ctx, http.MethodGet, urlStr, nil, &res, append(c.Options, opts...)...)
+	return &res, err
 }
 
-func (c *Client) Configprops(ctx context.Context) (*ConfigpropsResp, error) {
-	var resp ConfigpropsResp
-	if err := c.get(ctx, "configprops", emptyTmplParams, &resp); err != nil {
-		return nil, err
+func (c *Client) EvictAllCaches(ctx context.Context, opts ...RequestOption) error {
+	urlStr, err := c.getAbility("caches")
+	if err != nil {
+		return err
 	}
-	return &resp, nil
+
+	return ExecuteNewRequest(ctx, http.MethodDelete, urlStr, nil, nil, append(c.Options, opts...)...)
 }
 
-func (c *Client) Caches(ctx context.Context) (*CachesResp, error) {
-	var resp CachesResp
-	if err := c.get(ctx, "caches", emptyTmplParams, &resp); err != nil {
-		return nil, err
-	}
-	return &resp, nil
-}
-
-func (c *Client) EvictAllCaches(ctx context.Context) error {
-	return c.delete(ctx, "caches", emptyTmplParams)
-}
-
-func (c *Client) EvictCache(ctx context.Context, cacheManager, cache string) error {
-	u, err := c.evaluateTmpl("caches-cache", map[string]interface{}{
+// cacheManager 通过 opt 传递
+func (c *Client) EvictCache(ctx context.Context, cache string, opts ...RequestOption) error {
+	urlStr, err := c.getAbilityWithParam("caches-cache", map[string]interface{}{
 		"cache": cache,
 	})
 	if err != nil {
 		return err
 	}
 
-	q := u.Query()
-	q.Add("cacheManager", cacheManager)
-	u.RawQuery = q.Encode()
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, u.String(), nil)
-	if err != nil {
-		return err
-	}
-
-	return c.do(req, nil)
+	return ExecuteNewRequest(ctx, http.MethodDelete, urlStr, nil, nil, append(c.Options, opts...)...)
 }
 
-func (c *Client) Loggers(ctx context.Context) (*LoggersResp, error) {
-	var resp LoggersResp
-	if err := c.get(ctx, "loggers", emptyTmplParams, &resp); err != nil {
+func (c *Client) Loggers(ctx context.Context, opts ...RequestOption) (*model.LoggersResp, error) {
+	urlStr, err := c.getAbility("loggers")
+	if err != nil {
 		return nil, err
 	}
-	return &resp, nil
+
+	var res model.LoggersResp
+	err = ExecuteNewRequest(ctx, http.MethodGet, urlStr, nil, &res, append(c.Options, opts...)...)
+	return &res, err
 }
 
-func (c *Client) SetLoggerLevel(ctx context.Context, name, level string) error {
-	return c.post(ctx, "loggers-name", map[string]interface{}{
+func (c *Client) SetLoggerLevel(ctx context.Context, name string, opts ...RequestOption) error {
+	urlStr, err := c.getAbilityWithParam("loggers-name", map[string]interface{}{
 		"name": name,
-	}, &LoggerLevelReq{ConfiguredLevel: level}, nil)
-}
-
-func (c *Client) Mappings(ctx context.Context) (*MappingsResp, error) {
-	var resp MappingsResp
-	if err := c.get(ctx, "mappings", emptyTmplParams, &resp); err != nil {
-		return nil, err
-	}
-	return &resp, nil
-}
-
-func (c *Client) HttpExchanges(ctx context.Context) (*HttpExchangesResp, error) {
-	var resp HttpExchangesResp
-	if err := c.get(ctx, "httpexchanges", emptyTmplParams, &resp); err != nil {
-		return nil, err
-	}
-	return &resp, nil
-}
-
-func (c *Client) Logfile(ctx context.Context, start, end int) (string, error) {
-	u, err := c.evaluateTmpl("logfile", emptyTmplParams)
-	if err != nil {
-		return "", err
-	}
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
-	if err != nil {
-		return "", err
-	}
-
-	if end != 0 {
-		req.Header.Set("Range", fmt.Sprintf("bytes=%d-%d", start, end))
-	}
-
-	var resp string
-	err = c.do(req, &resp)
-	return resp, err
-}
-
-func (c *Client) ScheduledTasks(ctx context.Context) (resp *ScheduledTasksResp, err error) {
-	err = c.get(ctx, "scheduledtasks", emptyTmplParams, &resp)
-	return
-}
-
-func (c *Client) Togglz(ctx context.Context) (*TogglzResp, error) {
-	var resp TogglzResp
-	if err := c.get(ctx, "togglz", emptyTmplParams, &resp); err != nil {
-		return nil, err
-	}
-	return &resp, nil
-}
-
-func (c *Client) UpdateTogglz(ctx context.Context, enabled bool) (*TogglzResp, error) {
-	var resp TogglzResp
-	if err := c.post(ctx, "togglz", emptyTmplParams, TogglzReq{
-		Enabled: enabled,
-	}, &resp); err != nil {
-		return nil, err
-	}
-	return &resp, nil
-}
-
-func (c *Client) ThreadDump(ctx context.Context) (*ThreadResp, error) {
-	var resp ThreadResp
-	if err := c.get(ctx, "threaddump", emptyTmplParams, &resp); err != nil {
-		return nil, err
-	}
-	return &resp, nil
-}
-
-func (c *Client) DownloadThreadDump(ctx context.Context) (Downloader, error) {
-	u, err := c.evaluateTmpl("threaddump", map[string]interface{}{})
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Set("Accept", "text/plain")
-
-	bs := make([]byte, 0)
-	err = c.do(req, &bs)
-
-	return &SimpleDownloader{
-		filename: "stack.log",
-		bs:       bs,
-	}, err
-}
-
-// internal methods
-
-func (c *Client) evaluateTmpl(endpoint string, params map[string]interface{}) (*url.URL, error) {
-	tmpl, exists := c.abilities[endpoint]
-	if !exists {
-		return nil, fmt.Errorf("%s not exists", endpoint)
-	}
-
-	urlStr, err := tmpl.Expand(params)
-	if err != nil {
-		return nil, err
-	}
-
-	return url.Parse(urlStr)
-}
-
-func (c *Client) get(ctx context.Context, endpoint string, params map[string]interface{}, out any) error {
-	u, err := c.evaluateTmpl(endpoint, params)
+	})
 	if err != nil {
 		return err
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
-	if err != nil {
-		return err
-	}
-
-	return c.do(req, out)
+	return ExecuteNewRequest(ctx, http.MethodPost, urlStr, nil, nil, append(c.Options, opts...)...)
 }
 
-func (c *Client) delete(ctx context.Context, endpoint string, tmplParams map[string]interface{}) error {
-	u, err := c.evaluateTmpl(endpoint, tmplParams)
+func (c *Client) Mappings(ctx context.Context, opts ...RequestOption) (*model.MappingsResp, error) {
+	urlStr, err := c.getAbility("mappings")
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, u.String(), nil)
-	if err != nil {
-		return err
-	}
-
-	return c.do(req, nil)
+	var res model.MappingsResp
+	err = ExecuteNewRequest(ctx, http.MethodGet, urlStr, nil, &res, append(c.Options, opts...)...)
+	return &res, err
 }
 
-func (c *Client) post(ctx context.Context, endpoint string, tmplParams map[string]interface{}, payload interface{}, out any) error {
-	u, err := c.evaluateTmpl(endpoint, tmplParams)
+func (c *Client) HttpExchanges(ctx context.Context, opts ...RequestOption) (*model.HttpExchangesResp, error) {
+	urlStr, err := c.getAbility("httpexchanges")
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	var body io.Reader
-	if payload != nil {
-		data, err := json.Marshal(payload)
-		if err != nil {
-			return err
-		}
-
-		body = bytes.NewReader(data)
-	}
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, u.String(), body)
-	if err != nil {
-		return err
-	}
-
-	req.Header.Set("Content-Type", "application/json")
-
-	return c.do(req, out)
+	var res model.HttpExchangesResp
+	err = ExecuteNewRequest(ctx, http.MethodGet, urlStr, nil, &res, append(c.Options, opts...)...)
+	return &res, err
 }
 
-func (c *Client) do(req *http.Request, out any) error {
-	if c.enhancer != nil {
-		c.enhancer(req)
+func (c *Client) ScheduledTasks(ctx context.Context, opts ...RequestOption) (*model.ScheduledTasksResp, error) {
+	urlStr, err := c.getAbility("scheduledtasks")
+	if err != nil {
+		return nil, err
 	}
-	resp, err := c.Client.Do(req)
+
+	var res model.ScheduledTasksResp
+	err = ExecuteNewRequest(ctx, http.MethodGet, urlStr, nil, &res, append(c.Options, opts...)...)
+	return &res, err
+}
+
+func (c *Client) Togglz(ctx context.Context, opts ...RequestOption) (*model.TogglzResp, error) {
+	urlStr, err := c.getAbility("togglz")
+	if err != nil {
+		return nil, err
+	}
+
+	var res model.TogglzResp
+	err = ExecuteNewRequest(ctx, http.MethodGet, urlStr, nil, &res, append(c.Options, opts...)...)
+	return &res, err
+}
+
+func (c *Client) UpdateTogglz(ctx context.Context, name string, opts ...RequestOption) error {
+	urlStr, err := c.getAbilityWithParam("togglz-name", map[string]interface{}{
+		"name": name,
+	})
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
 
-	if resp.StatusCode >= 400 {
-		return &StatusCodeBadErr{StatusCode: resp.StatusCode, Method: req.Method, URL: req.URL.String()}
-	}
-
-	if out != nil {
-		switch v := out.(type) {
-		case *[]byte:
-			body, err := io.ReadAll(resp.Body)
-			if err != nil {
-				return err
-			}
-			*v = body
-		case *string:
-			body, err := io.ReadAll(resp.Body)
-			if err != nil {
-				return err
-			}
-			*v = string(body)
-		default:
-			return json.NewDecoder(resp.Body).Decode(out)
-		}
-	}
-	return nil
+	return ExecuteNewRequest(ctx, http.MethodPost, urlStr, nil, nil, append(c.Options, opts...)...)
 }
 
-func formatURL(urlStr string) string {
-	return strings.ReplaceAll(urlStr, "{*path}", "{+path}")
+func (c *Client) ThreadDump(ctx context.Context, opts ...RequestOption) (*model.ThreadResp, error) {
+	urlStr, err := c.getAbility("threaddump")
+	if err != nil {
+		return nil, err
+	}
+
+	var res model.ThreadResp
+	err = ExecuteNewRequest(ctx, http.MethodGet, urlStr, nil, &res, append(c.Options, opts...)...)
+	return &res, err
+}
+
+func (c *Client) DownloadThreadDump(ctx context.Context, opts ...RequestOption) ([]byte, error) {
+	urlStr, err := c.getAbility("threaddump")
+	if err != nil {
+		return nil, err
+	}
+
+	var res []byte
+	err = ExecuteNewRequest(ctx, http.MethodGet, urlStr, nil, &res, append(c.Options, opts...)...)
+	return res, err
 }

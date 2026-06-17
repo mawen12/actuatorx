@@ -1,19 +1,12 @@
-import {axiosInstance} from '@/apis/axiosInstance'
-import {useBaseMutation} from '@/apis/requests/base/useBaseMutation'
-import {useBaseQuery} from '@/apis/requests/base/useBaseQuery'
-import {apiKeys} from '@/apis/apiKeys'
-import {v4 as uuidv4} from 'uuid'
-import {DateTime, Duration} from 'luxon'
-import {useStorage} from "@vueuse/core";
-
-const connectUrl = useStorage('connectUrl')
+import { apiKeys } from '@/apis/apiKeys'
+import { axiosInstance } from '@/apis/axiosInstance'
+import { useBaseMutation } from '@/apis/requests/base/useBaseMutation'
+import { useBaseQuery } from '@/apis/requests/base/useBaseQuery'
+import { DateTime, Duration } from 'luxon'
+import { v4 as uuidv4 } from 'uuid'
 
 export const getHttpExchanges = async (variables) => {
-    const result = (await axiosInstance.get(`httpexchanges`, {
-        params: {
-            url: connectUrl.value,
-        }
-    })).data.exchanges
+    const result = (await axiosInstance.get(`httpexchanges`)).data.exchanges
 
     return result.map((exchange) => ({
         ...exchange,

@@ -10,7 +10,7 @@ COPY . /src
 WORKDIR /src
 
 # Build the binary!
-RUN mkdir -p logs && chmod 755 logs
+# RUN mkdir -p logs && chmod 755 logs
 RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -mod=vendor -ldflags="-s -w" -o=actuatorx_linux_arm64 ./cmd/actuatorx
 
 # Stage 2: Build the Logs-Viewer image proper
@@ -21,7 +21,7 @@ FROM scratch
 # Copy the binary from the build container
 COPY --from=build src/actuatorx_linux_arm64 .
 
-COPY --from=build src/logs .
+# COPY --from=build src/logs .
 
 # Tell Docker we'll be using port 4000
 EXPOSE 4000

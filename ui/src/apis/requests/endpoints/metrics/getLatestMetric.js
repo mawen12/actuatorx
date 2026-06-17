@@ -1,18 +1,11 @@
-import {axiosInstance} from '@/apis/axiosInstance'
-import {useBaseMutation} from '@/apis/requests/base/useBaseMutation'
-import {useBaseQuery} from '@/apis/requests/base/useBaseQuery'
-import {apiKeys} from '@/apis/apiKeys'
-import {useStorage} from "@vueuse/core";
-
-const connectUrl = useStorage('connectUrl')
+import { apiKeys } from '@/apis/apiKeys';
+import { axiosInstance } from '@/apis/axiosInstance';
+import { useBaseMutation } from '@/apis/requests/base/useBaseMutation';
+import { useBaseQuery } from '@/apis/requests/base/useBaseQuery';
 
 export const getLatestMetric = async (variables) => {
     return (
-        await axiosInstance.get(`endpoint/${variables.instanceId}/metrics/${variables.name}/latest`, {
-            params: {
-                url: connectUrl.value,
-            }
-        })
+        await axiosInstance.get(`endpoint/${variables.instanceId}/metrics/${variables.name}/latest`)
     ).data
 }
 
