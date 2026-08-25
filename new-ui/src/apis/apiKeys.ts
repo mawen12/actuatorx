@@ -22,13 +22,15 @@ export const apiKeys = {
     itemScheduledTasksFixed: (type: string) => [...apiKeys.itemScheduledTasks(), 'fixed', type],
     itemScheduledTasksCustom: () => [...apiKeys.itemScheduledTasks(), 'custom'],
     itemHttpRequestStatistics: (instanceId: string) => [...apiKeys.item(), 'httpRequestStatistics', instanceId],
-    itemQuartz: () => [...apiKeys.item(), 'quartz'],
+    itemQuartz: (instanceId: string) => [...apiKeys.item(), 'quartz', instanceId],
     itemQuartzJob: (group: string, name: string) => [...apiKeys.item(), 'quartz', 'jobs', group, name],
     itemQuartzJobs: (group: string) => [...apiKeys.item(), 'quartz', 'jobs', group],
     itemQuartzTriggers: (group: string) => [...apiKeys.item(), 'quartz', 'triggers', group],
     itemQuartzTrigger: (group: string, name: string) => [...apiKeys.item(), 'quartz', 'triggers', group, name],
     itemSessions: () => [...apiKeys.item(), 'sessions'],
-    itemTogglz: () => [...apiKeys.item(), 'togglz'],
+    itemTogglz: (instanceId: string) => [...apiKeys.item(), 'togglz', instanceId],
     itemThreaddump: () => [...apiKeys.item(), 'threaddump'],
-    metricLatest: (metricName: string) => [...apiKeys.itemMetrics(), 'latest', metricName],
+    metricLatest: (instanceId: string, metricName: string) => [...apiKeys.itemMetrics(), 'latest', instanceId, metricName],
 }
+
+export type JsonValue = | string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue }

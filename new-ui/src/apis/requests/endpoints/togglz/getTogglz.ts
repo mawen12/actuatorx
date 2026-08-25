@@ -1,13 +1,35 @@
 import { apiKeys } from '@/apis/apiKeys';
 import { axiosInstance } from '@/apis/axiosInstance';
-import { useBaseMutation } from '@/apis/requests/base/useBaseMutation';
+import { useBaseMutation, type BaseMutationOptions } from '@/apis/requests/base/useBaseMutation';
 import { useBaseQuery } from '@/apis/requests/base/useBaseQuery';
 
-export const getTogglz = async (variables) => {
-    return (await axiosInstance.get(`togglz`)).data
+interface TogglzResponse {
+    togglz: Togglz[]
 }
 
-export const useGetTogglz = (options) => useBaseMutation(getTogglz, options)
+type JsonValue = | string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue }
 
-export const useGetTogglzQuery = (variables, options) =>
-    useBaseQuery(apiKeys.itemMetrics(variables.instanceId), getTogglz, variables, options)
+
+interface Togglz {
+    name: string
+    enabled: boolean
+    strategy?: string
+    params: Record<string, JsonValue>
+    metadata: TogglzMetadata
+}
+
+interface TogglzMetadata {
+    label: string
+    groups: JsonValue[]
+    enabledByDefault: boolean
+    attributes: JsonValue[]
+}
+
+export const getTogglz = async (): Promise<TogglzResponse> => {
+    return (await axiosInstance.get<TogglzResponse>(`togglz`)).data
+}
+
+export const useGetTogglz = (options: BaseMutationOptions<TogglzResponse, void>) => useBaseMutation(getTogglz, options)
+
+export const useGetTogglzQuery = (variables: void, options: BaseMutationOptions<TogglzResponse, void>) =>
+    useBaseQuery(apiKeys.itemMetrics(), getTogglz, variables, options)

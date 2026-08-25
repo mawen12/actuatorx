@@ -1,4 +1,4 @@
-import { apiKeys } from '@/apis/apiKeys';
+import { apiKeys, type JsonValue } from '@/apis/apiKeys';
 import { axiosInstance } from '@/apis/axiosInstance';
 import { useBaseMutation, type BaseMutationOptions } from '@/apis/requests/base/useBaseMutation';
 import { useBaseQuery } from '@/apis/requests/base/useBaseQuery';
@@ -11,8 +11,6 @@ interface ConfigpropsContext {
     parentId: string
     beans: Record<string, ConfigpropsBean>
 }
-
-type JsonValue = | string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue }
 
 interface ConfigpropsBean {
     prefix: string

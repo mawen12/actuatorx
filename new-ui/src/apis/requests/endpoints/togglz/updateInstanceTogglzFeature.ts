@@ -1,8 +1,14 @@
 import { apiKeys } from '@/apis/apiKeys';
 import { axiosInstance } from '@/apis/axiosInstance';
-import { useBaseMutation } from '@/apis/requests/base/useBaseMutation';
+import { useBaseMutation, type BaseMutationOptions } from '@/apis/requests/base/useBaseMutation';
 
-export const updateInstanceTogglzFeature = async (variables) => {
+interface UpdateTogglzRequest {
+    instanceId: string
+    featureName: string
+    enabled: boolean
+}
+
+export const updateInstanceTogglzFeature = async (variables: UpdateTogglzRequest) => {
     const result = (
         await axiosInstance.post(`togglz/${variables.instanceId}`, null, {
             params: {
@@ -14,8 +20,8 @@ export const updateInstanceTogglzFeature = async (variables) => {
     return {...result, instanceId: variables.instanceId}
 }
 
-export const useUpdateInstanceTogglzFeature = (options) =>
+export const useUpdateInstanceTogglzFeature = (options: BaseMutationOptions<void, UpdateTogglzRequest>) =>
     useBaseMutation(updateInstanceTogglzFeature, {
         ...options,
-        invalidateQueriesKeyFn: (data, variables) => apiKeys.itemTogglz(variables.instanceId),
+        invalidateQueriesKeyFn: (data, variables: UpdateTogglzRequest) => apiKeys.itemTogglz(variables.instanceId),
     })

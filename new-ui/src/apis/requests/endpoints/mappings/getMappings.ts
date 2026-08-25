@@ -1,6 +1,6 @@
 import { apiKeys } from '@/apis/apiKeys'
 import { axiosInstance } from '@/apis/axiosInstance'
-import { useBaseMutation } from '@/apis/requests/base/useBaseMutation'
+import { useBaseMutation, type BaseMutationOptions } from '@/apis/requests/base/useBaseMutation'
 import { useBaseQuery } from '@/apis/requests/base/useBaseQuery'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -13,13 +13,17 @@ interface MappingsContext {
 }
 
 interface Mappings {
-    dispatcherServlets: DispatcherServlet[]
+    dispatcherServlets: DispatcherServlets[]
     servlets: Servlet[]
     servletFilters: ServletFilter[]
 }
 
+interface DispatcherServlets {
+    dispatcherServlet: DispatcherServlet[]
+}
+
 interface DispatcherServlet {
-    details?: Details
+    details: Details
     handler: string
     predicate: string
 }
@@ -70,7 +74,7 @@ interface ServletFilter {
 
 interface MappingGroup {
     name: string
-    value: 
+    value: MappingView[]
 }
 
 interface MappingView {
@@ -82,7 +86,7 @@ interface MappingView {
     search: string
 }
 
-export const getMappings = async () => {
+export const getMappings = async (): Promise<MappingGroup[]> => {
     const data = (await axiosInstance.get<MappingResponse>(`mappings`)).data
 
     return Object.entries(data.contexts).map(([key, value]) => ({
@@ -100,7 +104,7 @@ export const getMappings = async () => {
     }))
 }
 
-function dispatcherServletsToArray(dispatcherServlets: Mappings) {
+function dispatcherServletsToArray(dispatcherServlets: DispatcherServlets) {
     try {
         const data = dispatcherServlets.dispatcherServlet
             .filter((ds) => ds.details !== null)
@@ -122,7 +126,7 @@ function dispatcherServletsToArray(dispatcherServlets: Mappings) {
     }
 }
 
-function servletFiltersToArray(servletFilters) {
+function servletFiltersToArray(servletFilters: ServletFilter[]) {
     return servletFilters.flatMap((sf) =>
         sf.urlPatternMappings.map((mapping) => ({
             ...sf,
@@ -135,7 +139,7 @@ function servletFiltersToArray(servletFilters) {
     )
 }
 
-function servletsToArray(servlets) {
+function servletsToArray(servlets: Servlet[]) {
     return servlets.flatMap((servlet) =>
         servlet.mappings.map((mapping) => ({
             ...servlet,
@@ -148,7 +152,7 @@ function servletsToArray(servlets) {
     )
 }
 
-export const useGetMappings = (options) => useBaseMutation(getMappings, options)
+export const useGetMappings = (options: BaseMutationOptions<MappingGroup[], void>) => useBaseMutation(getMappings, options)
 
-export const useGetMappingsQuery = (variables, options) =>
+export const useGetMappingsQuery = (variables: void, options: BaseMutationOptions<MappingGroup[], void>) =>
     useBaseQuery(apiKeys.itemMappings(), getMappings, variables, options)

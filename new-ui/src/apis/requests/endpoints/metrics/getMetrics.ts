@@ -1,10 +1,19 @@
 import { apiKeys } from '@/apis/apiKeys';
 import { axiosInstance } from '@/apis/axiosInstance';
-import { useBaseMutation } from '@/apis/requests/base/useBaseMutation';
+import { useBaseMutation, type BaseMutationOptions } from '@/apis/requests/base/useBaseMutation';
 import { useBaseQuery } from '@/apis/requests/base/useBaseQuery';
 
-export const getMetrics = async (variables) => {
-    const result = (await axiosInstance.get(`metrics`)).data.names
+interface MetricResponse {
+    names: string[]
+}
+
+interface MetricView {
+    name: string
+    search: string
+}
+
+export const getMetrics = async (): Promise<MetricView[]> => {
+    const result = (await axiosInstance.get<MetricResponse>(`metrics`)).data.names
 
     return result.map((name) => ({
         name,
@@ -12,7 +21,7 @@ export const getMetrics = async (variables) => {
     }))
 }
 
-export const useGetMetrics = (options) => useBaseMutation(getMetrics, options)
+export const useGetMetrics = (options: BaseMutationOptions<MetricView[], void>) => useBaseMutation(getMetrics, options)
 
-export const useGetMetricsQuery = (variables, options) =>
+export const useGetMetricsQuery = (variables: void, options: BaseMutationOptions<MetricView[], void>) =>
     useBaseQuery(apiKeys.itemMetrics(), getMetrics, variables, options)
