@@ -1,7 +1,7 @@
 import { apiKeys } from '@/apis/apiKeys';
 import { axiosInstance } from '@/apis/axiosInstance';
 import { useBaseMutation, type BaseMutationOptions } from '@/apis/requests/base/useBaseMutation';
-import { useBaseQuery } from '@/apis/requests/base/useBaseQuery';
+import { useBaseQuery, type BaseQueryOptions } from '@/apis/requests/base/useBaseQuery';
 
 interface QuartzRequest {
     instanceId: string
@@ -22,5 +22,5 @@ export const getInstanceQuartz = async (variables: QuartzRequest): Promise<Quart
 
 export const useGetInstanceQuartz = (options: BaseMutationOptions<QuartzResponse, QuartzRequest>) => useBaseMutation(getInstanceQuartz, options)
 
-export const useGetInstanceQuartzQuery = (variables: QuartzRequest, options: BaseMutationOptions<QuartzResponse, QuartzRequest>) =>
+export const useGetInstanceQuartzQuery = (variables: QuartzRequest, options: BaseQueryOptions<QuartzResponse, QuartzRequest>) =>
     useBaseQuery(apiKeys.itemQuartz(variables.instanceId), getInstanceQuartz, variables, options)

@@ -1,7 +1,7 @@
 import { apiKeys } from '@/apis/apiKeys';
 import { axiosInstance } from "@/apis/axiosInstance";
 import { useBaseMutation, type BaseMutationOptions } from '@/apis/requests/base/useBaseMutation';
-import { useBaseQuery } from '@/apis/requests/base/useBaseQuery';
+import { useBaseQuery, type BaseQueryOptions } from '@/apis/requests/base/useBaseQuery';
 
 interface HttpRequestStatisticsRequest {
     instanceId: string
@@ -17,7 +17,7 @@ export const getInstanceHttpRequestStatistics = async (variables: HttpRequestSta
 export const useGetInstanceHttpRequestStatistics = (options: BaseMutationOptions<void, HttpRequestStatisticsRequest>) =>
     useBaseMutation(getInstanceHttpRequestStatistics, options)
 
-export const useGetInstanceHttpRequestStatisticsQuery = (variables: HttpRequestStatisticsRequest, options: BaseMutationOptions<void, HttpRequestStatisticsRequest>) =>
+export const useGetInstanceHttpRequestStatisticsQuery = (variables: HttpRequestStatisticsRequest, options: BaseQueryOptions<void, HttpRequestStatisticsRequest>) =>
     useBaseQuery(
         apiKeys.itemHttpRequestStatistics(variables.instanceId),
         getInstanceHttpRequestStatistics,

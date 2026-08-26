@@ -1,7 +1,7 @@
 import { apiKeys, type JsonValue } from '@/apis/apiKeys';
 import { axiosInstance } from '@/apis/axiosInstance';
 import { useBaseMutation, type BaseMutationOptions } from '@/apis/requests/base/useBaseMutation';
-import { useBaseQuery } from '@/apis/requests/base/useBaseQuery';
+import { useBaseQuery, type BaseQueryOptions } from '@/apis/requests/base/useBaseQuery';
 
 interface EnvResponse {
     activeProfiles: string[]
@@ -46,5 +46,5 @@ export const getEnv = async (): Promise<EnvResponse> => {
 
 export const useGetEnv = (options: BaseMutationOptions<EnvResponse, void>) => useBaseMutation(getEnv, options)
 
-export const useGetEnvQuery = (variables: void, options: BaseMutationOptions<EnvResponse, void>) =>
+export const useGetEnvQuery = (variables: void, options: BaseQueryOptions<EnvResponse, void>) =>
     useBaseQuery(apiKeys.itemEnv(), getEnv, variables, options)

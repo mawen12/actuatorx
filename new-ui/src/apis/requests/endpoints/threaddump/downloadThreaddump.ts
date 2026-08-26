@@ -1,7 +1,7 @@
 import { axiosInstance } from '@/apis/axiosInstance';
 import { useBaseMutation } from '@/apis/requests/base/useBaseMutation';
 
-export const downloadThreaddump = async (variables) => {
+export const downloadThreaddump = async () => {
     return (await axiosInstance.get(`threaddump/download`, {
         responseType: 'blob',
     })).data

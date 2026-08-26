@@ -1,7 +1,7 @@
 import { apiKeys } from '@/apis/apiKeys';
 import { axiosInstance } from '@/apis/axiosInstance';
 import { useBaseMutation, type BaseMutationOptions } from '@/apis/requests/base/useBaseMutation';
-import { useBaseQuery } from '@/apis/requests/base/useBaseQuery';
+import { useBaseQuery, type BaseQueryOptions } from '@/apis/requests/base/useBaseQuery';
 
 interface LoggerResponse {
     levels: string[]
@@ -38,5 +38,5 @@ export const getLoggers = async (): Promise<LoggerView[]> => {
 
 export const useGetLoggers = (options: BaseMutationOptions<LoggerView[], void>) => useBaseMutation(getLoggers, options)
 
-export const useGetLoggersQuery = (variables: void, options: BaseMutationOptions<LoggerView[], void>) =>
+export const useGetLoggersQuery = (variables: void, options: BaseQueryOptions<LoggerView[], void>) =>
     useBaseQuery(apiKeys.itemLoggers(), getLoggers, variables, options)

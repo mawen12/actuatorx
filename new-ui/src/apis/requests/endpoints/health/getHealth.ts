@@ -1,14 +1,14 @@
 import { apiKeys, type JsonValue } from '@/apis/apiKeys';
 import { axiosInstance } from '@/apis/axiosInstance';
 import { useBaseMutation, type BaseMutationOptions } from '@/apis/requests/base/useBaseMutation';
-import { useBaseQuery } from '@/apis/requests/base/useBaseQuery';
+import { useBaseQuery, type BaseQueryOptions } from '@/apis/requests/base/useBaseQuery';
 
 interface HealthResponse {
     status: string
-    components: Record<string, HealthComponent>
+    components: Record<string, HealthComponentResp>
 }
 
-interface HealthComponent {
+export interface HealthComponentResp {
     status: string
     details: Record<string, JsonValue>
 }
@@ -19,5 +19,5 @@ export const getHealth = async (): Promise<HealthResponse> => {
 
 export const useGetHealth = (options: BaseMutationOptions<HealthResponse, void>) => useBaseMutation(getHealth, options)
 
-export const useGetHealthQuery = (variables: void, options: BaseMutationOptions<HealthResponse, void>) =>
+export const useGetHealthQuery = (variables: void, options: BaseQueryOptions<HealthResponse, void>) =>
     useBaseQuery(apiKeys.itemHealth(), getHealth, variables, options)

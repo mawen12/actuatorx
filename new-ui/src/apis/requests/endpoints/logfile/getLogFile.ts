@@ -1,7 +1,7 @@
 import { apiKeys } from '@/apis/apiKeys';
 import { axiosInstance } from '@/apis/axiosInstance';
 import { useBaseMutation, type BaseMutationOptions } from '@/apis/requests/base/useBaseMutation';
-import { useBaseQuery } from '@/apis/requests/base/useBaseQuery';
+import { useBaseQuery, type BaseQueryOptions } from '@/apis/requests/base/useBaseQuery';
 
 interface LogfileRequest {
     start: number
@@ -22,5 +22,5 @@ export const getLogfile = async (variables: LogfileRequest) => {
 
 export const useGetLogfile = (options: BaseMutationOptions<void, LogfileRequest>) => useBaseMutation(getLogfile, options)
 
-export const useGetLogfileQuery = (variables: LogfileRequest, options: BaseMutationOptions<void, LogfileRequest>) =>
+export const useGetLogfileQuery = (variables: LogfileRequest, options: BaseQueryOptions<void, LogfileRequest>) =>
     useBaseQuery(apiKeys.itemLogfile(), getLogfile, variables, options)

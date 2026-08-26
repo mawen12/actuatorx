@@ -75,5 +75,6 @@ func writeJson(w http.ResponseWriter, r *http.Request, data any) {
 }
 
 func serveError(w http.ResponseWriter, err error) {
+	slog.Info("err happend", "err", err)
 	http.Error(w, err.Error(), http.StatusInternalServerError)
 }

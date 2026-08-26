@@ -1,14 +1,11 @@
-import { apiKeys } from '@/apis/apiKeys';
+import { apiKeys, type JsonValue } from '@/apis/apiKeys';
 import { axiosInstance } from '@/apis/axiosInstance';
 import { useBaseMutation, type BaseMutationOptions } from '@/apis/requests/base/useBaseMutation';
-import { useBaseQuery } from '@/apis/requests/base/useBaseQuery';
+import { useBaseQuery, type BaseQueryOptions } from '@/apis/requests/base/useBaseQuery';
 
 interface TogglzResponse {
     togglz: Togglz[]
 }
-
-type JsonValue = | string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue }
-
 
 interface Togglz {
     name: string
@@ -31,5 +28,5 @@ export const getTogglz = async (): Promise<TogglzResponse> => {
 
 export const useGetTogglz = (options: BaseMutationOptions<TogglzResponse, void>) => useBaseMutation(getTogglz, options)
 
-export const useGetTogglzQuery = (variables: void, options: BaseMutationOptions<TogglzResponse, void>) =>
+export const useGetTogglzQuery = (variables: void, options: BaseQueryOptions<TogglzResponse, void>) =>
     useBaseQuery(apiKeys.itemMetrics(), getTogglz, variables, options)

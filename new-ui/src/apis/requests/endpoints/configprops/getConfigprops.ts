@@ -1,7 +1,7 @@
 import { apiKeys, type JsonValue } from '@/apis/apiKeys';
 import { axiosInstance } from '@/apis/axiosInstance';
 import { useBaseMutation, type BaseMutationOptions } from '@/apis/requests/base/useBaseMutation';
-import { useBaseQuery } from '@/apis/requests/base/useBaseQuery';
+import { useBaseQuery, type BaseQueryOptions } from '@/apis/requests/base/useBaseQuery';
 
 interface ConfigpropsResponse {
     contexts: Record<string, ConfigpropsContext>
@@ -48,5 +48,5 @@ export const getConfigprops = async (): Promise<ConfigpropsContextGroup[]> => {
 
 export const useGetConfigprops = (options: BaseMutationOptions<ConfigpropsContextGroup[], void>) => useBaseMutation(getConfigprops, options)
 
-export const useGetConfigpropsQuery = (variables: void, options: BaseMutationOptions<ConfigpropsContextGroup[], void>) =>
+export const useGetConfigpropsQuery = (variables: void, options: BaseQueryOptions<ConfigpropsContextGroup[], void>) =>
     useBaseQuery(apiKeys.itemConfigProps(), getConfigprops, variables, options)

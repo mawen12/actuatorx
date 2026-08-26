@@ -1,7 +1,7 @@
 import { apiKeys } from '@/apis/apiKeys'
 import { axiosInstance } from '@/apis/axiosInstance'
 import { useBaseMutation, type BaseMutationOptions } from '@/apis/requests/base/useBaseMutation'
-import { useBaseQuery } from '@/apis/requests/base/useBaseQuery'
+import { useBaseQuery, type BaseQueryOptions } from '@/apis/requests/base/useBaseQuery'
 import { v4 as uuidv4 } from 'uuid'
 
 interface ScheduledTaskResponse {
@@ -77,7 +77,7 @@ export const getScheduledTasks = async (): Promise<ScheduledTaskView[]> => {
 export const useGetScheduldTasks = (options: BaseMutationOptions<ScheduledTaskView[], void>) =>
     useBaseMutation(getScheduledTasks, options)
 
-export const useGetScheduldTasksQuery = (variables: void, options: BaseMutationOptions<ScheduledTaskView[], void>) =>
+export const useGetScheduldTasksQuery = (variables: void, options: BaseQueryOptions<ScheduledTaskView[], void>) =>
     useBaseQuery(
         apiKeys.itemScheduledTasks(),
         getScheduledTasks,

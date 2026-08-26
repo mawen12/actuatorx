@@ -1,7 +1,7 @@
 import { apiKeys } from '@/apis/apiKeys';
 import { axiosInstance } from '@/apis/axiosInstance';
 import { useBaseMutation, type BaseMutationOptions } from '@/apis/requests/base/useBaseMutation';
-import { useBaseQuery } from '@/apis/requests/base/useBaseQuery';
+import { useBaseQuery, type BaseQueryOptions } from '@/apis/requests/base/useBaseQuery';
 
 interface CacheResponse {
     cacheManagers: Record<string, CacheManager>
@@ -36,5 +36,5 @@ export const getCaches = async (): Promise<CacheView[]> => {
 
 export const useGetCaches = (options: BaseMutationOptions<CacheView[], void>) => useBaseMutation(getCaches, options)
 
-export const useGetCachesQuery = (variables: void, options: BaseMutationOptions<CacheView[], void>) =>
+export const useGetCachesQuery = (variables: void, options: BaseQueryOptions<CacheView[], void>) =>
     useBaseQuery(apiKeys.itemCaches(), getCaches, variables, options)

@@ -1,7 +1,7 @@
 import { apiKeys, type JsonValue } from '@/apis/apiKeys';
 import { axiosInstance } from '@/apis/axiosInstance';
 import { useBaseMutation, type BaseMutationOptions } from '@/apis/requests/base/useBaseMutation';
-import { useBaseQuery } from '@/apis/requests/base/useBaseQuery';
+import { useBaseQuery, type BaseQueryOptions } from '@/apis/requests/base/useBaseQuery';
 
 interface MetricDetailRequest {
     name: string
@@ -32,7 +32,7 @@ export const getMetricDetails = async (variables: MetricDetailRequest) => {
 
 export const useGetDetails = (options: BaseMutationOptions<MetricDetailResponse, MetricDetailRequest>) => useBaseMutation(getMetricDetails, options)
 
-export const useGetMetricDetailsQuery = (variables: MetricDetailRequest, options: BaseMutationOptions<MetricDetailResponse, MetricDetailRequest>) =>
+export const useGetMetricDetailsQuery = (variables: MetricDetailRequest, options: BaseQueryOptions<MetricDetailResponse, MetricDetailRequest>) =>
     useBaseQuery(
         apiKeys.itemMetricDetails(variables.name, variables.tags),
         getMetricDetails,

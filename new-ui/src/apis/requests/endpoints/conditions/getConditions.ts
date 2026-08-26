@@ -1,7 +1,7 @@
 import { apiKeys } from '@/apis/apiKeys';
 import { axiosInstance } from '@/apis/axiosInstance';
 import { useBaseMutation, type BaseMutationOptions } from '@/apis/requests/base/useBaseMutation';
-import { useBaseQuery } from '@/apis/requests/base/useBaseQuery';
+import { useBaseQuery, type BaseQueryOptions } from '@/apis/requests/base/useBaseQuery';
 
 interface ConditionResponse {
     contexts: Record<string, ConditionContext>
@@ -66,5 +66,5 @@ export const getConditions = async (): Promise<ConditionContextGroup[]> => {
 
 export const useGetConditions = (options: BaseMutationOptions<ConditionContextGroup[], void>) => useBaseMutation(getConditions, options)
 
-export const useGetConditionsQuery = (variables: void, options: BaseMutationOptions<ConditionContextGroup[], void>) =>
+export const useGetConditionsQuery = (variables: void, options: BaseQueryOptions<ConditionContextGroup[], void>) =>
     useBaseQuery(apiKeys.itemConditions(), getConditions, variables, options)

@@ -1,7 +1,7 @@
 import { apiKeys } from '@/apis/apiKeys';
 import { axiosInstance } from '@/apis/axiosInstance';
 import { useBaseMutation, type BaseMutationOptions } from '@/apis/requests/base/useBaseMutation';
-import { useBaseQuery } from '@/apis/requests/base/useBaseQuery';
+import { useBaseQuery, type BaseQueryOptions } from '@/apis/requests/base/useBaseQuery';
 import { DateTime, Duration } from 'luxon';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -48,5 +48,5 @@ export const getHttpExchanges = async (): Promise<HttpExchangeView[]> => {
 
 export const useGetHttpExchanges = (options: BaseMutationOptions<HttpExchangeView[], void>) => useBaseMutation(getHttpExchanges, options)
 
-export const useGetHttpExchangesQuery = (variables: void, options: BaseMutationOptions<HttpExchangeView[], void>) =>
+export const useGetHttpExchangesQuery = (variables: void, options: BaseQueryOptions<HttpExchangeView[], void>) =>
     useBaseQuery(apiKeys.itemHttpExchanges(), getHttpExchanges, variables, options)

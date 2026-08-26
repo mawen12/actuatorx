@@ -19,6 +19,7 @@ const backendUrl = getBackendUrl()
 
 const axiosInstance = axios.create({
     baseURL: backendUrl,
+    withCredentials: true,
 })
 
 // TODO use react router replace 

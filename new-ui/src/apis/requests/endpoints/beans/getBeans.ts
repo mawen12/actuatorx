@@ -1,7 +1,7 @@
 import { apiKeys } from '@/apis/apiKeys';
 import { axiosInstance } from '@/apis/axiosInstance';
 import { useBaseMutation, type BaseMutationOptions } from '@/apis/requests/base/useBaseMutation';
-import { useBaseQuery } from '@/apis/requests/base/useBaseQuery';
+import { useBaseQuery, type BaseQueryOptions } from '@/apis/requests/base/useBaseQuery';
 
 interface BeanResponse {
     contexts: Record<string, BeansContext>
@@ -54,5 +54,5 @@ export const getBeans = async (): Promise<BeanContextGroup[]> => {
 
 export const useGetBeans = (options: BaseMutationOptions<BeanContextGroup[], void>) => useBaseMutation(getBeans, options)
 
-export const useGetBeansQuery = (variables: void, options: BaseMutationOptions<BeanContextGroup[], void>) =>
+export const useGetBeansQuery = (variables: void, options: BaseQueryOptions<BeanContextGroup[], void>) =>
     useBaseQuery(apiKeys.itemBeans(), getBeans, variables, options)

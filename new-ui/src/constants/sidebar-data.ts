@@ -1,20 +1,20 @@
 import type { NavGroup } from "@/components/layout/types";
-import { ClipboardList, Construction, FileX, LayoutDashboard, Lock, Palette, ServerOff, Settings, ShieldLock, ShieldX, UserCog, UserRoundX } from "lucide-react";
+import { ChartLine, Construction, FileX, HeartPulse, Lock, Palette, ServerOff, Settings, ShieldLock, ShieldX, UserCog, UserRoundX } from "lucide-react";
 
 export const navGroups: NavGroup[] = [
   {
     title: 'General',
     items: [
       {
-        title: 'Home',
-        url: '/',
-        icon: LayoutDashboard,
+        title: 'Health',
+        url: '/health',
+        icon: HeartPulse,
       },
       {
-        title: 'Tasks',
-        url: '/tasks',
-        icon: ClipboardList,
-      },
+        title: 'Metrics',
+        url: '/metrics',
+        icon: ChartLine,
+      }
     ],
   },
   {

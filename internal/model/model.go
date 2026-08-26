@@ -252,7 +252,7 @@ type (
 		DispatcherServlets struct {
 			DispatcherServlet []DispatcherServlet `json:"dispatcherServlet"`
 		} `json:"dispatcherServlets"`
-		// DispatcherHandlers []DispatcherServlet `json:"dispatcherHandlers"`
+		// DispatcherHandlers []DispatcheMpapirServlet `json:"dispatcherHandlers"`
 		Servlets       []Servlet       `json:"servlets"`
 		ServletFilters []ServletFilter `json:"servletFilters"`
 	}

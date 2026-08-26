@@ -9,7 +9,7 @@ export type BaseQueryOptions<Data, Variables> = Omit<UseQueryOptions<Data, unkno
 
 export type BaseUseQueryResult<Data> = UseQueryResult<NoInfer<Data>, unknown>
 
-export const useBaseQuery = <Data, Variables>(queryKey: QueryKey, queryFn: (variables: Variables) => Promise<Data>, variables: Variables, options?: BaseQueryOptions<Data, Variables>): BaseUseQueryResult<Data> => {
+export const useBaseQuery = <Data, Variables>(queryKey: QueryKey, queryFn: (variables: Variables) => Promise<Data>, variables: Variables, options?: BaseQueryOptions<Data, Variables>):BaseUseQueryResult<Data> => {
     const queryFnInterval = useMemo(() => () => queryFn(variables), [queryFn, variables])
 
     return useQuery({

@@ -1,7 +1,7 @@
 import { apiKeys } from '@/apis/apiKeys';
 import { axiosInstance } from '@/apis/axiosInstance';
 import { useBaseMutation, type BaseMutationOptions } from '@/apis/requests/base/useBaseMutation';
-import { useBaseQuery } from '@/apis/requests/base/useBaseQuery';
+import { useBaseQuery, type BaseQueryOptions } from '@/apis/requests/base/useBaseQuery';
 
 interface MetricResponse {
     names: string[]
@@ -23,5 +23,5 @@ export const getMetrics = async (): Promise<MetricView[]> => {
 
 export const useGetMetrics = (options: BaseMutationOptions<MetricView[], void>) => useBaseMutation(getMetrics, options)
 
-export const useGetMetricsQuery = (variables: void, options: BaseMutationOptions<MetricView[], void>) =>
+export const useGetMetricsQuery = (variables: void, options: BaseQueryOptions<MetricView[], void>) =>
     useBaseQuery(apiKeys.itemMetrics(), getMetrics, variables, options)

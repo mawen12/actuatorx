@@ -1,7 +1,7 @@
 import { apiKeys } from '@/apis/apiKeys'
 import { axiosInstance } from '@/apis/axiosInstance'
 import { useBaseMutation, type BaseMutationOptions } from '@/apis/requests/base/useBaseMutation'
-import { useBaseQuery } from '@/apis/requests/base/useBaseQuery'
+import { useBaseQuery, type BaseQueryOptions } from '@/apis/requests/base/useBaseQuery'
 import { v4 as uuidv4 } from 'uuid'
 
 interface MappingResponse {
@@ -154,5 +154,5 @@ function servletsToArray(servlets: Servlet[]) {
 
 export const useGetMappings = (options: BaseMutationOptions<MappingGroup[], void>) => useBaseMutation(getMappings, options)
 
-export const useGetMappingsQuery = (variables: void, options: BaseMutationOptions<MappingGroup[], void>) =>
+export const useGetMappingsQuery = (variables: void, options: BaseQueryOptions<MappingGroup[], void>) =>
     useBaseQuery(apiKeys.itemMappings(), getMappings, variables, options)
