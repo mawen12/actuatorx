@@ -50,7 +50,7 @@ export function DataTable<DataType extends RowData>({ renderExpandedRow }: DataT
     return (
         <div
             className={cn(
-                'max-sm:has-[div[role="toolbar"]]:mb-16', // Add margin bottom to the table on mobile when the toolbar is visible
+                'max-sm:has-[div[role="toolbar"]]:mb-16',
                 'flex min-h-0 flex-1 flex-col gap-4',
             )}
         >
@@ -71,7 +71,7 @@ export function DataTable<DataType extends RowData>({ renderExpandedRow }: DataT
                                             colSpan={header.colSpan}
                                             className={cn(
                                                 header.column.columnDef.meta?.className,
-                                                header.column.columnDef.meta?.thClassName
+                                                header.column.columnDef.meta?.thClassName,
                                             )}
                                         >
                                             {header.isPlaceholder

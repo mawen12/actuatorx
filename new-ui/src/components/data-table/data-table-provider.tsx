@@ -6,7 +6,7 @@ import { createContext, useContext, useMemo, useState, type Dispatch, type SetSt
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
 import { DataTableColumnHeader } from "./column-header";
-import type { DataTableEntity } from "./entity";
+import type { DataTableColumn, DataTableEntity } from "./entity";
 import { RowActions } from "./row-actions";
 
 type DataTableDialogType = 'create' | 'update' | 'delete' | 'import'
@@ -49,11 +49,11 @@ export function DataTableProvider({ children, entity, data, isLoading, refetchHa
 
         return entity.columns.map((col) => {
             if (col.key === 'data-table-expand') {
-                return DataTableExpand(columnHelper)
+                return DataTableExpand(columnHelper, col)
             } else if (col.key === 'data-table-select') {
-                return DataTableSelect(columnHelper)
+                return DataTableSelect(columnHelper, col)
             } else if (col.key === 'data-table-row-actions') {
-                return DataTableRowActions(columnHelper)
+                return DataTableRowActions(columnHelper, col)
             } else {
                 return columnHelper.accessor(col.key, {
                     header: ({ column }) => (
@@ -62,6 +62,7 @@ export function DataTableProvider({ children, entity, data, isLoading, refetchHa
                     cell: ({ row }) => <div className='w-5'>{row.getValue(`${col.key}`)}</div>,
                     enableSorting: col.sortable,
                     enableHiding: col.hideable,
+                    meta: col.meta,
                 })
             }
         })
@@ -84,23 +85,30 @@ export const useDataTable = () => {
     return taskContext
 }
 
-function DataTableExpand(columnHelper: ColumnHelper<TableFeatures, RowData>) {
+function DataTableExpand(columnHelper: ColumnHelper<TableFeatures, RowData>, col: DataTableColumn) {
     return columnHelper.display({
         id: 'expand',
         header: ({ table }) => (
-            <Button size='icon' variant='ghost' title={'Collapse All'} disabled={!table.getIsSomeRowsExpanded()} onClick={() => table.toggleAllRowsExpanded(false)}>
+            <Button 
+                size='icon' 
+                variant='ghost' 
+                title={'Collapse All'} 
+                disabled={!table.getIsSomeRowsExpanded()} 
+                onClick={() => table.toggleAllRowsExpanded(false)}
+            >
                 <ListChevronsUpDown />
-            </Button>
+            </Button> 
         ),
         cell: ({ row }) => (
             <Button size='icon' variant='ghost' disabled={!row.getCanExpand()} onClick={() => row.toggleExpanded()}>
                 <ChevronRight className={cn(row.getIsExpanded() && 'rotate-90')} />
             </Button>
         ),
+        meta: col.meta
     })
 }
 
-function DataTableSelect(columnHelper: ColumnHelper<TableFeatures, RowData>) {
+function DataTableSelect(columnHelper: ColumnHelper<TableFeatures, RowData>, col: DataTableColumn) {
     return columnHelper.display({
         id: 'select',
         header: ({ table }) => (
@@ -119,11 +127,12 @@ function DataTableSelect(columnHelper: ColumnHelper<TableFeatures, RowData>) {
                 aria-label='Select row'
                 className='translate-y-0.5'
             />
-        )
+        ),
+        meta: col.meta
     })
 }
 
-function DataTableRowActions(columnHelper: ColumnHelper<TableFeatures, RowData>) {
+function DataTableRowActions(columnHelper: ColumnHelper<TableFeatures, RowData>, col: DataTableColumn) {
     return columnHelper.display({
         id: 'actions',
         header: ({ column }) => (
@@ -132,5 +141,6 @@ function DataTableRowActions(columnHelper: ColumnHelper<TableFeatures, RowData>)
         cell: ({ row }) => (
             <RowActions row={row}/>
         ),
+        meta: col.meta
     })
 }

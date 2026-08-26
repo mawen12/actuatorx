@@ -7,7 +7,7 @@ interface MetricResponse {
     names: string[]
 }
 
-interface MetricView {
+export interface MetricView {
     name: string
     search: string
 }

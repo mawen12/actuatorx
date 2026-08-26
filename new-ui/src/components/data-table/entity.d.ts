@@ -1,6 +1,6 @@
 import type { JSX } from "react";
 
-interface DataTableEntity<DataType> {
+export interface DataTableEntity<DataType> {
     id: string
     showToolbar: boolean
     columns: DataTableColumn<DataType>[]
@@ -8,16 +8,17 @@ interface DataTableEntity<DataType> {
     globalActions: DataTableAction[]
 }
 
-interface DataTableColumn {
+export interface DataTableColumn {
     key: string
     title?: string
     sortable?: boolean
     hideable?: boolean
     actions?: DataTableAction[]
     component?: JSX.Element
+    meta?: any
 }
 
-interface DataTableAction {
+export interface DataTableAction {
     id: string
     label: string
     icon: string

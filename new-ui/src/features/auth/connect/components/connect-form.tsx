@@ -63,7 +63,9 @@ export function ConnectForm({ className, redirectTo, ...props }: UserAuthFormPro
 
                 return `Connect success`
             },
-            error: 'Error'
+            error: (e) => {
+                return e
+            }
         })
     }
 

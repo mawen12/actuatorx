@@ -20,7 +20,7 @@ confirm:
 ## run: run the cmd application
 .PHONY: run
 run:
-	go run ./cmd/web --debug --handler-debug --pprof --port 5000
+	go run ./cmd/web --debug --handler-debug --pprof --port 9000
 
 .PHONY: clean
 clean:
