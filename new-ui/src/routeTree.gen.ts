@@ -17,6 +17,8 @@ import { Route as authSignInRouteImport } from './routes/(auth)/sign-in'
 import { Route as authSignUpRouteImport } from './routes/(auth)/sign-up'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedSettingsRouteRouteImport } from './routes/_authenticated/settings/route'
+import { Route as AuthenticatedBeansIndexRouteImport } from './routes/_authenticated/beans/index'
+import { Route as AuthenticatedEnvIndexRouteImport } from './routes/_authenticated/env/index'
 import { Route as AuthenticatedErrorsErrorRouteImport } from './routes/_authenticated/errors/$error'
 import { Route as AuthenticatedHealthIndexRouteImport } from './routes/_authenticated/health/index'
 import { Route as AuthenticatedMetricsIndexRouteImport } from './routes/_authenticated/metrics/index'
@@ -64,6 +66,16 @@ const AuthenticatedSettingsRouteRoute =
     path: '/settings',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedBeansIndexRoute = AuthenticatedBeansIndexRouteImport.update({
+  id: '/beans/',
+  path: '/beans/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedEnvIndexRoute = AuthenticatedEnvIndexRouteImport.update({
+  id: '/env/',
+  path: '/env/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedErrorsErrorRoute =
   AuthenticatedErrorsErrorRouteImport.update({
     id: '/errors/$error',
@@ -110,6 +122,8 @@ export interface FileRoutesByFullPath {
   '/sign-up': typeof authSignUpRoute
   '/errors/$error': typeof AuthenticatedErrorsErrorRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
+  '/beans/': typeof AuthenticatedBeansIndexRoute
+  '/env/': typeof AuthenticatedEnvIndexRoute
   '/health/': typeof AuthenticatedHealthIndexRoute
   '/metrics/': typeof AuthenticatedMetricsIndexRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
@@ -124,6 +138,8 @@ export interface FileRoutesByTo {
   '/': typeof AuthenticatedIndexRoute
   '/errors/$error': typeof AuthenticatedErrorsErrorRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
+  '/beans': typeof AuthenticatedBeansIndexRoute
+  '/env': typeof AuthenticatedEnvIndexRoute
   '/health': typeof AuthenticatedHealthIndexRoute
   '/metrics': typeof AuthenticatedMetricsIndexRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
@@ -141,6 +157,8 @@ export interface FileRoutesById {
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/errors/$error': typeof AuthenticatedErrorsErrorRoute
   '/_authenticated/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
+  '/_authenticated/beans/': typeof AuthenticatedBeansIndexRoute
+  '/_authenticated/env/': typeof AuthenticatedEnvIndexRoute
   '/_authenticated/health/': typeof AuthenticatedHealthIndexRoute
   '/_authenticated/metrics/': typeof AuthenticatedMetricsIndexRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
@@ -158,6 +176,8 @@ export interface FileRouteTypes {
     | '/sign-up'
     | '/errors/$error'
     | '/settings/appearance'
+    | '/beans/'
+    | '/env/'
     | '/health/'
     | '/metrics/'
     | '/settings/'
@@ -172,6 +192,8 @@ export interface FileRouteTypes {
     | '/'
     | '/errors/$error'
     | '/settings/appearance'
+    | '/beans'
+    | '/env'
     | '/health'
     | '/metrics'
     | '/settings'
@@ -188,6 +210,8 @@ export interface FileRouteTypes {
     | '/_authenticated/'
     | '/_authenticated/errors/$error'
     | '/_authenticated/settings/appearance'
+    | '/_authenticated/beans/'
+    | '/_authenticated/env/'
     | '/_authenticated/health/'
     | '/_authenticated/metrics/'
     | '/_authenticated/settings/'
@@ -261,6 +285,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/beans/': {
+      id: '/_authenticated/beans/'
+      path: '/beans'
+      fullPath: '/beans/'
+      preLoaderRoute: typeof AuthenticatedBeansIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/env/': {
+      id: '/_authenticated/env/'
+      path: '/env'
+      fullPath: '/env/'
+      preLoaderRoute: typeof AuthenticatedEnvIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/errors/$error': {
       id: '/_authenticated/errors/$error'
       path: '/errors/$error'
@@ -326,6 +364,8 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedErrorsErrorRoute: typeof AuthenticatedErrorsErrorRoute
+  AuthenticatedBeansIndexRoute: typeof AuthenticatedBeansIndexRoute
+  AuthenticatedEnvIndexRoute: typeof AuthenticatedEnvIndexRoute
   AuthenticatedHealthIndexRoute: typeof AuthenticatedHealthIndexRoute
   AuthenticatedMetricsIndexRoute: typeof AuthenticatedMetricsIndexRoute
   AuthenticatedTasksIndexRoute: typeof AuthenticatedTasksIndexRoute
@@ -335,6 +375,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedErrorsErrorRoute: AuthenticatedErrorsErrorRoute,
+  AuthenticatedBeansIndexRoute: AuthenticatedBeansIndexRoute,
+  AuthenticatedEnvIndexRoute: AuthenticatedEnvIndexRoute,
   AuthenticatedHealthIndexRoute: AuthenticatedHealthIndexRoute,
   AuthenticatedMetricsIndexRoute: AuthenticatedMetricsIndexRoute,
   AuthenticatedTasksIndexRoute: AuthenticatedTasksIndexRoute,

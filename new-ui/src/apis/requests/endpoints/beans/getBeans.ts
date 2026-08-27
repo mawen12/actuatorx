@@ -20,14 +20,14 @@ interface Bean {
     dependencies: string[]
 }
 
-interface BeanView extends Bean {
+export interface BeanView extends Bean {
     name: string
     shortName: string
     package: string
     search: string
 }
 
-interface BeanContextGroup {
+export interface BeanContextGroup {
     name: string
     value: BeanView[]
 }
@@ -54,5 +54,5 @@ export const getBeans = async (): Promise<BeanContextGroup[]> => {
 
 export const useGetBeans = (options: BaseMutationOptions<BeanContextGroup[], void>) => useBaseMutation(getBeans, options)
 
-export const useGetBeansQuery = (variables: void, options: BaseQueryOptions<BeanContextGroup[], void>) =>
+export const useGetBeansQuery = (variables?: void, options?: BaseQueryOptions<BeanContextGroup[], void>) =>
     useBaseQuery(apiKeys.itemBeans(), getBeans, variables, options)

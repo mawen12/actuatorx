@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/jtacoma/uritemplates"
 	"github.com/mawen12/actuatorx/internal/model"
@@ -107,7 +106,6 @@ func (c *Client) getAbilityWithParam(ability string, param map[string]interface{
 }
 
 func (c *Client) Health(ctx context.Context, opts ...RequestOption) (*model.HealthResp, error) {
-	time.Sleep(time.Second * 3)
 	urlStr, err := c.getAbility("health")
 	if err != nil {
 		return nil, err

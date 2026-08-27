@@ -1,4 +1,5 @@
 import { useGetMetricsQuery } from "@/apis/requests/endpoints/metrics/getMetrics";
+import type { MetricView } from "@/apis/requests/endpoints/metrics/getMetrics";
 import { DataTable } from "@/components/data-table/data-table";
 import { DataTableProvider } from "@/components/data-table/data-table-provider";
 import { MetricsTableEntity } from "@/entities/metrics-table.entity";
@@ -14,7 +15,7 @@ export function MetricsTable() {
             data-layout='fixed'
         >
             <DataTableProvider entity={MetricsTableEntity} data={data ?? []} isLoading={isLoading} refetchHandler={() => refetch()}>
-                <DataTable renderExpandedRow={MetricDetail}></DataTable>
+                <DataTable<MetricView> renderExpandedRow={(row) => <MetricDetail row={row} />}></DataTable>
             </DataTableProvider>
         </div>
     )

@@ -1,50 +1,68 @@
-import { apiKeys, type JsonValue } from '@/apis/apiKeys';
+import { apiKeys, type BasicValue } from '@/apis/apiKeys';
 import { axiosInstance } from '@/apis/axiosInstance';
 import { useBaseMutation, type BaseMutationOptions } from '@/apis/requests/base/useBaseMutation';
 import { useBaseQuery, type BaseQueryOptions } from '@/apis/requests/base/useBaseQuery';
 
-interface EnvResponse {
+export interface EnvResponse {
     activeProfiles: string[]
-    propertySources: EnvPropertySource[]
+    propertySources: {
+        name: string
+        properties: Record<string, EnvProperty>
+    }[]
 }
 
-interface EnvPropertySource {
-    name: string
-    properties: Record<string, EnvProperty> | EnvPropertyView[]
+export interface EnvProperty {
+    value: BasicValue
 }
 
-interface EnvProperty {
-    value: JsonValue
-}
-
-interface EnvPropertyView extends EnvProperty {
+export interface EnvPropertyView extends EnvProperty {
     name: string
     search: string
 }
 
-export const getEnv = async (): Promise<EnvResponse> => {
+export interface EnvPropertySourceView {
+    name: string
+    properties: EnvPropertyView[]
+}
+
+export const getEnv = async (): Promise<EnvPropertySourceView[]> => {
     const data = (await axiosInstance.get<EnvResponse>(`env`)).data
 
-    for (const propertySource of data.propertySources) {
-        if (Object.keys(propertySource.properties).length > 0) {
-            const str = propertySource.name
-            const match = str.match(/\[([^\]]+\.properties)\]/)
-            propertySource.name = match ? match[1] : propertySource.name
+    return data.propertySources?.map(propertySource => {
+        const str = propertySource.name
+        const match = str.match(/\[([^\]]+\.properties)\]/)
+        const name = match ? match[1] : propertySource.name
 
-            propertySource.properties = Object.entries(propertySource.properties).map(([key, obj]) => ({
+        return {
+            name: name,
+            properties: Object.entries(propertySource.properties).map(([key, obj]) => ({
                 name: key,
                 search: key.toLowerCase(),
                 value: obj.value,
             }))
-        } else {
-            propertySource.properties = []
         }
-    }
+    })
 
-    return data
+    // for (const propertySource of data.propertySources) {
+    //     if (Object.keys(propertySource.properties).length > 0) {
+    //         const str = propertySource.name
+    //         const match = str.match(/\[([^\]]+\.properties)\]/)
+    //         propertySource.name = match ? match[1] : propertySource.name
+
+    //         propertySource.properties = Object.entries(propertySource.properties).map(([key, obj]) => ({
+    //             name: key,
+    //             search: key.toLowerCase(),
+    //             value: obj.value,
+    //         }))
+    //     } else {
+    //         propertySource.properties = []
+    //     }
+    // }
+
+    // return data
 }
 
-export const useGetEnv = (options: BaseMutationOptions<EnvResponse, void>) => useBaseMutation(getEnv, options)
+export const useGetEnv = (options: BaseMutationOptions<EnvPropertySourceView[], void>) => useBaseMutation(getEnv, options)
 
-export const useGetEnvQuery = (variables: void, options: BaseQueryOptions<EnvResponse, void>) =>
+export const useGetEnvQuery = (variables?: void, options?: BaseQueryOptions<EnvPropertySourceView[], void>) =>
     useBaseQuery(apiKeys.itemEnv(), getEnv, variables, options)

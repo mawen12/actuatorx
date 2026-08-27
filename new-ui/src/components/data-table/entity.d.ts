@@ -21,5 +21,11 @@ export interface DataTableColumn {
 export interface DataTableAction {
     id: string
     label: string
-    icon: string
+    icon: React.ElementType
 }
+
+export type RowActionsHandler = (row: DataType, actionId: string) => void
+
+export type MassActionsHandler = (someSelected: DataType[], actionId: string) => void
+
+export type GlobalActionsHandler = (actionId: string) => void

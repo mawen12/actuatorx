@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 export function useCopyToClipboard() {
     const { showInfoMessage } = useSnack();
 
-    return async(text: string, msgInfo: string | ReactNode) => {
+    return async(text: string, msgInfo?: string | ReactNode) => {
         if (!navigator?.clipboard) {
             try {
                 const textarea = document.createElement('textarea');

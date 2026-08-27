@@ -1,5 +1,5 @@
 import type { NavGroup } from "@/components/layout/types";
-import { ChartLine, Construction, FileX, HeartPulse, Lock, Palette, ServerOff, Settings, ShieldLock, ShieldX, UserCog, UserRoundX } from "lucide-react";
+import { Bean, ChartLine, Construction, Container, FileX, HeartPulse, Lock, Palette, ServerOff, Settings, ShieldLock, ShieldX, UserCog, UserRoundX } from "lucide-react";
 
 export const navGroups: NavGroup[] = [
   {
@@ -14,7 +14,17 @@ export const navGroups: NavGroup[] = [
         title: 'Metrics',
         url: '/metrics',
         icon: ChartLine,
-      }
+      },
+      {
+        title: 'Env',
+        url: '/env',
+        icon: Container,
+      },
+      {
+        title: 'Beans',
+        url: '/beans',
+        icon: Bean,
+      },
     ],
   },
   {

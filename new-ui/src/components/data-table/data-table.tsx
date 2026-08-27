@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { columnFacetingFeature, columnFilteringFeature, columnVisibilityFeature, createFilteredRowModel, createPaginatedRowModel, createSortedRowModel, filterFn_includesString, flexRender, rowExpandingFeature, rowPaginationFeature, rowSelectionFeature, rowSortingFeature, sortFn_alphanumeric, tableFeatures, useTable, type ColumnDef, type Row, type RowData, type TableFeatures } from "@tanstack/react-table";
+import { columnFacetingFeature, columnFilteringFeature, columnVisibilityFeature, createFilteredRowModel, createPaginatedRowModel, createSortedRowModel, filterFn_includesString, flexRender, rowExpandingFeature, rowPaginationFeature, rowSelectionFeature, rowSortingFeature, sortFn_alphanumeric, sortFn_text, tableFeatures, useTable, type ColumnDef, type Row, type RowData, type TableFeatures } from "@tanstack/react-table";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { DataTableBulkActions } from "./bulk-actions";
 import { DataTablePagination } from "./pagination";
@@ -7,6 +7,21 @@ import { DataTableToolbar } from "./toolbar";
 import type React from "react";
 import { Fragment } from "react";
 import { useDataTable } from "./data-table-provider";
+
+const features = tableFeatures({
+    columnFilteringFeature,
+    columnVisibilityFeature,
+    rowPaginationFeature,
+    rowSelectionFeature,
+    rowSortingFeature,
+    columnFacetingFeature,
+    rowExpandingFeature,
+    filteredRowModel: createFilteredRowModel(),
+    paginatedRowModel: createPaginatedRowModel(),
+    sortedRowModel: createSortedRowModel(),
+    filterFns: { includesString: filterFn_includesString },
+    sortFns: { alphanumeric: sortFn_alphanumeric, text: sortFn_text },
+})
 
 export interface DataTableProps<DataType extends RowData> {
     fixed?: boolean
@@ -16,7 +31,7 @@ export interface DataTableProps<DataType extends RowData> {
 }
 
 export function DataTable<DataType extends RowData>({ renderExpandedRow }: DataTableProps<DataType>) {
-    const {data, columns} = useDataTable()
+    const { data, columns, entity } = useDataTable()
 
     // const [rowSelection, setRowSelection] = useState({})
     // const [sorting, setSorting] = useState<SortingState>([])
@@ -24,21 +39,6 @@ export function DataTable<DataType extends RowData>({ renderExpandedRow }: DataT
     // const [globalFilter, setGlobalFilter] = useState('')
     // const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>()
     // const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 })
-
-    const features = tableFeatures({
-        columnFilteringFeature,
-        columnFacetingFeature,
-        columnVisibilityFeature,
-        rowSortingFeature,
-        rowPaginationFeature,
-        rowSelectionFeature,
-        rowExpandingFeature,
-        filteredRowModel: createFilteredRowModel(),
-        sortedRowModel: createSortedRowModel(),
-        paginatedRowModel: createPaginatedRowModel(),
-        filterFns: { includesString: filterFn_includesString },
-        sortFns: { alphanumeric: sortFn_alphanumeric },
-    })
 
     const table = useTable({
         features,
@@ -54,11 +54,14 @@ export function DataTable<DataType extends RowData>({ renderExpandedRow }: DataT
                 'flex min-h-0 flex-1 flex-col gap-4',
             )}
         >
-            <DataTableToolbar
-                table={table}
-                searchPlaceholder='Filter by title or ID...'
-                filters={[]}
-            />
+            {entity.showToolbar && (
+                <DataTableToolbar
+                    table={table}
+                    searchPlaceholder='Filter by title or ID...'
+                    filters={[]}
+                />
+            )}
+
             <div className='flex h-full min-h-0 flex-1 overflow-hidden rounded-md border'>
                 <Table className='min-h-0 flex-1'>
                     <TableHeader className="top-0 sticky bg-muted z-10">
@@ -76,10 +79,8 @@ export function DataTable<DataType extends RowData>({ renderExpandedRow }: DataT
                                         >
                                             {header.isPlaceholder
                                                 ? null
-                                                : flexRender(
-                                                    header.column.columnDef.header,
-                                                    header.getContext()
-                                                )}
+                                                : (<table.FlexRender header={header}/>) 
+                                            }
                                         </TableHead>
                                     )
                                 })}
@@ -94,7 +95,7 @@ export function DataTable<DataType extends RowData>({ renderExpandedRow }: DataT
                                         key={row.id}
                                         data-state={row.getIsSelected() && 'selected'}
                                     >
-                                        {row.getVisibleCells && row.getVisibleCells().map((cell) => (
+                                        {row.getVisibleCells().map((cell) => (
                                             <TableCell
                                                 key={cell.id}
                                                 className={cn(
@@ -102,10 +103,7 @@ export function DataTable<DataType extends RowData>({ renderExpandedRow }: DataT
                                                     cell.column.columnDef.meta?.tdClassName
                                                 )}
                                             >
-                                                {flexRender(
-                                                    cell.column.columnDef.cell,
-                                                    cell.getContext()
-                                                )}
+                                                <table.FlexRender cell={cell}/>
                                             </TableCell>
                                         ))}
                                     </TableRow>

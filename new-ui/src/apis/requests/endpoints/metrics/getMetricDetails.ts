@@ -3,36 +3,36 @@ import { axiosInstance } from '@/apis/axiosInstance';
 import { useBaseMutation, type BaseMutationOptions } from '@/apis/requests/base/useBaseMutation';
 import { useBaseQuery, type BaseQueryOptions } from '@/apis/requests/base/useBaseQuery';
 
-interface MetricDetailRequest {
+export interface MetricDetailRequest {
     name: string
-    tags: string[]
+    tags: Record<string, string>
 }
 
-interface MetricDetailResponse {
+export interface MetricDetailResponse {
     name: string
     description: string
     baseUnit: string
     measurements: MetricMeasurement[]
-    availableTags:   MetricAvailableTag[]
+    availableTags: MetricAvailableTag[]
 }
 
-interface MetricMeasurement {
+export interface MetricMeasurement {
     statistic: string
     value: JsonValue
 }
 
-interface MetricAvailableTag {
+export interface MetricAvailableTag {
     tag: string
     values: string[]
 }
 
-export const getMetricDetails = async (variables: MetricDetailRequest) => {
+export const getMetricDetails = async (variables: MetricDetailRequest): Promise<MetricDetailResponse> => {
     return (await axiosInstance.post<MetricDetailResponse>(`metrics/${variables.name}`, variables.tags)).data
 }
 
 export const useGetDetails = (options: BaseMutationOptions<MetricDetailResponse, MetricDetailRequest>) => useBaseMutation(getMetricDetails, options)
 
-export const useGetMetricDetailsQuery = (variables: MetricDetailRequest, options: BaseQueryOptions<MetricDetailResponse, MetricDetailRequest>) =>
+export const useGetMetricDetailsQuery = (variables: MetricDetailRequest, options?: BaseQueryOptions<MetricDetailResponse, MetricDetailRequest>) =>
     useBaseQuery(
         apiKeys.itemMetricDetails(variables.name, variables.tags),
         getMetricDetails,

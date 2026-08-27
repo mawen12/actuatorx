@@ -3,7 +3,7 @@ export const apiKeys = {
     itemHealth: () => [...apiKeys.item(), 'health'],
     itemAbilities: () => [...apiKeys.item(), 'abilities'],
     itemMetrics: () => [...apiKeys.item(), 'metrics'],
-    itemMetricDetails: (name: string, tags: string[]) => [...apiKeys.itemMetrics(), name, tags],
+    itemMetricDetails: (name: string, tags: Record<string, string>) => [...apiKeys.itemMetrics(), name, tags],
     itemEnv: () => [...apiKeys.item(), 'env'],
     itemLoggers: () => [...apiKeys.item(), 'loggers'],
     itemLogfile: () => [...apiKeys.item(), 'logfile'],
@@ -33,4 +33,6 @@ export const apiKeys = {
     metricLatest: (instanceId: string, metricName: string) => [...apiKeys.itemMetrics(), 'latest', instanceId, metricName],
 }
 
-export type JsonValue = | string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue }
+export type BasicValue = | string | number | boolean | null
+
+export type JsonValue = | JsonValue[] | { [key: string]: JsonValue }

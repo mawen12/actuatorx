@@ -1,6 +1,5 @@
 import type { MetricView } from "@/apis/requests/endpoints/metrics/getMetrics";
 import type { DataTableEntity } from "@/components/data-table/entity";
-import { z } from 'zod'
 
 
 export const MetricsTableEntity: DataTableEntity<MetricView> = {
