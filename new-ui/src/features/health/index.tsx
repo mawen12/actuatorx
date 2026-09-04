@@ -12,7 +12,7 @@ export function Health() {
                 <ThemeSwitch />
             </Header>
 
-            <Main className='p-2 space-y-4 flex flex-row items-center justify-between'>
+            <Main className='p-2 space-y-4 flex-1'>
                 <HealthContent />
             </Main>
         </>

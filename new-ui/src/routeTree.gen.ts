@@ -18,9 +18,14 @@ import { Route as authSignUpRouteImport } from './routes/(auth)/sign-up'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedSettingsRouteRouteImport } from './routes/_authenticated/settings/route'
 import { Route as AuthenticatedBeansIndexRouteImport } from './routes/_authenticated/beans/index'
+import { Route as AuthenticatedCachesIndexRouteImport } from './routes/_authenticated/caches/index'
+import { Route as AuthenticatedConditionsIndexRouteImport } from './routes/_authenticated/conditions/index'
+import { Route as AuthenticatedConfigpropsIndexRouteImport } from './routes/_authenticated/configprops/index'
 import { Route as AuthenticatedEnvIndexRouteImport } from './routes/_authenticated/env/index'
 import { Route as AuthenticatedErrorsErrorRouteImport } from './routes/_authenticated/errors/$error'
 import { Route as AuthenticatedHealthIndexRouteImport } from './routes/_authenticated/health/index'
+import { Route as AuthenticatedLoggersIndexRouteImport } from './routes/_authenticated/loggers/index'
+import { Route as AuthenticatedMappingsIndexRouteImport } from './routes/_authenticated/mappings/index'
 import { Route as AuthenticatedMetricsIndexRouteImport } from './routes/_authenticated/metrics/index'
 import { Route as AuthenticatedSettingsIndexRouteImport } from './routes/_authenticated/settings/index'
 import { Route as AuthenticatedSettingsAppearanceRouteImport } from './routes/_authenticated/settings/appearance'
@@ -71,6 +76,24 @@ const AuthenticatedBeansIndexRoute = AuthenticatedBeansIndexRouteImport.update({
   path: '/beans/',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedCachesIndexRoute =
+  AuthenticatedCachesIndexRouteImport.update({
+    id: '/caches/',
+    path: '/caches/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedConditionsIndexRoute =
+  AuthenticatedConditionsIndexRouteImport.update({
+    id: '/conditions/',
+    path: '/conditions/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedConfigpropsIndexRoute =
+  AuthenticatedConfigpropsIndexRouteImport.update({
+    id: '/configprops/',
+    path: '/configprops/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedEnvIndexRoute = AuthenticatedEnvIndexRouteImport.update({
   id: '/env/',
   path: '/env/',
@@ -86,6 +109,18 @@ const AuthenticatedHealthIndexRoute =
   AuthenticatedHealthIndexRouteImport.update({
     id: '/health/',
     path: '/health/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedLoggersIndexRoute =
+  AuthenticatedLoggersIndexRouteImport.update({
+    id: '/loggers/',
+    path: '/loggers/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedMappingsIndexRoute =
+  AuthenticatedMappingsIndexRouteImport.update({
+    id: '/mappings/',
+    path: '/mappings/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedMetricsIndexRoute =
@@ -123,8 +158,13 @@ export interface FileRoutesByFullPath {
   '/errors/$error': typeof AuthenticatedErrorsErrorRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/beans/': typeof AuthenticatedBeansIndexRoute
+  '/caches/': typeof AuthenticatedCachesIndexRoute
+  '/conditions/': typeof AuthenticatedConditionsIndexRoute
+  '/configprops/': typeof AuthenticatedConfigpropsIndexRoute
   '/env/': typeof AuthenticatedEnvIndexRoute
   '/health/': typeof AuthenticatedHealthIndexRoute
+  '/loggers/': typeof AuthenticatedLoggersIndexRoute
+  '/mappings/': typeof AuthenticatedMappingsIndexRoute
   '/metrics/': typeof AuthenticatedMetricsIndexRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
   '/tasks/': typeof AuthenticatedTasksIndexRoute
@@ -139,8 +179,13 @@ export interface FileRoutesByTo {
   '/errors/$error': typeof AuthenticatedErrorsErrorRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/beans': typeof AuthenticatedBeansIndexRoute
+  '/caches': typeof AuthenticatedCachesIndexRoute
+  '/conditions': typeof AuthenticatedConditionsIndexRoute
+  '/configprops': typeof AuthenticatedConfigpropsIndexRoute
   '/env': typeof AuthenticatedEnvIndexRoute
   '/health': typeof AuthenticatedHealthIndexRoute
+  '/loggers': typeof AuthenticatedLoggersIndexRoute
+  '/mappings': typeof AuthenticatedMappingsIndexRoute
   '/metrics': typeof AuthenticatedMetricsIndexRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
   '/tasks': typeof AuthenticatedTasksIndexRoute
@@ -158,8 +203,13 @@ export interface FileRoutesById {
   '/_authenticated/errors/$error': typeof AuthenticatedErrorsErrorRoute
   '/_authenticated/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/_authenticated/beans/': typeof AuthenticatedBeansIndexRoute
+  '/_authenticated/caches/': typeof AuthenticatedCachesIndexRoute
+  '/_authenticated/conditions/': typeof AuthenticatedConditionsIndexRoute
+  '/_authenticated/configprops/': typeof AuthenticatedConfigpropsIndexRoute
   '/_authenticated/env/': typeof AuthenticatedEnvIndexRoute
   '/_authenticated/health/': typeof AuthenticatedHealthIndexRoute
+  '/_authenticated/loggers/': typeof AuthenticatedLoggersIndexRoute
+  '/_authenticated/mappings/': typeof AuthenticatedMappingsIndexRoute
   '/_authenticated/metrics/': typeof AuthenticatedMetricsIndexRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
   '/_authenticated/tasks/': typeof AuthenticatedTasksIndexRoute
@@ -177,8 +227,13 @@ export interface FileRouteTypes {
     | '/errors/$error'
     | '/settings/appearance'
     | '/beans/'
+    | '/caches/'
+    | '/conditions/'
+    | '/configprops/'
     | '/env/'
     | '/health/'
+    | '/loggers/'
+    | '/mappings/'
     | '/metrics/'
     | '/settings/'
     | '/tasks/'
@@ -193,8 +248,13 @@ export interface FileRouteTypes {
     | '/errors/$error'
     | '/settings/appearance'
     | '/beans'
+    | '/caches'
+    | '/conditions'
+    | '/configprops'
     | '/env'
     | '/health'
+    | '/loggers'
+    | '/mappings'
     | '/metrics'
     | '/settings'
     | '/tasks'
@@ -211,8 +271,13 @@ export interface FileRouteTypes {
     | '/_authenticated/errors/$error'
     | '/_authenticated/settings/appearance'
     | '/_authenticated/beans/'
+    | '/_authenticated/caches/'
+    | '/_authenticated/conditions/'
+    | '/_authenticated/configprops/'
     | '/_authenticated/env/'
     | '/_authenticated/health/'
+    | '/_authenticated/loggers/'
+    | '/_authenticated/mappings/'
     | '/_authenticated/metrics/'
     | '/_authenticated/settings/'
     | '/_authenticated/tasks/'
@@ -292,6 +357,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBeansIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/caches/': {
+      id: '/_authenticated/caches/'
+      path: '/caches'
+      fullPath: '/caches/'
+      preLoaderRoute: typeof AuthenticatedCachesIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/conditions/': {
+      id: '/_authenticated/conditions/'
+      path: '/conditions'
+      fullPath: '/conditions/'
+      preLoaderRoute: typeof AuthenticatedConditionsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/configprops/': {
+      id: '/_authenticated/configprops/'
+      path: '/configprops'
+      fullPath: '/configprops/'
+      preLoaderRoute: typeof AuthenticatedConfigpropsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/env/': {
       id: '/_authenticated/env/'
       path: '/env'
@@ -311,6 +397,20 @@ declare module '@tanstack/react-router' {
       path: '/health'
       fullPath: '/health/'
       preLoaderRoute: typeof AuthenticatedHealthIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/loggers/': {
+      id: '/_authenticated/loggers/'
+      path: '/loggers'
+      fullPath: '/loggers/'
+      preLoaderRoute: typeof AuthenticatedLoggersIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/mappings/': {
+      id: '/_authenticated/mappings/'
+      path: '/mappings'
+      fullPath: '/mappings/'
+      preLoaderRoute: typeof AuthenticatedMappingsIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/metrics/': {
@@ -365,8 +465,13 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedErrorsErrorRoute: typeof AuthenticatedErrorsErrorRoute
   AuthenticatedBeansIndexRoute: typeof AuthenticatedBeansIndexRoute
+  AuthenticatedCachesIndexRoute: typeof AuthenticatedCachesIndexRoute
+  AuthenticatedConditionsIndexRoute: typeof AuthenticatedConditionsIndexRoute
+  AuthenticatedConfigpropsIndexRoute: typeof AuthenticatedConfigpropsIndexRoute
   AuthenticatedEnvIndexRoute: typeof AuthenticatedEnvIndexRoute
   AuthenticatedHealthIndexRoute: typeof AuthenticatedHealthIndexRoute
+  AuthenticatedLoggersIndexRoute: typeof AuthenticatedLoggersIndexRoute
+  AuthenticatedMappingsIndexRoute: typeof AuthenticatedMappingsIndexRoute
   AuthenticatedMetricsIndexRoute: typeof AuthenticatedMetricsIndexRoute
   AuthenticatedTasksIndexRoute: typeof AuthenticatedTasksIndexRoute
 }
@@ -376,8 +481,13 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedErrorsErrorRoute: AuthenticatedErrorsErrorRoute,
   AuthenticatedBeansIndexRoute: AuthenticatedBeansIndexRoute,
+  AuthenticatedCachesIndexRoute: AuthenticatedCachesIndexRoute,
+  AuthenticatedConditionsIndexRoute: AuthenticatedConditionsIndexRoute,
+  AuthenticatedConfigpropsIndexRoute: AuthenticatedConfigpropsIndexRoute,
   AuthenticatedEnvIndexRoute: AuthenticatedEnvIndexRoute,
   AuthenticatedHealthIndexRoute: AuthenticatedHealthIndexRoute,
+  AuthenticatedLoggersIndexRoute: AuthenticatedLoggersIndexRoute,
+  AuthenticatedMappingsIndexRoute: AuthenticatedMappingsIndexRoute,
   AuthenticatedMetricsIndexRoute: AuthenticatedMetricsIndexRoute,
   AuthenticatedTasksIndexRoute: AuthenticatedTasksIndexRoute,
 }

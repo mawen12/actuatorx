@@ -1,10 +1,6 @@
-import { useSnack } from "@/context/snackbar-context";
-import type { ReactNode } from "react";
 
 export function useCopyToClipboard() {
-    const { showInfoMessage } = useSnack();
-
-    return async(text: string, msgInfo?: string | ReactNode) => {
+    return async(text: string) => {
         if (!navigator?.clipboard) {
             try {
                 const textarea = document.createElement('textarea');
@@ -27,21 +23,8 @@ export function useCopyToClipboard() {
 
         try {
             await navigator.clipboard.writeText(text);
-            if (msgInfo) {
-                showInfoMessage({
-                    text: msgInfo,
-                    type: "success"
-                })
-            }
             return true;
         } catch (err) {
-            if (err instanceof Error) {
-                showInfoMessage({
-                    text: `${err.name}: ${err.message}`,
-                    type: "error",
-                })
-            }
-
             console.warn("Copy failed", err);
             return false;
         }

@@ -19,7 +19,7 @@ interface LoggerGroup {
     members: string[]
 }
 
-interface LoggerView extends Logger {
+export interface LoggerView extends Logger {
     name: string
     timestamp: number
     search: string
@@ -36,7 +36,7 @@ export const getLoggers = async (): Promise<LoggerView[]> => {
     }))
 }
 
-export const useGetLoggers = (options: BaseMutationOptions<LoggerView[], void>) => useBaseMutation(getLoggers, options)
+export const useGetLoggers = (options?: BaseMutationOptions<LoggerView[], void>) => useBaseMutation(getLoggers, options)
 
-export const useGetLoggersQuery = (variables: void, options: BaseQueryOptions<LoggerView[], void>) =>
+export const useGetLoggersQuery = (variables?: void, options?: BaseQueryOptions<LoggerView[], void>) =>
     useBaseQuery(apiKeys.itemLoggers(), getLoggers, variables, options)

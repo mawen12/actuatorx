@@ -6,6 +6,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { pageSizes } from '@/constants/pagination';
 import { cn, getPageNumbers } from '@/lib/utils';
 import { type ReactTable, type RowData, type TableFeatures } from '@tanstack/react-table';
 import { ChevronLeft, ChevronRightIcon, ChevronsLeft, ChevronsRight } from 'lucide-react';
@@ -47,7 +48,7 @@ export function DataTablePagination<TData extends RowData>({
               <SelectValue placeholder={table.state.pagination.pageSize} />
             </SelectTrigger>
             <SelectContent side='top'>
-              {[10, 20, 30, 40, 50].map((pageSize) => (
+              {pageSizes.map((pageSize) => (
                 <SelectItem key={pageSize} value={`${pageSize}`}>
                   {pageSize}
                 </SelectItem>

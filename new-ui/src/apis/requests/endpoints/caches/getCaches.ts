@@ -15,7 +15,7 @@ interface Cache {
     target: string
 }
 
-interface CacheView extends Cache {
+export interface CacheView extends Cache {
     name: string
     cacheManager: string
     search: string
@@ -34,7 +34,7 @@ export const getCaches = async (): Promise<CacheView[]> => {
     )
 }
 
-export const useGetCaches = (options: BaseMutationOptions<CacheView[], void>) => useBaseMutation(getCaches, options)
+export const useGetCaches = (options?: BaseMutationOptions<CacheView[], void>) => useBaseMutation(getCaches, options)
 
-export const useGetCachesQuery = (variables: void, options: BaseQueryOptions<CacheView[], void>) =>
+export const useGetCachesQuery = (variables?: void, options?: BaseQueryOptions<CacheView[], void>) =>
     useBaseQuery(apiKeys.itemCaches(), getCaches, variables, options)

@@ -41,7 +41,7 @@ export function HealthContent() {
     }, [data])
 
     return (
-        <Card className="mx-auto w-full lg:w-3/4 xl:w-1/2">
+        <Card className="mx-auto w-full h-full lg:w-3/4 xl:w-1/2">
             <CardHeader>
                 <CardTitle>Health</CardTitle>
                 <CardDescription>{dataUpdatedAt ? new Date(dataUpdatedAt).toLocaleString() : "-"}</CardDescription>

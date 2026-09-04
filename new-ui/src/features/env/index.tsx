@@ -8,18 +8,20 @@ import { ThemeSwitch } from "@/components/theme-switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/components/ui/toast";
 import { EnvTableEntity } from "@/entities/env-table.entity";
-import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
+import { useCopyFeedback } from "@/hooks/use-copy-feedback";
 
 export function Env() {
-
     const { data, isLoading, refetch } = useGetEnvQuery()
 
-    const copy = useCopyToClipboard()
+    const { copyItem, isCopied } = useCopyFeedback({
+        timeout: 1500,
+        getKey: (item: EnvPropertySourceView) => item.name
+    })
 
-    const rowActionsHandler = (row: EnvPropertySourceView, actionId: string) => {
+    const rowActionsHandler = async (row: EnvPropertySourceView, actionId: string) => {
         switch (actionId) {
             case 'copy':
-                copy(JSON.stringify(row))
+                await copyItem(JSON.stringify(row), row)
                 break
             default:
                 toast.add({

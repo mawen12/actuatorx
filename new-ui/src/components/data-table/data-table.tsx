@@ -1,12 +1,13 @@
 import { cn } from "@/lib/utils";
-import { columnFacetingFeature, columnFilteringFeature, columnVisibilityFeature, createFilteredRowModel, createPaginatedRowModel, createSortedRowModel, filterFn_includesString, flexRender, rowExpandingFeature, rowPaginationFeature, rowSelectionFeature, rowSortingFeature, sortFn_alphanumeric, sortFn_text, tableFeatures, useTable, type ColumnDef, type Row, type RowData, type TableFeatures } from "@tanstack/react-table";
+import { columnFacetingFeature, columnFilteringFeature, columnVisibilityFeature, createFilteredRowModel, createPaginatedRowModel, createSortedRowModel, filterFn_includesString, flexRender, rowExpandingFeature, rowPaginationFeature, rowSelectionFeature, rowSortingFeature, sortFn_alphanumeric, sortFn_text, tableFeatures, useTable, type ColumnDef, type ColumnFiltersState, type ColumnVisibilityState, type PaginationState, type Row, type RowData, type RowSelectionState, type SortingState, type TableFeatures } from "@tanstack/react-table";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { DataTableBulkActions } from "./bulk-actions";
 import { DataTablePagination } from "./pagination";
 import { DataTableToolbar } from "./toolbar";
 import type React from "react";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { useDataTable } from "./data-table-provider";
+import { initPagination } from "@/constants/pagination";
 
 const features = tableFeatures({
     columnFilteringFeature,
@@ -33,17 +34,33 @@ export interface DataTableProps<DataType extends RowData> {
 export function DataTable<DataType extends RowData>({ renderExpandedRow }: DataTableProps<DataType>) {
     const { data, columns, entity } = useDataTable()
 
-    // const [rowSelection, setRowSelection] = useState({})
-    // const [sorting, setSorting] = useState<SortingState>([])
-    // const [columnVisiblity, setColumnVisiblity] = useState<ColumnVisibilityState>({})
-    // const [globalFilter, setGlobalFilter] = useState('')
-    // const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>()
-    // const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 })
+    // externally-controlled state: lifted into React state so any ancestor could
+    // hoist/replace these with its own state (e.g. synced to the URL or a store)
+    const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
+    const [sorting, setSorting] = useState<SortingState>([])
+    const [columnVisibility, setColumnVisibility] = useState<ColumnVisibilityState>({})
+    const [globalFilter, setGlobalFilter] = useState('')
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+    const [pagination, setPagination] = useState<PaginationState>(initPagination)
 
     const table = useTable({
         features,
-        data,
         columns,
+        data,
+        state: {
+            rowSelection,
+            sorting,
+            columnVisibility,
+            globalFilter,
+            columnFilters,
+            pagination,
+        },
+        onRowSelectionChange: setRowSelection,
+        onSortingChange: setSorting,
+        onColumnVisibilityChange: setColumnVisibility,
+        onGlobalFilterChange: setGlobalFilter,
+        onColumnFiltersChange: setColumnFilters,
+        onPaginationChange: setPagination,
         getRowCanExpand: () => true,
     })
 

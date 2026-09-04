@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"strconv"
@@ -118,11 +119,11 @@ func (app *application) GetMetric(w http.ResponseWriter, r *http.Request) (inter
 
 	// tags is optional
 	var m map[string]string
-	r.Body = http.MaxBytesReader(w, r.Body, int64(1024*1024))
+	// r.Body = http.MaxBytesReader(w, r.Body, int64(1024*1024))
 	dec := json.NewDecoder(r.Body)
-	if err := dec.Decode(m); err == nil {
+	if err := dec.Decode(&m); err == nil {
 		for k, v := range m {
-			opts = append(opts, client.WithQueryAdd(k, v))
+			opts = append(opts, client.WithQueryAdd("tag", fmt.Sprintf("%s:%s", k, v)))
 		}
 	}
 

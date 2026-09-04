@@ -99,18 +99,18 @@ function DataTableExpand(columnHelper: ColumnHelper<TableFeatures, RowData>, col
     return columnHelper.display({
         id: 'expand',
         header: ({ table }) => (
-            <Button 
-                size='icon' 
-                variant='ghost' 
-                title={'Collapse All'} 
-                disabled={!table.getIsSomeRowsExpanded()} 
+            <Button
+                size='icon'
+                variant='ghost'
+                title={'Collapse All'}
+                disabled={!table.getIsSomeRowsExpanded()}
                 onClick={() => table.toggleAllRowsExpanded(false)}
             >
                 <ListChevronsUpDown />
-            </Button> 
+            </Button>
         ),
         cell: ({ row }) => (
-            <Button size='icon' variant='ghost' disabled={!row.getCanExpand()} onClick={() => row.toggleExpanded()}>
+            <Button size='icon' variant='ghost' title={row.getIsExpanded() ? 'Collapse' : 'Expand'} disabled={!row.getCanExpand()} onClick={() => row.toggleExpanded()}>
                 <ChevronRight className={cn(row.getIsExpanded() && 'rotate-90')} />
             </Button>
         ),
@@ -149,7 +149,7 @@ function DataTableRowActions(columnHelper: ColumnHelper<TableFeatures, RowData>,
             <DataTableColumnHeader column={column} title={'Actions'} />
         ),
         cell: ({ row }) => (
-            <RowActions row={row}/>
+            <RowActions row={row} />
         ),
         meta: col.meta
     })
@@ -164,7 +164,7 @@ function DataTableRowActionsV2(columnHelper: ColumnHelper<TableFeatures, RowData
         cell: ({ row }) => (
             <div className="flex items-center justify-center gap-2">
                 {col.actions && col.actions.map(action => (
-                    <Button key={action.id} variant={'ghost'} title={action.label} size='icon' onClick={() => rowActionsHandler(row, action.id)}>
+                    <Button key={action.id} variant={'ghost'} title={action.label} size='icon' onClick={() => rowActionsHandler(row.original, action.id)}>
                         <action.icon />
                     </Button>
                 ))}

@@ -56,8 +56,6 @@ export function MetricDetail({ row }: { row: Row<TableFeatures, MetricView> }) {
                 />
             )}
 
-            {JSON.stringify(selectedTags)}
-
             <Card className="w-full">
                 <CardHeader>
                     <CardTitle>Measurements</CardTitle>

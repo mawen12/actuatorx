@@ -19,10 +19,6 @@ export function MetricTags({ allTags, availableTags, selectedTags, onSelected }:
         return m
     }, [availableTags])
 
-    const disableAll = useMemo(() => {
-        return availableTags.length === 1 && availableTags[0].values.length === 1
-    }, [availableTags])
-
     const disabled = useCallback((v: string, tag: string) => {
         const selected = selectedTags[tag] === v
         return !selected && !map.get(tag)?.has(v)
@@ -54,7 +50,7 @@ export function MetricTags({ allTags, availableTags, selectedTags, onSelected }:
                             }}
                         >
                             {tag.values.map((v) => (
-                                <ToggleGroupItem key={v} value={v} disabled={disableAll || disabled(v, tag.tag)}>
+                                <ToggleGroupItem key={v} value={v} disabled={disabled(v, tag.tag)}>
                                     {v}
                                 </ToggleGroupItem>
                             ))}

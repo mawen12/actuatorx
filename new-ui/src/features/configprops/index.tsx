@@ -1,5 +1,4 @@
-import { useGetBeansQuery, type BeanView } from "@/apis/requests/endpoints/beans/getBeans";
-import { type EnvPropertySourceView } from "@/apis/requests/endpoints/env/getEnv";
+import { useGetConfigpropsQuery, type ConfigpropsBeanView } from "@/apis/requests/endpoints/configprops/getConfigprops";
 import { DataTable } from "@/components/data-table/data-table";
 import { DataTableProvider } from "@/components/data-table/data-table-provider";
 import { Header } from "@/components/layout/header";
@@ -8,11 +7,12 @@ import { Search } from "@/components/search";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BeansTableEntity } from "@/entities/beans-table.entity";
-import { BeanDetail } from "./components/bean-detail";
+import { ConfigpropDetail } from "./components/configprop-detail";
+import { ConfigpropsTableEntity } from "@/entities/configprops-table.entity";
 
-export function Beans() {
+export function Configprops() {
 
-    const { data, isLoading, refetch } = useGetBeansQuery()
+    const { data, isLoading, refetch } = useGetConfigpropsQuery()
 
     return (
         <>
@@ -36,8 +36,8 @@ export function Beans() {
                                 className="flex min-h-0 flex-1 flex-col"
                                 data-layout='fixed'
                             >
-                                <DataTableProvider entity={BeansTableEntity} data={bean.value} isLoading={isLoading}>
-                                    <DataTable<BeanView> renderExpandedRow={(row) => <BeanDetail bean={row.original} />} />
+                                <DataTableProvider entity={ConfigpropsTableEntity} data={bean.value} isLoading={isLoading}>
+                                    <DataTable<ConfigpropsBeanView> renderExpandedRow={(row) => <ConfigpropDetail configprop={row.original} />} />
                                 </DataTableProvider>
                             </div>
                         </TabsContent>

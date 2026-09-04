@@ -23,12 +23,12 @@ interface ConditionMatch {
     message: string
 }
 
-interface ConditionContextGroup {
+export interface ConditionContextGroup {
     name: string
     value: ConditionMatchView[]
 }
 
-interface ConditionMatchView {
+export interface ConditionMatchView {
     value?: ConditionMatch[]
     type: string
     name: string
@@ -64,7 +64,7 @@ export const getConditions = async (): Promise<ConditionContextGroup[]> => {
     return result
 }
 
-export const useGetConditions = (options: BaseMutationOptions<ConditionContextGroup[], void>) => useBaseMutation(getConditions, options)
+export const useGetConditions = (options?: BaseMutationOptions<ConditionContextGroup[], void>) => useBaseMutation(getConditions, options)
 
-export const useGetConditionsQuery = (variables: void, options: BaseQueryOptions<ConditionContextGroup[], void>) =>
+export const useGetConditionsQuery = (variables?: void, options?: BaseQueryOptions<ConditionContextGroup[], void>) =>
     useBaseQuery(apiKeys.itemConditions(), getConditions, variables, options)

@@ -1,5 +1,5 @@
 import type { NavGroup } from "@/components/layout/types";
-import { Bean, ChartLine, Construction, Container, FileX, HeartPulse, Lock, Palette, ServerOff, Settings, ShieldLock, ShieldX, UserCog, UserRoundX } from "lucide-react";
+import { Bean, ChartLine, Construction, Container, DatabaseZap, FileSliders, FileX, HeartPulse, Lock, Map, Palette, ScrollText, ServerOff, Settings, ShieldLock, ShieldX, SlidersHorizontal, UserCog, UserRoundX } from "lucide-react";
 
 export const navGroups: NavGroup[] = [
   {
@@ -23,6 +23,41 @@ export const navGroups: NavGroup[] = [
       {
         title: 'Beans',
         url: '/beans',
+        icon: Bean,
+      },
+      {
+        title: 'Conditions',
+        url: '/conditions',
+        icon: SlidersHorizontal,
+      },
+      {
+        title: 'Configprops',
+        url: '/configprops',
+        icon: FileSliders,
+      },
+      {
+        title: 'Caches',
+        url: '/caches',
+        icon: DatabaseZap,
+      },
+      {
+        title: 'Loggers',
+        url: '/loggers',
+        icon: ScrollText,
+      },
+      {
+        title: 'Mappings',
+        url: '/mappings',
+        icon: Map,
+      },
+      {
+        title: 'Http Exchanges',
+        url: '/http-exchanges',
+        icon: Bean,
+      },
+      {
+        title: 'Thread Dump',
+        url: '/thread-dump',
         icon: Bean,
       },
     ],
@@ -111,4 +146,19 @@ export const navGroups: NavGroup[] = [
 
     ]
   }
+
+  // TODO 状态与基础信息 (Health & Application Info)
+  // /health /info /env /configprops
+
+  // TODO 监控与度量指标 (Metrics & Observability)
+  // /metrics /prometheus /caches /scheduledtasks
+
+  // TODO 调试与排错 (Troubleshooting & Diagnostics)
+  // /threaddump /heapdump /loggers /httpexchanges
+
+  // TODO 应用结构与路由 (Application Architecture & Routing)
+  // /beans /mappings /conditions
+
+  // TODO Spring Cloud 专属管理 (Spring Cloud Management)
+  // /refresh /bus-refresh /features /serviceregistry /gateway
 ]

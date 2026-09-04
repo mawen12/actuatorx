@@ -72,12 +72,12 @@ interface ServletFilter {
     className: string
 }
 
-interface MappingGroup {
+export interface MappingGroup {
     name: string
     value: MappingView[]
 }
 
-interface MappingView {
+export interface MappingView {
     url: string
     method: string[]
     handler: string
@@ -152,7 +152,7 @@ function servletsToArray(servlets: Servlet[]) {
     )
 }
 
-export const useGetMappings = (options: BaseMutationOptions<MappingGroup[], void>) => useBaseMutation(getMappings, options)
+export const useGetMappings = (options?: BaseMutationOptions<MappingGroup[], void>) => useBaseMutation(getMappings, options)
 
-export const useGetMappingsQuery = (variables: void, options: BaseQueryOptions<MappingGroup[], void>) =>
+export const useGetMappingsQuery = (variables?: void, options?: BaseQueryOptions<MappingGroup[], void>) =>
     useBaseQuery(apiKeys.itemMappings(), getMappings, variables, options)

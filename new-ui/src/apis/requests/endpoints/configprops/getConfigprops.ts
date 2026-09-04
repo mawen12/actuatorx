@@ -18,12 +18,12 @@ interface ConfigpropsBean {
     properties: Record<string, JsonValue>
 }
 
-interface ConfigpropsContextGroup {
+export interface ConfigpropsContextGroup {
     name: string
     value: ConfigpropsBeanView[]
 }
 
-interface ConfigpropsBeanView extends ConfigpropsBean {
+export interface ConfigpropsBeanView extends ConfigpropsBean {
     file: string
     search: string
 }
@@ -46,7 +46,7 @@ export const getConfigprops = async (): Promise<ConfigpropsContextGroup[]> => {
     return result
 }
 
-export const useGetConfigprops = (options: BaseMutationOptions<ConfigpropsContextGroup[], void>) => useBaseMutation(getConfigprops, options)
+export const useGetConfigprops = (options?: BaseMutationOptions<ConfigpropsContextGroup[], void>) => useBaseMutation(getConfigprops, options)
 
-export const useGetConfigpropsQuery = (variables: void, options: BaseQueryOptions<ConfigpropsContextGroup[], void>) =>
+export const useGetConfigpropsQuery = (variables?: void, options?: BaseQueryOptions<ConfigpropsContextGroup[], void>) =>
     useBaseQuery(apiKeys.itemConfigProps(), getConfigprops, variables, options)
